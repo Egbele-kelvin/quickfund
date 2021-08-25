@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:quickfund/util/constants.dart';
+
+class RoundedInputField extends StatelessWidget {
+  final String hintText;
+  final TextStyle customTextHintStyle;
+  final Icon prefixIcon;
+  final TextInputType inputType;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<String> onComplete;
+  final ValueChanged<String> onEditing;
+  final ValueChanged<String> onSubmitted;
+  final bool isEnabled;
+  final Widget suffixIcon;
+  final String labelText;
+  final int maxLen;
+  final Color textColor, hintColor;
+  final bool autoCorrect, passwordvisible;
+  final ValueChanged<String> onSaved;
+  final Color borderColor;
+  final List inputForm;
+
+  final FormFieldValidator<String> validateForm;
+  final FocusNode hasFocus;
+
+  final controller;
+
+  // final ValueChanged<dynamic> contentPadding;
+
+  const RoundedInputField({
+    Key key,
+    this.hintText,
+    this.onChanged,
+    this.validateForm,
+    this.inputType = TextInputType.text,
+    this.isEnabled,
+    this.textColor = Colors.black,
+    this.borderColor = Colors.grey,
+    this.autoCorrect,
+    this.onComplete,
+    this.onEditing,
+    this.prefixIcon,
+    this.onSaved,
+    this.maxLen,
+    this.inputForm,
+    Null Function(BuildContext context,
+            {int currentLength, bool isFocused, int maxLength})
+        buildCounter,
+    this.controller,
+    this.onSubmitted,
+    this.hintColor,
+    this.suffixIcon,
+    this.passwordvisible = false,
+    this.labelText,
+    this.hasFocus,
+    this.customTextHintStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      obscureText: passwordvisible,
+      onFieldSubmitted: onSubmitted,
+      controller: controller,
+      inputFormatters: inputForm,
+      onSaved: onSaved,
+      maxLength: maxLen,
+      autocorrect: autoCorrect,
+      focusNode: hasFocus,
+      validator: validateForm,
+      onChanged: onChanged,
+      enabled: isEnabled,
+      keyboardType: inputType,
+      style: GoogleFonts.roboto(
+          fontSize: 12, color: textColor, fontWeight: FontWeight.w400),
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: GoogleFonts.roboto(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: kPrimaryColor,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: hintText,
+        suffixIcon: suffixIcon,
+        hintStyle: customTextHintStyle,
+        prefixIcon: prefixIcon,
+        // prefixIcon: Icon(
+        //   DashBoard.naira,
+        //   color: Colors.black,
+        //   size: 20,
+        // ),
+        contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
+        counterText: '',
+        //filled: true,
+        //fillColor: Colors.grey.withOpacity(0.25),
+        // focusColor: Colors.grey,
+        // enabledBorder: OutlineInputBorder(
+        //     gapPadding: 10,
+        //     borderSide: BorderSide(color: borderColor),
+        //     borderRadius: BorderRadius.circular(10)),
+        // focusedBorder: OutlineInputBorder(
+        //     borderSide:
+        //     BorderSide(color: Colors.grey.withOpacity(0.2)),
+        //     borderRadius: BorderRadius.circular(10)),
+        // border: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(10),
+        // ),
+      ),
+      // border: InputBorder.none,
+    );
+  }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
