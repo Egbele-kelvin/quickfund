@@ -158,6 +158,7 @@ class _SignInMainState extends State<SignInMain> {
                                 // onSaved: (newValue) => bvn = newValue,
                                 inputType: TextInputType.visiblePassword,
                                 maxLen: 11,
+                                passwordvisible: _passwordVisible,
                                 labelText: 'Enter Password',
                                 hintText: '*********',
                                 autoCorrect: true,

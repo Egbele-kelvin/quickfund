@@ -15,6 +15,8 @@ class AppRouteName {
   static const String HelpUI = '/HelpUI';
   static const String BillMainUI = '/BillMainUI';
   static const String TransactionUI = '/TransactionUI';
+  static const String TransactionRef = '/TransactionRef';
   static const String FundAccountUI = '/FundAccountUI';
   static const String DashBoardMain = '/DashBoardMain';
+  static const String SaveBeneficiary = '/SaveBeneficiary';
 }

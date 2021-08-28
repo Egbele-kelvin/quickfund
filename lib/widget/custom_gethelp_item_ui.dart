@@ -82,7 +82,7 @@ class BillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: size.height * 0.067,
+      height: size.height * 0.064,
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(8),
         vertical: getProportionateScreenHeight(8),
@@ -115,14 +115,14 @@ class BillWidget extends StatelessWidget {
         ),
         title: Text(
         title,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.lato(
             color: Colors.black,
             fontWeight: FontWeight.w400,
             fontSize: 12,
           ),
         ),
         trailing: Icon(Icons.arrow_forward,
-          size: 20,
+          size: 16,
           color: Colors.black,),
       ),
     );

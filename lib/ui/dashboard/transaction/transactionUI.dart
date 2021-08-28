@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
@@ -64,50 +65,16 @@ class _TransactionUIState extends State<TransactionUI> {
                       height: size.height * 0.03,
                     ),
                     Expanded(
-                      flex: 0,
-                      child: Column(
-                        children: [
-                          CardDetails(
-                            dashBoardColor: kPrimaryColor,
-                            size: size,
-                            accountNum: '2993204939',
-                            acctBalanceI: 'Account Balance',
-                            acctBalanceII: 'N $acctBalance',
-                            savingsAcct: 'Savings Account',
-                            iconData: Icons.visibility,
-                          ),
-                          SizedBox(
-                            height: size.height * 0.03,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SearchBoxWidget(
-                              searchController: searchController,
-                              onSubmitted: (val) {},
-                              onEditingComplete: () {},
-                              onChanged: (val) {},
-                              onEditing: (val) {},
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.02,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 4),
-                            child: Align(
-                              child: Icon(
-                                Icons.calendar_today_outlined,
-                                color: Colors.grey,
-                                size: 18,
-                              ),
-                              alignment: Alignment.topRight,
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.02,
-                          ),
-
-                        ],
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SearchBoxWidget(
+                          searchController: searchController,
+                          onSubmitted: (val) {},
+                          onEditingComplete: () {},
+                          onChanged: (val) {},
+                          onEditing: (val) {},
+                        ),
                       ),
                     ),
 
@@ -119,6 +86,32 @@ class _TransactionUIState extends State<TransactionUI> {
                             hasScrollBody: false,
                             child: Column(children: [
 
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+
+                              TransactionHistorySummary(
+                                onTap: () {
+                                  Navigator.pushReplacementNamed(context, AppRouteName.TransactionRef);
+                                },
+                                size: size,
+                                tfDate: tfDate,
+                                amount: '-N 10,000',
+                                amountColor: kTap,
+                                code: 'Sent',
+                                igUrl: 'assets/f_png/bg_2.png',
+                                transferName: 'Transfer to Kelvin Jason',
+                              ),
+                              TransactionHistorySummary(
+                                onTap: () {},
+                                size: size,
+                                tfDate: tfDate,
+                                amount: '+N 20,000',
+                                amountColor: Colors.green.withOpacity(0.8),
+                                code: 'Received',
+                                igUrl: 'assets/f_png/bg-3.png',
+                                transferName: 'Received from Oyeyemi Kolapo',
+                              ),
                               TransactionHistorySummary(
                                 onTap: () {},
                                 size: size,
@@ -148,6 +141,36 @@ class _TransactionUIState extends State<TransactionUI> {
                                 code: 'Sent',
                                 igUrl: 'assets/f_png/bg_2.png',
                                 transferName: 'Transfer to Kelvin Jason',
+                              ),
+                              TransactionHistorySummary(
+                                onTap: () {},
+                                size: size,
+                                tfDate: tfDate,
+                                amount: '+N 20,000',
+                                amountColor: Colors.green.withOpacity(0.8),
+                                code: 'Received',
+                                igUrl: 'assets/f_png/bg-3.png',
+                                transferName: 'Received from Oyeyemi Kolapo',
+                              ),
+                              TransactionHistorySummary(
+                                onTap: () {},
+                                size: size,
+                                tfDate: tfDate,
+                                amount: '-N 10,000',
+                                amountColor: kTap,
+                                code: 'Sent',
+                                igUrl: 'assets/f_png/bg_2.png',
+                                transferName: 'Transfer to Kelvin Jason',
+                              ),
+                              TransactionHistorySummary(
+                                onTap: () {},
+                                size: size,
+                                tfDate: tfDate,
+                                amount: '+N 20,000',
+                                amountColor: Colors.green.withOpacity(0.8),
+                                code: 'Received',
+                                igUrl: 'assets/f_png/bg-3.png',
+                                transferName: 'Received from Oyeyemi Kolapo',
                               ),
                             ]),
                           ),

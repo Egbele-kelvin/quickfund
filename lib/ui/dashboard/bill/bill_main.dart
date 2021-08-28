@@ -65,15 +65,6 @@ class _BillMainUIState extends State<BillMainUI> {
                     BillWidget(
 
                       size: size,
-                      title: 'Airtime',
-                      leadingIcon: Icons.send_to_mobile,
-                      onTap: () {
-                        print('');
-                      },
-                    ),
-                    BillWidget(
-
-                      size: size,
                       title: 'Cable TV',
                       leadingIcon: Icons.wifi,
                       onTap: () {

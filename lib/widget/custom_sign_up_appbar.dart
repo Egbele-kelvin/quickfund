@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget {
         Text(
           pageTitle,
           style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w400, fontSize: 18.0, color: Colors.white),
+              fontWeight: FontWeight.w400, fontSize: 16.0, color: Colors.white),
         ),
         Spacer(
           flex: 7,

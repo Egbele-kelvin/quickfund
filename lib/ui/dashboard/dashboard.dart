@@ -5,6 +5,7 @@ import 'package:quickfund/util/constants.dart';
 import 'bill/bill_main.dart';
 import 'dashboardMain.dart';
 import 'fundAcct/fundAccountUI.dart';
+import 'more/more.dart';
 import 'transaction/transactionUI.dart';
 
 class DashboardMain extends StatefulWidget {
@@ -34,7 +35,8 @@ class _DashboardMainState extends State<DashboardMain> {
        DashBoardMain(),
        BillMainUI(),
        TransactionUI(),
-       FundAccountUI()
+       More()
+      // FundAccountUI()
 
 
     ];
@@ -68,6 +70,8 @@ class _DashboardMainState extends State<DashboardMain> {
               ),
               child: BottomNavigationBar(
 
+                type: BottomNavigationBarType.fixed,
+                elevation: 1.0,
                 onTap: onItemTapped,
                 selectedItemColor: kPrimaryColor,
                 unselectedItemColor: Colors.grey,
@@ -100,10 +104,12 @@ class _DashboardMainState extends State<DashboardMain> {
                         Icons.add_circle,
                       ),
                       label:
-                        'Fund account',
+                        'More',
                       )
                 ],
               ),
             )));
   }
 }
+
+

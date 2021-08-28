@@ -54,12 +54,12 @@ class SearchBoxWidget extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
             gapPadding: 10,
             borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(12)),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: kPrimaryColor),
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(12)),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );

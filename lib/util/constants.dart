@@ -19,6 +19,7 @@ const Color colorPrimaryRed = Color(0XFFDB0011);
 const Color colorPrimaryLightGreen = Color(0XFF17C261);
 const Color colorPrimaryBlue = Color(0XFF1E32FA);
 const Color kShadowColor = Color(0XFFFCCCCC);
+const Color kDashBoardCardColor = Color(0XFFF57B7B);
 
 const Color colorGrey = Colors.grey;
 const kPrimaryGradientColor = LinearGradient(

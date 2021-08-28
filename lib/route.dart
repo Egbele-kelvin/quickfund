@@ -4,6 +4,8 @@ import 'package:quickfund/ui/dashboard/bill/bill_main.dart';
 import 'package:quickfund/ui/dashboard/dashboard.dart';
 import 'package:quickfund/ui/dashboard/dashboardMain.dart';
 import 'package:quickfund/ui/dashboard/fundAcct/fundAccountUI.dart';
+import 'package:quickfund/ui/dashboard/transaction/saveBeneficiary.dart';
+import 'package:quickfund/ui/dashboard/transaction/transactionRef.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionUI.dart';
 import 'package:quickfund/ui/onboarding/get_started.dart';
 import 'package:quickfund/ui/quickHelp/help_ui.dart';
@@ -74,8 +76,14 @@ class RouteGenerator {
         case AppRouteName.FundAccountUI:
         return _pageRoute(settings: settings, widget: FundAccountUI());
         break;
-      case AppRouteName.TransactionUI:
+        case AppRouteName.TransactionUI:
         return _pageRoute(settings: settings, widget: TransactionUI());
+        break;
+        case AppRouteName.TransactionRef:
+        return _pageRoute(settings: settings, widget: TransactionRef());
+        break;
+        case AppRouteName.SaveBeneficiary:
+        return _pageRoute(settings: settings, widget: SaveBeneficiary());
         break;
 
       default:
