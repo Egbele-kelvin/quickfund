@@ -19,4 +19,9 @@ class AppRouteName {
   static const String FundAccountUI = '/FundAccountUI';
   static const String DashBoardMain = '/DashBoardMain';
   static const String SaveBeneficiary = '/SaveBeneficiary';
+  static const String LoanMainUI = '/LoanMainUI';
+  static const String CategoriesOfLoanUI = '/CategoriesOfLoanUI';
+  static const String LoanPageUI = '/LoanPageUI';
+  static const String AirtimeUI = '/AirtimeUI';
+  static const String SuccessPage = '/SuccessPage';
 }

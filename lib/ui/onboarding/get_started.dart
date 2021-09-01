@@ -70,6 +70,9 @@ class GetStartedUI extends StatelessWidget {
                   CustomButton(
                     btnColor: Colors.transparent,
                     btnName: 'Login',
+                    onTap:() {
+                  Navigator.of(context).pushReplacementNamed(AppRouteName.LOG_IN);
+                    },
                   ),
                   Spacer(
                     flex: 2,

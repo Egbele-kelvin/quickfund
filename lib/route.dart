@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quickfund/ui/Loan/categoriesOfLoan.dart';
+import 'package:quickfund/ui/Loan/loanMain.dart';
+import 'package:quickfund/ui/Loan/loanPage.dart';
+import 'package:quickfund/ui/dashboard/bill/airtime.dart';
 import 'package:quickfund/ui/dashboard/bill/bill_main.dart';
 import 'package:quickfund/ui/dashboard/dashboard.dart';
 import 'package:quickfund/ui/dashboard/dashboardMain.dart';
@@ -8,17 +12,18 @@ import 'package:quickfund/ui/dashboard/transaction/saveBeneficiary.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionRef.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionUI.dart';
 import 'package:quickfund/ui/onboarding/get_started.dart';
+import 'package:quickfund/ui/onboarding/onboarding_ui.dart';
+import 'package:quickfund/ui/onboarding/splashscreen.dart';
 import 'package:quickfund/ui/quickHelp/help_ui.dart';
+import 'package:quickfund/ui/signin/sign_in_main.dart';
 import 'package:quickfund/ui/signup/account_opening/account_opening_ui.dart';
 import 'package:quickfund/ui/signup/account_opening/account_ui.dart';
 import 'package:quickfund/ui/signup/account_opening/review_details.dart';
 import 'package:quickfund/ui/signup/account_opening/securityQuestionUI.dart';
 import 'package:quickfund/ui/signup/register/registerUI.dart';
 import 'package:quickfund/ui/signup/sign_up_main.dart';
-import 'package:quickfund/ui/onboarding/onboarding_ui.dart';
-import 'package:quickfund/ui/onboarding/splashscreen.dart';
-import 'package:quickfund/ui/signin/sign_in_main.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
+import 'package:quickfund/widget/successPageForAirtimeData.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'ui/onboarding/welcomeui.dart';
@@ -84,6 +89,21 @@ class RouteGenerator {
         break;
         case AppRouteName.SaveBeneficiary:
         return _pageRoute(settings: settings, widget: SaveBeneficiary());
+        break;
+        case AppRouteName.LoanMainUI:
+        return _pageRoute(settings: settings, widget: LoanMainUI());
+        break;
+        case AppRouteName.CategoriesOfLoanUI:
+        return _pageRoute(settings: settings, widget: CategoriesOfLoanUI());
+        break;
+        case AppRouteName.LoanPageUI:
+        return _pageRoute(settings: settings, widget: LoanPageUI());
+        break;
+        case AppRouteName.AirtimeUI:
+        return _pageRoute(settings: settings, widget: AirtimeUI());
+        break;
+        case AppRouteName.SuccessPage:
+        return _pageRoute(settings: settings, widget: SuccessPage());
         break;
 
       default:

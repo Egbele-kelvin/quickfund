@@ -79,3 +79,50 @@ class RefrenceContent extends StatelessWidget {
     );
   }
 }
+
+
+class SummaryRe extends StatelessWidget {
+  const SummaryRe({
+    Key key,
+    @required this.size, this.tag, this.labelI
+  }) : super(key: key);
+
+  final Size size;
+  final String tag , labelI;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(tag , style: GoogleFonts.lato(
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+                color: Colors.black
+            ),
+            ),
+           Align(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0 , vertical: 2),
+                child: Text(labelI, style: GoogleFonts.lato(
+                  color: Colors.grey,
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w400,
+                ),),
+              ),
+              alignment: Alignment.topRight,
+            ),
+
+          ],
+        ),
+        SizedBox(height: size.height *0.02,),
+        FDottedLine(
+          width: double.infinity,
+          color: Colors.grey.withOpacity(0.5),
+        )
+      ],
+    );
+  }
+}

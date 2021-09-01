@@ -34,9 +34,8 @@ class _TransactionRefState extends State<TransactionRef> {
 
   @override
   void initState() {
-    // print(dateNow);
-    print(DateFormat('MMM dd,  yyyy, hh:mm kk:mm').format(dateNow));
-
+    print(dateNow);
+    print(DateFormat('MMM dd,  yyyy').format(dateNow));
     print(getUTCDate());
     // TODO: implement initState
     super.initState();
@@ -59,7 +58,7 @@ class _TransactionRefState extends State<TransactionRef> {
               //color: kPrimaryColor,
               child: CustomAppBar(
                 onTap: () {
-                  Navigator.pop(context);
+                 // Navigator.pop(context);
                   //onBackPress();
                   Navigator.pushReplacementNamed(
                       context, AppRouteName.DASHBOARD);

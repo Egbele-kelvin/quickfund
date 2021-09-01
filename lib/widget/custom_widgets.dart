@@ -151,7 +151,7 @@ class DashBoardHeader extends StatelessWidget {
         child: Icon(
           Icons.notifications,
           size: 30,
-          color: Colors.grey,
+          color: kPrimaryColor,
         ),
       ),
     );
@@ -204,7 +204,10 @@ class CardDetails extends StatelessWidget {
     this.acctBalanceII,
     this.savingsAcct,
     this.accountNum,
-    this.iconData, this.dashBoardColor, this.gestureTap,
+    this.iconData,
+    this.dashBoardColor,
+    this.gestureTap,
+    this.iconWidget,
   }) : super(key: key);
 
   final Size size;
@@ -212,6 +215,7 @@ class CardDetails extends StatelessWidget {
   final IconData iconData;
   final Color dashBoardColor;
   final Function gestureTap;
+  final Widget iconWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -220,8 +224,7 @@ class CardDetails extends StatelessWidget {
       width: size.width * 0.9,
       height: size.height * 0.18,
       decoration: BoxDecoration(
-          color: dashBoardColor,
-          borderRadius: BorderRadius.circular(10)),
+          color: dashBoardColor, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           SizedBox(
@@ -263,11 +266,13 @@ class CardDetails extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.2,
                 ),
-                Icon(
-                  iconData,
-                  size: 20,
-                  color: Colors.white,
-                ),
+                // Icon(
+                //   iconData,
+                //   size: 20,
+                //   color: Colors.white,
+                // ),
+
+                iconWidget,
               ],
             ),
             alignment: Alignment.topLeft,
@@ -422,27 +427,27 @@ class TransactionHistorySummary extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
                 child: Container(
                   width: size.width * 0.5,
-                  height: size.height * 05,
+                  height: size.height * 08,
                   child: Column(
                     children: [
                       Align(
                         child: Text(
                           transferName,
                           style: GoogleFonts.roboto(
-                              fontSize: 10,
+                              fontSize: 9.3,
                               fontWeight: FontWeight.w400,
                               color: Colors.black),
                         ),
                         alignment: Alignment.topLeft,
                       ),
                       SizedBox(
-                        height: size.height * 0.01,
+                        height: size.height * 0.00678,
                       ),
                       Align(
                         child: Text(
                           code,
                           style: GoogleFonts.roboto(
-                              fontSize: 9,
+                              fontSize: 8.5,
                               fontWeight: FontWeight.w300,
                               color: Colors.grey.withOpacity(1)),
                         ),
@@ -472,7 +477,7 @@ class TransactionHistorySummary extends StatelessWidget {
                         alignment: Alignment.topRight,
                       ),
                       SizedBox(
-                        height: size.height * 0.01,
+                        height: size.height * 0.00678,
                       ),
                       Align(
                         child: Text(
@@ -593,11 +598,9 @@ class AccountSettingCardMenu extends StatelessWidget {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircleAvatar(
-                      radius: 24,
-                      backgroundColor: kPrimaryColor,
-                      child: Icon(iconData, color: Colors.white,
-                      size: 20,)
-                    ),
+                        radius: 24,
+                        backgroundColor: kPrimaryColor,
+                        child: SvgPicture.asset(imgURL)),
                     SizedBox(
                       width: size.width * 0.03,
                     ),
@@ -743,6 +746,72 @@ class BeneficiaryCard extends StatelessWidget {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BuyingAirtimeCustomPlaceHolder extends StatelessWidget {
+  const BuyingAirtimeCustomPlaceHolder({
+    Key key,
+    @required this.size,
+    @required this.airtimeType,
+  }) : super(key: key);
+
+  final Size size;
+  final String airtimeType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: SvgPicture.asset(
+        'assets/f_svg/${airtimeType.toLowerCase()}.svg',
+        width: size.width * 0.1,
+        height: size.height *0.05,
+      ),
+    );
+  }
+}
+class CancelTranasactionProcess extends StatelessWidget {
+  const CancelTranasactionProcess({
+    Key key,
+    this.onTap,
+  }) : super(key: key);
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        'Cancel',
+        style: GoogleFonts.roboto(
+            fontWeight: FontWeight.w400, color: Colors.black, fontSize: 12),
+      ),
+    );
+  }
+}
+
+class SelectAmountWidget extends StatelessWidget {
+  const SelectAmountWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Text(
+          'Or Select amount',
+          style: GoogleFonts.robotoMono(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
         ),
       ),

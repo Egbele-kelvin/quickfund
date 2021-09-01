@@ -25,6 +25,7 @@ class _WelcomeQuickFundState extends State<WelcomeQuickFund> {
 
   void navigateToNextUI() async {
       Navigator.of(context).pushReplacementNamed(AppRouteName.onboardingmain);
+
   }
 
   @override

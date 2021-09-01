@@ -41,13 +41,13 @@ class _SplashScreenState extends State<SplashScreen> {
     final hasLoggedIn = sharedPref.getBool(AppStrings.HAS_LOGGED_IN) ?? false;
     if(hasLoggedIn) {
       //TODO: perform log process here
-      Navigator.of(context).pushNamed(AppRouteName.LOG_IN);
+      Navigator.of(context).pushReplacementNamed(AppRouteName.LOG_IN);
       //Navigator.of(context).pushNamed(AppRouteName.getStartedUpdatedUI);
     //  Navigator.of(context).pushNamed(AppRouteName.DASHBOARD);
     }else {
 
       sharedPref.setBool(AppStrings.HAS_LOGGED_IN, true);
-      Navigator.of(context).pushNamed(AppRouteName.LOG_IN);
+      Navigator.of(context).pushReplacementNamed(AppRouteName.LOG_IN);
     }
   }
 

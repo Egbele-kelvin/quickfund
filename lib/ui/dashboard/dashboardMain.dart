@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
@@ -12,9 +12,14 @@ class DashBoardMain extends StatefulWidget {
 }
 
 class _DashBoardMainState extends State<DashBoardMain> {
-  String userName = 'Bose', acctBalance = '239,600';
-
+  String userName = 'Bose', acctBalance = '239,600' , closedBal = 'XXXXXXX';
+  bool _passwordVisible;
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +54,31 @@ class _DashBoardMainState extends State<DashBoardMain> {
                     ),
 
                     CardDetails(
-                      dashBoardColor: kDashBoardCardColor,
+                      dashBoardColor: kPrimaryColor,
                       size: size,
                       gestureTap: () {
                         print('add fund');
+                        Navigator.pushReplacementNamed(
+                            context, AppRouteName.FundAccountUI);
                       },
                       accountNum: '2993204939',
                       acctBalanceI: 'Account Balance',
-                      acctBalanceII: 'N $acctBalance',
+                      acctBalanceII: _passwordVisible ?'N $acctBalance' : 'XXXXXXXXXX',
                       savingsAcct: 'Savings Account',
-                      iconData: Icons.visibility,
+
+                      iconWidget: InkWell(
+                          child: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          }),
                     )
                     //Spacer(flex: 1,),
                   ],
@@ -84,13 +104,15 @@ class _DashBoardMainState extends State<DashBoardMain> {
                   CustomDashBoardCard(
                     size: size,
                     onTap: () {},
-                    cardIcon: Icons.wb_incandescent,
+                    cardIcon: Icons.swap_horiz_rounded,
                     cardTitle: 'Transfer Via Bank',
                   ),
                   CustomDashBoardCard(
                     size: size,
-                    onTap: () {},
-                    cardIcon: Icons.autorenew_outlined,
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(AppRouteName.AirtimeUI);
+                    },
+                    cardIcon: Icons.phonelink_ring,
                     cardTitle: 'Buy Airtime',
                   ),
                 ],
@@ -103,14 +125,18 @@ class _DashBoardMainState extends State<DashBoardMain> {
                 children: [
                   CustomDashBoardCard(
                     size: size,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(AppRouteName.LoanMainUI);
+                    },
                     cardIcon: Icons.account_balance,
                     cardTitle: 'Loan',
                   ),
                   CustomDashBoardCard(
                     size: size,
-                    onTap: () {},
-                    cardIcon: Icons.money,
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(AppRouteName.BillMainUI);
+                    },
+                    cardIcon: Icons.multiline_chart_outlined,
                     cardTitle: 'Bill Payment',
                   ),
                 ],

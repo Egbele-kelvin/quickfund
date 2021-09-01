@@ -20,7 +20,7 @@ class RoundedInputField extends StatelessWidget {
   final ValueChanged<String> onSaved;
   final Color borderColor;
   final List inputForm;
-
+  final String initialValue;
   final FormFieldValidator<String> validateForm;
   final FocusNode hasFocus;
 
@@ -54,12 +54,14 @@ class RoundedInputField extends StatelessWidget {
     this.passwordvisible = false,
     this.labelText,
     this.hasFocus,
-    this.customTextHintStyle,
+    this.customTextHintStyle, this.initialValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: kDashBoardCardColor,
+      initialValue: initialValue,
       obscureText: passwordvisible,
       onFieldSubmitted: onSubmitted,
       controller: controller,

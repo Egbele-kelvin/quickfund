@@ -55,9 +55,14 @@ const String kSecurityNullError = "Please Enter your security answer";
 const String kShortPassError = "Password is too short";
 const String kShortPhoneNumberError = "Phone Number is too short";
 const String kShortBVNError = "BVN is too short";
+const String kShortLoanError = "Amount is too short";
 const String kMatchPassError = "Passwords don't match";
 const String kNamelNullError = "Please Enter your name";
 const String kAddressNullError = "Please Enter your address";
+const String kSalaryAmountNullError = "Please Enter your Salary";
+const String kLoanAmountNullErrorII = "Loan amount should\'nt exceed 1,000,000";
+const String kLoanAmountNullError = "Please Enter Loan Amount";
+const String kAmount = "Please Enter Amount";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

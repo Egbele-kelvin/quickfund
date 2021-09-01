@@ -73,7 +73,7 @@ class _DashboardMainState extends State<DashboardMain> {
                 type: BottomNavigationBarType.fixed,
                 elevation: 1.0,
                 onTap: onItemTapped,
-                selectedItemColor: kPrimaryColor,
+                selectedItemColor: kDashBoardCardColor,
                 unselectedItemColor: Colors.grey,
                 currentIndex: _selectedIndex,
                 selectedLabelStyle: GoogleFonts.roboto(
@@ -101,7 +101,7 @@ class _DashboardMainState extends State<DashboardMain> {
                       label: 'Transactions'),
                   BottomNavigationBarItem(
                       icon: Icon(
-                        Icons.add_circle,
+                        Icons.more_horiz,
                       ),
                       label:
                         'More',

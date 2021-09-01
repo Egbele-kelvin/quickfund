@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_gethelp_item_ui.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 
-class BillMainUI extends StatefulWidget {
+class CategoriesOfLoanUI extends StatefulWidget {
   @override
-  _BillMainUIState createState() => _BillMainUIState();
+  _CategoriesOfLoanUIState createState() => _CategoriesOfLoanUIState();
 }
 
-class _BillMainUIState extends State<BillMainUI> {
+class _CategoriesOfLoanUIState extends State<CategoriesOfLoanUI> {
   @override
   void initState() {
     super.initState();
@@ -33,10 +32,9 @@ class _BillMainUIState extends State<BillMainUI> {
               child: CustomAppBar(
                 onTap: () {
                   //onBackPress();
-                  Navigator.pushReplacementNamed(
-                      context, AppRouteName.DASHBOARD);
+                Navigator.pop(context);
                 },
-                pageTitle: 'Bills Payment',
+                pageTitle: 'Loan',
               ),
             ),
           ),
@@ -66,8 +64,8 @@ class _BillMainUIState extends State<BillMainUI> {
                     BillWidget(
 
                       size: size,
-                      title: 'Cable TV',
-                      leadingIcon: Icons.wifi,
+                      title: 'Nano Loan',
+                      leadingIcon: Icons.account_balance,
                       onTap: () {
                         print('');
                       },
@@ -75,17 +73,18 @@ class _BillMainUIState extends State<BillMainUI> {
                     BillWidget(
 
                       size: size,
-                      title: 'Data',
-                      leadingIcon: Icons.track_changes,
+                      title: 'Salary Loan',
+                      leadingIcon: Icons.account_balance,
                       onTap: () {
                         print('');
+                        Navigator.pushReplacementNamed(context, AppRouteName.LoanPageUI);
                       },
                     ),
                     BillWidget(
 
                       size: size,
-                      title: 'Electricity',
-                      leadingIcon: Icons.flash_on,
+                      title: 'Business Loan',
+                      leadingIcon: Icons.account_balance,
                       onTap: () {
                         print('');
                       },
