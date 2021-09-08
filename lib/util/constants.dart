@@ -21,6 +21,7 @@ const Color colorPrimaryBlue = Color(0XFF1E32FA);
 const Color kShadowColor = Color(0XFFFCCCCC);
 const Color kDashBoardCardColor = Color(0XFFF57B7B);
 
+
 const Color colorGrey = Colors.grey;
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,

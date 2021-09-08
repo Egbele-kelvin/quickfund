@@ -11,7 +11,7 @@ class CustomFileContainerWidget extends StatefulWidget {
   CustomFileContainerWidget({
     Key key,
     @required this.size,
-    this.onTap,
+    @required this.onTap,
     this.imageUrl,
     this.headline,
   }) : super(key: key);
@@ -64,10 +64,7 @@ class _CustomFileContainerWidgetState extends State<CustomFileContainerWidget> {
       dottedLength: 10.0,
       space: 2.0,
       child: GestureDetector(
-        onTap: () {
-          // pickImage();
-          // saveImage(imageFile.path);
-        },
+        onTap:(){} ,
         child: Container(
           height: widget.size.height * 0.15,
           width: widget.size.width * 0.35,

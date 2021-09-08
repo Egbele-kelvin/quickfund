@@ -49,6 +49,7 @@ dependencies:
   toggle_switch: ^1.2.0
   dio: ^4.0.0
   get_it: ^7.2.0
+  video_player:
 
 
 
