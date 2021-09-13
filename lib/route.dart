@@ -5,6 +5,7 @@ import 'package:quickfund/ui/Loan/loanMain.dart';
 import 'package:quickfund/ui/Loan/loanPage.dart';
 import 'package:quickfund/ui/dashboard/bill/airtime.dart';
 import 'package:quickfund/ui/dashboard/bill/bill_main.dart';
+import 'package:quickfund/ui/dashboard/bill/cable/cable_main.dart';
 import 'package:quickfund/ui/dashboard/dashboard.dart';
 import 'package:quickfund/ui/dashboard/dashboardMain.dart';
 import 'package:quickfund/ui/dashboard/fundAcct/fundAccountUI.dart';
@@ -105,6 +106,8 @@ class RouteGenerator {
         case AppRouteName.SuccessPage:
         return _pageRoute(settings: settings, widget: SuccessPage());
         break;
+      case AppRouteName.CableMain:
+        return _pageRoute(settings: settings, widget: CableMain());
 
       default:
         return _errorRoute(
