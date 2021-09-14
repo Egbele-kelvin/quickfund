@@ -6,6 +6,8 @@ import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_gethelp_item_ui.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 
+import 'cable/cable_main.dart';
+
 class BillMainUI extends StatefulWidget {
   @override
   _BillMainUIState createState() => _BillMainUIState();
@@ -64,11 +66,11 @@ class _BillMainUIState extends State<BillMainUI> {
                       flex: 1,
                     ),
                     BillWidget(
-
                       size: size,
                       title: 'Cable TV',
                       leadingIcon: Icons.wifi,
                       onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CableMain()));
                         print('');
                       },
                     ),

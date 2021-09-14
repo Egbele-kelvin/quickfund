@@ -83,7 +83,7 @@ class BillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: size.height * 0.064,
+      height: size.height * 0.1,
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(8),
         vertical: getProportionateScreenHeight(8),

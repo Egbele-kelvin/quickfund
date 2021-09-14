@@ -118,7 +118,7 @@ class _SignInMainState extends State<SignInMain> {
                               RoundedInputField(
                                 // onSaved: (newValue) => bvn = newValue,
                                 onSaved: (newValue) => phoneNumber = newValue,
-                                inputType: TextInputType.text,
+                                inputType: TextInputType.phone,
                                 maxLen: 11,
                                 labelText: 'Phone Number',
                                 customTextHintStyle: GoogleFonts.lato(

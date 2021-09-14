@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
@@ -404,7 +405,7 @@ class TransactionHistorySummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Container(
-          height: size.height * 0.065,
+          height: size.height * 0.1,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -414,12 +415,16 @@ class TransactionHistorySummary extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
                 child: Container(
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(igUrl),
+                  width: 30,
+                  height: 30,
+                  padding: EdgeInsets.only(left: 6,top: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(100)
                   ),
-                  padding: EdgeInsets.all(5),
-                  width: size.width * 0.13,
-                  height: size.height * 05,
+                  child: FaIcon(
+                    FontAwesomeIcons.exchangeAlt,color: kPrimaryColor,size: 15,
+                  ),
                 ),
               ),
               Padding(
