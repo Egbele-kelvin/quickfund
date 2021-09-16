@@ -1,7 +1,7 @@
-import 'dart:io';
+
+import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
@@ -9,12 +9,12 @@ import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/keyboard.dart';
 import 'package:quickfund/util/size_config.dart';
+import 'package:quickfund/widget/customFile_container.dart';
 import 'package:quickfund/widget/custom_button.dart';
-import 'package:quickfund/widget/custom_image_picker_widgets.dart';
 import 'package:quickfund/widget/custom_selecet_menu.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewDetails extends StatefulWidget {
   @override
@@ -22,38 +22,8 @@ class ReviewDetails extends StatefulWidget {
 }
 
 class _ReviewDetailsState extends State<ReviewDetails> {
-  File _image;
-  File _signImage;
-  _imgFromCamera() async{
-    File image = await ImagePicker.pickImage(source: ImageSource.camera,imageQuality: 50);
-    setState(() {
-      _image = image;
-    });
-  }
-  _imageFromGallery() async{
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery,imageQuality: 50);
-    setState(() {
-      _image = image;
-    });
-  }
-  _imgFromCameraForSignature() async{
-    File image = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 50);
-    setState(() {
-      _signImage = image;
-    });
-  }
-  _imageFromGalleryForSignature() async{
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-    setState(() {
-      _signImage = image;
-    });
-  }
-
   int currentView = 0;
   bool showDataplan = false, showPhoneEdit = false;
-  // File fileMedia;
-  // MediaSource source;
-
 
   List<String> userTitle = ['Mr.', 'Mrs.', 'Miss.'];
   List<String> maritalStatusData = [
@@ -237,7 +207,6 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       print('printght' + currentView.toString());
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -589,38 +558,16 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showPicker(context);
-                                        },
-                                        child: CustomImagePicker(
-                                            image: _image,
-                                              icon: Icons.camera_alt,),
+                                      CustomFileContainerWidget(
+                                        size: size,
+                                        headline: 'Take a selfie',
+                                        imageUrl: 'assets/f_png/avatar.png',
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showPickerSign(context);
-                                        },
-                                        child: CustomImagePickerSignature(
-                                          image: _signImage,
-                                          icon: FontAwesomeIcons.signature,),
+                                      CustomFileContainerWidget(
+                                        size: size,
+                                        headline: 'Your signature',
+                                        imageUrl: 'assets/f_png/avatar.png',
                                       ),
-
-
-                                      // CustomFileContainerWidget(
-                                      //   size: size,
-                                      //   headline: 'Take a selfie',
-                                      //   imageUrl: 'assets/f_png/avatar.png',
-                                      //   onTap: (){
-                                      //     _showPicker(context);
-                                      //   },
-                                      //
-                                      // ),
-                                      // CustomFileContainerWidget(
-                                      //   size: size,
-                                      //   headline: 'Your signature',
-                                      //   imageUrl: 'assets/f_png/avatar.png',
-                                      // ),
                                     ],
                                   ),
                                   SizedBox(
@@ -651,69 +598,5 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       ),
     );
   }
-
-
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: Icon(Icons.photo_camera),
-                      title:  Text('Camera'),
-                      onTap: () {
-                        _imgFromCamera();
-                        Navigator.of(context).pop();
-                      }),
-                  ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title:  Text('Photo Library'),
-                    onTap: () {
-                      _imageFromGallery();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
-  }
-
-  void _showPickerSign(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: Icon(Icons.photo_camera),
-                      title:  Text('Camera'),
-                      onTap: () {
-                        _imgFromCameraForSignature();
-                        Navigator.of(context).pop();
-                      }),
-                  ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title:  Text('Photo Library'),
-                    onTap: () {
-                      _imageFromGalleryForSignature();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
-  }
 }
-
 

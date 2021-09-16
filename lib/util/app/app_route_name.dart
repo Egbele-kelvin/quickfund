@@ -24,5 +24,7 @@ class AppRouteName {
   static const String LoanPageUI = '/LoanPageUI';
   static const String AirtimeUI = '/AirtimeUI';
   static const String SuccessPage = '/SuccessPage';
-  static const String CableMain = '/cable_main';
+  static const String TransferMainPage = '/TransferMainPage';
+  static const String TransferComponent = '/TransferComponent';
+  static const String CableMain = '/CableMain';
 }

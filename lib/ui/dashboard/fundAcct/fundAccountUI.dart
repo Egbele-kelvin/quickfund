@@ -126,7 +126,7 @@ class FundAccountWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          height: size.height * 0.08,
+          height: size.height * 0.095,
           width: double.infinity,
           //padding: EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(

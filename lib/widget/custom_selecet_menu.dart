@@ -29,7 +29,7 @@ class CustomQuickFundSelectMenu extends StatelessWidget {
         margin: EdgeInsets.symmetric(
           horizontal: getProportionateScreenWidth(20),
           vertical: getProportionateScreenHeight(10),),
-        height: size.height *0.085,
+        height: size.height *0.1,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
@@ -55,13 +55,8 @@ class CustomQuickFundSelectMenu extends StatelessWidget {
                 color: kSelectMenuColor
             ),
           ),
-          trailing: Container(
-            width: getProportionateScreenWidth(30),
-            height: getProportionateScreenHeight(30),
-            decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(30)
-            ),
+          trailing: CircleAvatar(
+            backgroundColor: Colors.black,
             child: Icon(
               Icons.forward,
               size: 18,

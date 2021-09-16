@@ -341,6 +341,15 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                   userAccount: userAccountNumber,
                                   receipientNumber: phoneNum,
                                   transactPin: transactPin,
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return "Transaction is required";
+                                    } else if (value.length != 4) {
+                                      return "Transaction pin is to short";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
                                   onChanged: (value) {
                                     setState(() {
                                       pin = value;

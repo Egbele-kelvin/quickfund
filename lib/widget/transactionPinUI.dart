@@ -18,12 +18,13 @@ class OTPTransaction extends StatelessWidget {
         this.userAccount,
         this.receipientNumber,
         this.date,
-        this.amount, this.onTap, this.cancelOnTap})
+        this.amount, this.onTap, this.cancelOnTap, this.validator})
       : super(key: key);
   final Size size;
   final transactPin;
   final String userAccount, receipientNumber, date, amount;
   final ValueChanged<String> onChanged;
+  final FormFieldValidator<String> validator;
   final ValueChanged<String> onComplete;
   final Function onTap , cancelOnTap;
 
@@ -84,6 +85,7 @@ class OTPTransaction extends StatelessWidget {
             controller: transactPin,
             textStyle: TextStyle(fontWeight: FontWeight.normal),
             cursorColor: kPrimaryColor,
+            validator:validator ,
             cursorHeight: 10,
             onCompleted: onComplete,
             onChanged: onChanged,

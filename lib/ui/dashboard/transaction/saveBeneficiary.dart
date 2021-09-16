@@ -73,7 +73,7 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                     Expanded(
                       flex: 1,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: SearchBoxWidget(
                           searchController: searchController,
                           onSubmitted: (val) {},
@@ -99,9 +99,6 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                                 accountNum: '08097969699439',
                                 accountName: 'Olufunmilayo Emmanuel Tope',
                                 bankName: 'Polaris Bank',
-                                moreTap: () {
-                                  print('more is tap');
-                                },
                                 deleteTap: () {
                                   print('delete is tap');
                                 },

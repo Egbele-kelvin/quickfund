@@ -68,35 +68,39 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Spacer(
-          flex: 2,
-        ),
+        // Spacer(
+        //   flex: 1,
+        // ),
         InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(30),
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding: EdgeInsets.all(25),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                  size: 25,
-                ),
-              )),
+          child: Container(
+            padding: EdgeInsets.all(25),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
         ),
         Spacer(
           flex: 1,
         ),
-        Text(
-          pageTitle,
-          style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w400, fontSize: 15.0, color: Colors.white),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            pageTitle,
+            style: GoogleFonts.roboto(
+                fontWeight: FontWeight.w400, fontSize: 15.0, color: Colors.white),
+          ),
         ),
+
+        Container(),
         Spacer(
-          flex: 7,
+          flex: 2,
         ),
       ],
     );

@@ -67,7 +67,7 @@ class _TransactionUIState extends State<TransactionUI> {
                     Expanded(
                       flex: 1,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: SearchBoxWidget(
                           searchController: searchController,
                           onSubmitted: (val) {},
@@ -78,6 +78,8 @@ class _TransactionUIState extends State<TransactionUI> {
                       ),
                     ),
 
+
+                    ///-----concept to --- work on ------
                     Expanded(
                       flex: 10,
                       child: CustomScrollView(
@@ -99,7 +101,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '-N 10,000',
                                 amountColor: kTap,
                                 code: 'Sent',
-                                igUrl: 'assets/f_png/bg_2.png',
                                 transferName: 'Transfer to Kelvin Jason',
                               ),
                               TransactionHistorySummary(
@@ -109,7 +110,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '+N 20,000',
                                 amountColor: Colors.green.withOpacity(0.8),
                                 code: 'Received',
-                                igUrl: 'assets/f_png/bg-3.png',
                                 transferName: 'Received from Oyeyemi Kolapo',
                               ),
                               TransactionHistorySummary(
@@ -119,7 +119,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '-N 10,000',
                                 amountColor: kTap,
                                 code: 'Sent',
-                                igUrl: 'assets/f_png/bg_2.png',
                                 transferName: 'Transfer to Kelvin Jason',
                               ),
                               TransactionHistorySummary(
@@ -129,7 +128,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '+N 20,000',
                                 amountColor: Colors.green.withOpacity(0.8),
                                 code: 'Received',
-                                igUrl: 'assets/f_png/bg-3.png',
                                 transferName: 'Received from Oyeyemi Kolapo',
                               ),
                               TransactionHistorySummary(
@@ -139,7 +137,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '-N 10,000',
                                 amountColor: kTap,
                                 code: 'Sent',
-                                igUrl: 'assets/f_png/bg_2.png',
                                 transferName: 'Transfer to Kelvin Jason',
                               ),
                               TransactionHistorySummary(
@@ -149,7 +146,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '+N 20,000',
                                 amountColor: Colors.green.withOpacity(0.8),
                                 code: 'Received',
-                                igUrl: 'assets/f_png/bg-3.png',
                                 transferName: 'Received from Oyeyemi Kolapo',
                               ),
                               TransactionHistorySummary(
@@ -159,7 +155,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '-N 10,000',
                                 amountColor: kTap,
                                 code: 'Sent',
-                                igUrl: 'assets/f_png/bg_2.png',
                                 transferName: 'Transfer to Kelvin Jason',
                               ),
                               TransactionHistorySummary(
@@ -169,7 +164,6 @@ class _TransactionUIState extends State<TransactionUI> {
                                 amount: '+N 20,000',
                                 amountColor: Colors.green.withOpacity(0.8),
                                 code: 'Received',
-                                igUrl: 'assets/f_png/bg-3.png',
                                 transferName: 'Received from Oyeyemi Kolapo',
                               ),
                             ]),

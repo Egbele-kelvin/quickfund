@@ -35,3 +35,19 @@ class CustomDivider extends StatelessWidget {
     //     ));
   }
 }
+
+class CustomHorizonDivider extends StatelessWidget {
+  const CustomHorizonDivider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 48.0),
+      child: Divider(
+        color: Colors.grey,
+      ),
+    );
+  }
+}

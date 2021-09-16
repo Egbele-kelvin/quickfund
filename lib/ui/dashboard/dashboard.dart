@@ -58,7 +58,7 @@ class _DashboardMainState extends State<DashboardMain> {
                   topRight: Radius.circular(15), topLeft: Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black38.withOpacity(0.1),
+                    color: Colors.black38.withOpacity(0.06),
                     spreadRadius: 0,
                     blurRadius: 10),
               ],

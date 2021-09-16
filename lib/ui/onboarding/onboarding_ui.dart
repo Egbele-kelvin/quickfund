@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
+import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/data.dart';
 import 'package:quickfund/widget/cumstom_onboarding_slider.dart';
 
@@ -34,6 +35,7 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       //elevation: 0.0,
       body: Stack(
@@ -54,6 +56,20 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
               );
             },
           ),
+          Positioned(
+            bottom: 100,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < slides.length; i++)
+                  currentIndex == i
+                      ? pageIndexIndicator(true)
+                      : pageIndexIndicator(false)
+              ],
+            ),
+          ),
           currentIndex != slides.length - 1
               ? Positioned(
                   bottom: 30,
@@ -65,7 +81,7 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
                     ),
                     // height: Platform.isAndroid? 50 : 50,
 
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 18),
                     // color: Colors.transparent,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,36 +93,28 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
                           },
                           child: Text(AppStrings.appskip,
                               style: GoogleFonts.roboto(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w400)),
-                        ),
-                        Row(
-                          children: [
-                            for (int i = 0; i < slides.length; i++)
-                              currentIndex == i
-                                  ? pageIndexIndicator(true)
-                                  : pageIndexIndicator(false)
-                          ],
-                        ),
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400)),
+                  ),
                         InkWell(
-                          onTap: () async {
-                            await _pageController
-                                .nextPage(
-                                    duration: Duration(milliseconds: 500),
-                                    curve: Curves.easeInCubic)
-                                .then((_) {
-                              if (_pageController.page.toInt() == 3) {
-                                Navigator.pushReplacementNamed(
-                                    context, AppRouteName.getStarted);
-                              }
-                            });
-                            // pageController.animateToPage(slides.length + 1,
-                            //     duration: Duration(microseconds: 400),
-                            //     curve: Curves.linear);
-                          },
-                          child: Text(
-                            AppStrings.appnext,
+                    onTap: () async {
+                      await _pageController
+                          .nextPage(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInCubic)
+                          .then((_) {
+                        if (_pageController.page.toInt() == 3) {
+                          Navigator.pushReplacementNamed(
+                              context, AppRouteName.getStarted);
+                        }
+                      });
+                      // pageController.animateToPage(slides.length + 1,
+                      //     duration: Duration(microseconds: 400),
+                      //     curve: Curves.linear);
+                    },
+                    child: Text(
+                      AppStrings.appnext,
                             style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -117,7 +125,7 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
                     ),
                   ),
                 )
-              : GetStartedUI()
+              : GetStartedUI(),
         ],
       ),
     );
@@ -147,11 +155,11 @@ class _OnBoardingUIState extends State<OnBoardingUI> {
 
 Widget pageIndexIndicator(bool isCurrentPage) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 2.0),
+    margin: EdgeInsets.symmetric(horizontal: 10.0),
     height: isCurrentPage ? 10.0 : 6.0,
     width: isCurrentPage ? 10.0 : 6.0,
     decoration: BoxDecoration(
-      color: isCurrentPage ? Colors.orange.shade900 : Colors.orange[200],
+      color: isCurrentPage ? kPrimaryColor : Colors.white,
       borderRadius: BorderRadius.circular(12),
     ),
   );

@@ -18,46 +18,61 @@ class CustomSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    var size = MediaQuery.of(context).size;
+    return Scaffold(
         body: DecoratedBox(
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(backgroundImage), fit: BoxFit.cover),
           ),
-          child: Column(
+          child: Stack(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 200),
-                padding: EdgeInsets.only(left: 28, right: 36),
-                child: Text(
-                  title,
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                width: double.infinity,
+                height: size.height,
+                color: Colors.black.withOpacity(0.78),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 40, bottom: 90),
-                padding: EdgeInsets.only(left: 28, right: 36),
-                child: Text(
-                  desc,
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w300,
+              Column(
+                children: [
+                  Spacer(flex: 2,),
+                  Container(
+                    margin: EdgeInsets.only(top: 200),
+                    padding: EdgeInsets.only(left: 28, right: 36),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 40, bottom: 90),
+                      padding: EdgeInsets.only(left: 28, right: 36),
+                      child: Text(
+                        desc,
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Spacer(flex: 3,),
+                ],
               ),
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

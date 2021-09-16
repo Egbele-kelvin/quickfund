@@ -33,7 +33,7 @@ class GetStartedUI extends StatelessWidget {
                     padding: EdgeInsets.only(left: 28, right: 36),
                     child: Text(
                       'Flexible and convenient repayment.',
-                      textAlign: TextAlign.left,
+                      //textAlign: TextAlign.left,
                       style: GoogleFonts.roboto(
                         color: Colors.white,
                         fontSize: 28,

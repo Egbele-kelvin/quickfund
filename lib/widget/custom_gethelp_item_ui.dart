@@ -83,7 +83,7 @@ class BillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: size.height * 0.1,
+      height: size.height * 0.08,
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(8),
         vertical: getProportionateScreenHeight(8),
@@ -94,37 +94,38 @@ class BillWidget extends StatelessWidget {
           color: Colors.grey.withOpacity(0.2),
         ),
       ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.symmetric(vertical: 1),
-          height: size.height * 0.04,
-          width: size.width * 0.09,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(
-                color: kPrimaryColor.withOpacity(0.6),
-                width: 1,
-              ),
+      child: Center(
+        child: ListTile(
+          onTap: onTap,
+          leading: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(vertical: 4),
+            height: size.height * 0.04,
+            width: size.width * 0.09,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: kPrimaryColor.withOpacity(0.4)
+                )
+            ),
+            child: Icon(
+              leadingIcon,
+              size: 20,
+              color: kPrimaryColor.withOpacity(0.7),
+            ),
           ),
-          child: Icon(
-            leadingIcon,
-            size: 20,
-            color: kPrimaryColor.withOpacity(0.7),
+          title: Text(
+          title,
+            style: GoogleFonts.lato(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
           ),
+          trailing: Icon(Icons.arrow_forward,
+            size: 16,
+            color: Colors.black,),
         ),
-        title: Text(
-        title,
-          style: GoogleFonts.lato(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-          ),
-        ),
-        trailing: Icon(Icons.arrow_forward,
-          size: 16,
-          color: Colors.black,),
       ),
     );
   }
@@ -146,7 +147,7 @@ class CustomAirtimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: size.height * 0.064,
+      height: size.height * 0.08,
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(8),
         vertical: getProportionateScreenHeight(8),

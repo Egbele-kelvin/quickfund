@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
@@ -21,6 +22,27 @@ class _SignInMainState extends State<SignInMain> {
   String userName = 'Bose', phoneNumber, password;
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
+
+
+
+  // static Future<bool> authenticateWithBiometrics() async {
+  //   final LocalAuthentication localAuthentication = LocalAuthentication();
+  //   bool isBiometricSupported = await localAuthentication.isDeviceSupported();
+  //   bool canCheckBiometrics = await localAuthentication.canCheckBiometrics;
+  //
+  //   bool isAuthenticated = false;
+  //
+  //   if (isBiometricSupported && canCheckBiometrics) {
+  //     isAuthenticated = await localAuthentication.authenticate(
+  //       localizedReason: 'Please complete the biometrics to proceed.',
+  //       //biometricOnly: true,
+  //       stickyAuth: true,
+  //     );
+  //   }
+  //
+  //   return isAuthenticated;
+  // }
+
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -118,7 +140,7 @@ class _SignInMainState extends State<SignInMain> {
                               RoundedInputField(
                                 // onSaved: (newValue) => bvn = newValue,
                                 onSaved: (newValue) => phoneNumber = newValue,
-                                inputType: TextInputType.phone,
+                                inputType: TextInputType.text,
                                 maxLen: 11,
                                 labelText: 'Phone Number',
                                 customTextHintStyle: GoogleFonts.lato(

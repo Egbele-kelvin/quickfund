@@ -23,7 +23,7 @@ class _LoanPageUIState extends State<LoanPageUI> {
   bool setImage, assetsImageUrl = false;
   int selectedIndex;
   bool _passwordVisible;
-  String title, userName = 'Bose', salary, loanAmount, purposeOfLoan;
+  String title='', userName = 'Bose', salary, loanAmount, purposeOfLoan;
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
 

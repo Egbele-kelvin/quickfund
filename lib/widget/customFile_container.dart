@@ -1,3 +1,4 @@
+
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _CustomFileContainerWidgetState extends State<CustomFileContainerWidget> {
     });
   }
 
- void saveImage(path) async {
+  void saveImage(path) async {
     SharedPreferences imagePref = await SharedPreferences.getInstance();
     imagePref.setString('imagePref', path);
   }
@@ -73,15 +74,15 @@ class _CustomFileContainerWidgetState extends State<CustomFileContainerWidget> {
             children: [
               imagePath != null
                   ? CircleAvatar(
-                      backgroundImage: FileImage(File(imagePath)),
-                      radius: 30,
-                    )
+                backgroundImage: FileImage(File(imagePath)),
+                radius: 30,
+              )
                   : CircleAvatar(
-                      radius: 30,
-                      backgroundImage: imageFile != null
-                          ? Image.file(imageFile)
-                          : AssetImage(widget.imageUrl),
-                    ),
+                radius: 30,
+                backgroundImage: imageFile != null
+                    ? Image.file(imageFile)
+                    : AssetImage(widget.imageUrl),
+              ),
               SizedBox(
                 height: widget.size.height * 0.04,
               ),

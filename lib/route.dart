@@ -23,6 +23,8 @@ import 'package:quickfund/ui/signup/account_opening/review_details.dart';
 import 'package:quickfund/ui/signup/account_opening/securityQuestionUI.dart';
 import 'package:quickfund/ui/signup/register/registerUI.dart';
 import 'package:quickfund/ui/signup/sign_up_main.dart';
+import 'package:quickfund/ui/transfer/transfer.dart';
+import 'package:quickfund/ui/transfer/transferMain.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/widget/successPageForAirtimeData.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -35,6 +37,12 @@ class RouteGenerator {
     switch (settings.name) {
       case AppRouteName.app:
         return _pageRoute(widget: SplashScreen(), settings: settings);
+        break;
+        case AppRouteName.TransferMainPage:
+        return _pageRoute(settings: settings, widget: TransferMainPage());
+        break;
+        case AppRouteName.TransferComponent:
+        return _pageRoute(settings: settings, widget: TransferComponent());
         break;
 
       case AppRouteName.welcome:

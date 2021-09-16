@@ -79,58 +79,58 @@ class _MoreState extends State<More> {
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    // AccountSettingCardMenu(
-                    //   size: size,
-                    //   onTap: () {
-                    //     print('click');
-                    //     Navigator.popAndPushNamed(
-                    //         context, AppRouteName.SaveBeneficiary);
-                    //   },
-                    //  iconData: Icons.swap_horiz_rounded,
-                    //   lable: 'Beneficiary Management',
-                    // ),
-                    // AccountSettingCardMenu(
-                    //   size: size,
-                    //   onTap: () {
-                    //     print('click');
-                    //   },
-                    //  iconData: Icons.account_circle,
-                    //   lable: 'Contact Us',
-                    // ),
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        print('click');
+                        Navigator.popAndPushNamed(
+                            context, AppRouteName.SaveBeneficiary);
+                      },
+                     iconData: Icons.swap_horiz_rounded,
+                      lable: 'Beneficiary Management',
+                    ),
                     AccountSettingCardMenu(
                       size: size,
                       onTap: () {
                         print('click');
                       },
-                     imgURL: 'assets/f_svg/Icon-awesome-credit-card.svg',
-                      lable: 'Card Service',
+                     iconData: Icons.account_circle,
+                      lable: 'Contact Us',
                     ),
                     // AccountSettingCardMenu(
                     //   size: size,
                     //   onTap: () {
                     //     print('click');
                     //   },
-                    //   iconData: Icons.settings,
-                    //   lable: 'Setting',
+                    //  imgURL: 'assets/f_svg/Icon-awesome-credit-card.svg',
+                    //   lable: 'Card Service',
                     // ),
-                    // AccountSettingCardMenu(
-                    //   size: size,
-                    //   onTap: () {
-                    //     print('click');
-                    //   },
-                    //  iconData: Icons.rate_review,
-                    //   lable: 'Rate this App',
-                    // ),
-                    // AccountSettingCardMenu(
-                    //   size: size,
-                    //   onTap: () {
-                    //     print('click');
-                    //     Navigator.pushReplacementNamed(
-                    //         context, AppRouteName.LOG_IN);
-                    //   },
-                    //  iconData: Icons.power_settings_new,
-                    //   lable: 'Logout',
-                    // ),
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        print('click');
+                      },
+                      iconData: Icons.settings,
+                      lable: 'Setting',
+                    ),
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        print('click');
+                      },
+                     iconData: Icons.rate_review,
+                      lable: 'Rate this App',
+                    ),
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        print('click');
+                        Navigator.pushReplacementNamed(
+                            context, AppRouteName.LOG_IN);
+                      },
+                     iconData: Icons.power_settings_new,
+                      lable: 'Logout',
+                    ),
                   ],
                 ),
               ),

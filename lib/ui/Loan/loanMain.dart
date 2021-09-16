@@ -84,8 +84,8 @@ class _LoanMainUIState extends State<LoanMainUI> {
                           height: size.height * 0.05,
                         ),
                         ResendOTP(
-                          textI: "Need Money ? ",
-                          textII: 'Get a Loan up to N1m and repay in 3 - 6 months.',
+                          textI: "Need Money ? \n",
+                          textII: 'Get a Loan up to N1m and repay \n in 3 - 6 months.',
                           onTap: () {
                             Navigator.of(context).pushNamed(
                                 AppRouteName.CategoriesOfLoanUI);

@@ -74,60 +74,18 @@ class _CableMainState extends State<CableMain> {
                         padding: EdgeInsets.only(top: 25, left: 10),
                         child: Text(
                           'Choose Your Service Provider',
-                          style: GoogleFonts.roboto(fontSize: 16),
+                          style: GoogleFonts.roboto(fontSize: 12,
+                          fontWeight: FontWeight.w400 ,
+                          color: Colors.black),
                         )),
-                    SizedBox(height: 40),
-                    CustomImageListTile(
-                      leadingImage:
-                      'https://getlogo.net/wp-content/uploads/2021/05/dstv-logo-vector.png',
-                      title: 'DStv',
-                      onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>Cable())),
-                    ),
-                    CustomImageListTile(
-                      leadingImage:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY2Pjt-PzqsRcCD3iou8G0QjP6sZAV_kqV0_NfivjIA6oIQ7DOBQDcWBbIAol0lxZJggg&usqp=CAU',
-                      title: 'Startime',
-                    ),
-                    CustomImageListTile(
-                      leadingImage:
-                      'https://getlogo.net/wp-content/uploads/2021/05/gotv-nigeria-logo-vector.png',
-                      title: 'GOtv',
-                    ),
-                    CustomImageListTile(
-                      leadingImage: 'http://www.techzim.co.zw/wp-content/uploads/2013/06/mytv-logo.png',
-                      title: 'Mytv',
-                    )
+                    SizedBox(height: size.height *0.02),
+
                   ],
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CustomImageListTile extends StatelessWidget {
-  const CustomImageListTile({
-    Key key, this.title, this.leadingImage,this.onTap
-  }) : super(key: key);
-
-  final String title;
-  final String leadingImage;
-  final Function onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Container(
-            width: 35,
-            height: 35,
-            child: Image.network(leadingImage)),
-        title: Text(title),
-        trailing: Icon(Icons.east),
-        onTap: onTap,
       ),
     );
   }

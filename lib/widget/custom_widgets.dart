@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
@@ -20,6 +19,129 @@ class CustomBottomSheetMenuItem extends StatelessWidget {
   }
 }
 
+
+class PayBillDataProvider extends StatelessWidget {
+  const PayBillDataProvider({
+    Key key, this.title, this.svgURL, this.onTap,
+  }) : super(key: key);
+
+  final String title, svgURL;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    var size= MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        children: [
+          ListTile(
+            onTap: onTap,
+            leading: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(vertical: 1),
+              height: size.height * 0.04,
+              width: size.width * 0.09,
+              // decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(40),
+              //     border: Border.all(
+              //       color: kPrimaryColor.withOpacity(0.6),
+              //       width: 1,
+              //     ),
+              // ),
+              child: Image.asset(svgURL),
+            ),
+            title: Text( title , style: GoogleFonts.openSans(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.black
+            ),),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey.withOpacity(0.5),),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+            child: CustomHorizonDividerForProfile(),
+          )
+        ],
+      ),
+    );
+  }
+}
+class DataWidget extends StatelessWidget {
+  const DataWidget({
+    Key key,
+    @required this.airtimeType,
+    @required this.size, this.imgUrl, this.payBillData,
+  }) : super(key: key);
+
+  final String airtimeType ,payBillData, imgUrl;
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          horizontalTitleGap: 10.0,
+          leading: SvgPicture.asset(
+              imgUrl,
+              width: size.width * 0.1,
+              height: size.height * 0.05),
+          title: Text(
+            airtimeType ?? '',
+            style: GoogleFonts.nunito(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                color: Colors.white
+            ),
+          ),
+          subtitle: Text(payBillData, style: GoogleFonts.nunito(
+              color: Color(0xffBB9A8C),
+              fontSize: 12
+          ),),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: CustomHorizonDividerForProfile(),
+        )
+      ],
+    );
+  }
+}
+class SelectFromContactWidgetText extends StatelessWidget {
+  const SelectFromContactWidgetText({
+    Key key,
+    this.onTap,
+  }) : super(key: key);
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkResponse(
+      onTap: onTap,
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Text(
+          'Select from phone contacts',
+          style: GoogleFonts.nunito(
+              color: Colors.black, fontSize: 12, fontWeight: FontWeight.w400),
+        ),
+      ),
+    );
+  }
+}
+class CustomHorizonDividerForProfile extends StatelessWidget {
+  const CustomHorizonDividerForProfile({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      color: Colors.grey,
+    );
+  }
+}
 class CustomDetails extends StatelessWidget {
   final String heading;
 
@@ -225,7 +347,11 @@ class CardDetails extends StatelessWidget {
       width: size.width * 0.9,
       height: size.height * 0.18,
       decoration: BoxDecoration(
-          color: dashBoardColor, borderRadius: BorderRadius.circular(10)),
+        image: DecorationImage(
+          image: AssetImage('assets/f_png/dashboardbg.png')
+        ),
+          // color: dashBoardColor,
+          borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           SizedBox(
@@ -321,7 +447,7 @@ class CustomDashBoardCard extends StatelessWidget {
 
   final Size size;
   final String cardTitle;
-  final IconData cardIcon;
+  final String cardIcon;
   final Function onTap;
 
   @override
@@ -340,19 +466,17 @@ class CustomDashBoardCard extends StatelessWidget {
             Align(
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 6.0),
-                child: Container(
-                  child: Icon(
+                 EdgeInsets.symmetric(horizontal: 8, vertical: 6.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                  child: SvgPicture.asset(
                     cardIcon,
-                    size: 15,
-                    color: kTap,
+                    // fit: BoxFit.fill,
+                    width: size.width *0.03,
+                    color: kPrimaryColor,
                   ),
-                  width: size.width * 0.07,
-                  height: size.height * 0.033,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white),
-                ),
+                )
               ),
               alignment: Alignment.topRight,
             ),
@@ -405,7 +529,7 @@ class TransactionHistorySummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Container(
-          height: size.height * 0.1,
+          height: size.height * 0.065,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -415,15 +539,15 @@ class TransactionHistorySummary extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
                 child: Container(
-                  width: 30,
-                  height: 30,
-                  padding: EdgeInsets.only(left: 6,top: 5),
+                  child:Icon(Icons.swap_horiz_rounded, color: kPrimaryColor,),
+                  padding: EdgeInsets.all(5),
+                  width: size.width * 0.13,
+                  height: size.height * 0.05,
                   decoration: BoxDecoration(
-                    border: Border.all(color: kPrimaryColor),
-                    borderRadius: BorderRadius.circular(100)
-                  ),
-                  child: FaIcon(
-                    FontAwesomeIcons.exchangeAlt,color: kPrimaryColor,size: 15,
+                      shape: BoxShape.circle,
+                    border: Border.all(
+                      color: kPrimaryColor
+                    )
                   ),
                 ),
               ),
@@ -605,7 +729,7 @@ class AccountSettingCardMenu extends StatelessWidget {
                     CircleAvatar(
                         radius: 24,
                         backgroundColor: kPrimaryColor,
-                        child: SvgPicture.asset(imgURL)),
+                        child: Icon(iconData)),
                     SizedBox(
                       width: size.width * 0.03,
                     ),
