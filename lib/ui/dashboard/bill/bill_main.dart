@@ -33,15 +33,15 @@ class _BillMainUIState extends State<BillMainUI> {
       userAccountNumber = '1019945039';
 
   List<AirtimePackage> airtimeProviderBundle = [
-    AirtimePackage(bundleType: '100MB', amount: 'N100'),
-    AirtimePackage(bundleType: '200MB', amount: 'N300'),
-    AirtimePackage(bundleType: '1GB', amount: 'N500'),
-    AirtimePackage(bundleType: '1.5 GB', amount: 'N800'),
-    AirtimePackage(bundleType: '2GM', amount: 'N1200'),
-    AirtimePackage(bundleType: '3GB', amount: 'N1500'),
-    AirtimePackage(bundleType: '3.5GB', amount: 'N1600'),
-    AirtimePackage(bundleType: '4.5GB', amount: 'N1900'),
-    AirtimePackage(bundleType: '6.7GB', amount: 'N2000'),
+    AirtimePackage(bundleType: '100MB -1 Day', amount: 'N100'),
+    AirtimePackage(bundleType: '200MB - 3 Day' , amount: 'N300'),
+    AirtimePackage(bundleType: '1GB - 5 Days', amount: 'N500'),
+    AirtimePackage(bundleType: '1.5 GB - 1 week', amount: 'N800'),
+    AirtimePackage(bundleType: '2GM - 1 week', amount: 'N1200'),
+    AirtimePackage(bundleType: '3GB - 2 weeks', amount: 'N1500'),
+    AirtimePackage(bundleType: '3.5GB - 1 month', amount: 'N1600'),
+    AirtimePackage(bundleType: '4.5GB  - 1 month', amount: 'N1900'),
+    AirtimePackage(bundleType: '6.7GB - 2 month', amount: 'N2000'),
   ];
   List<String> airtimeProvider = ['Airtel', 'MTN', 'GLO', '9Mobile'];
   List<String> utilityBill = [
@@ -116,12 +116,12 @@ class _BillMainUIState extends State<BillMainUI> {
                           return CustomItemWidget(
                             onTap: () {
                               setState(() {
-                                cableBundle = airtimeProviderBundle[index].bundleType;
+                                bundle = airtimeProviderBundle[index].bundleType;
                               });
 
                               Navigator.of(context).pop();
                             },
-                            descriptionItem: airtimeProviderBundle[index].amount,
+                            descriptionItem: airtimeProviderBundle[index].bundleType + ' '+ airtimeProviderBundle[index].amount,
                           );
                         },
                         separatorBuilder: (context, index) => Container(),
@@ -350,24 +350,6 @@ class _BillMainUIState extends State<BillMainUI> {
                               ),
 
                               SizedBox(height: size.height *0.03,),
-                              RoundedInputField(
-                                hasFocus: AlwaysDisabledFocusNode(),
-                                suffixIcon: InkResponse(
-                                  onTap: (){},
-                                  child: Icon(Icons.arrow_drop_down_outlined , color: kPrimaryColor,
-                                  size: 18,),
-                                ),
-                                inputType: TextInputType.text,
-                                maxLen: 11,
-                                labelText: 'Bundle',
-                                customTextHintStyle: GoogleFonts.lato(
-                                    fontSize: 12,
-                                    color: Colors.black54.withOpacity(0.3),
-                                    fontWeight: FontWeight.w600),
-                                hintText: bundle,
-                                autoCorrect: true,
-                              ),
-
                               SelectedCustom(
                                 size: size,
                                 onTap: () {
@@ -531,22 +513,13 @@ class _BillMainUIState extends State<BillMainUI> {
                               UserProfileWidget(size: size ,
                               detail: 'Eric  Kelivn',),
                               SizedBox(height: size.height *0.09,),
-                              RoundedInputField(
-                                hasFocus: AlwaysDisabledFocusNode(),
-                                suffixIcon: InkResponse(
-                                  onTap: (){},
-                                  child: Icon(Icons.arrow_drop_down_outlined , color: kPrimaryColor,
-                                    size: 18,),
-                                ),
-                                inputType: TextInputType.text,
-                                maxLen: 11,
-                                labelText: 'Bundle',
-                                customTextHintStyle: GoogleFonts.lato(
-                                    fontSize: 12,
-                                    color: Colors.black54.withOpacity(0.3),
-                                    fontWeight: FontWeight.w600),
-                                hintText: cableBundle,
-                                autoCorrect: true,
+                              SelectedCustom(
+                                size: size,
+                                onTap: () {
+                                  buildShowModalBottomSheetForUserTitle(
+                                      context, size);
+                                },
+                                title: cableBundle,
                               ),
 
                               SizedBox(
