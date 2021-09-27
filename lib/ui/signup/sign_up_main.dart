@@ -31,12 +31,12 @@ class _GetStartedUpdatedUIState extends State<GetStartedUpdatedUI> {
                   Spacer(
                     flex: 1,
                   ),
-                  Center(child: SvgPicture.asset('assets/f_svg/quickfund.svg')),
+                //  Center(child: SvgPicture.asset('assets/f_svg/quickfund.svg')),
                   Spacer(
                     flex: 1,
                   ),
                   Text(
-                    'Welcome to QuickfundFMB',
+                    'Welcome to Quickfund MFB',
                     style: GoogleFonts.roboto(
                         fontWeight: FontWeight.w400,
                         fontSize: 16.0,

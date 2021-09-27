@@ -29,7 +29,7 @@ class CustomQuickFundSelectMenu extends StatelessWidget {
         margin: EdgeInsets.symmetric(
           horizontal: getProportionateScreenWidth(20),
           vertical: getProportionateScreenHeight(10),),
-        height: size.height *0.1,
+        height: size.height *0.12,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
@@ -38,29 +38,32 @@ class CustomQuickFundSelectMenu extends StatelessWidget {
         ),
 
 
-        child: ListTile(
-          title: Text(
-           title,
-            style: GoogleFonts.roboto(
-                fontWeight: FontWeight.w300,
-                fontSize: 12,
-                color: Colors.black
+        child: Center(
+          child: ListTile(
+            title: Text(
+             title,
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 10.5,
+                  color: Colors.black
+              ),
             ),
-          ),
-          subtitle: Text(
-            subTitle.toUpperCase(),
-            style: GoogleFonts.roboto(
-                fontWeight: FontWeight.w400,
-                fontSize: 13.5,
-                color: kSelectMenuColor
+            subtitle: Text(
+              subTitle.toUpperCase(),
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                  color: kSelectMenuColor
+              ),
             ),
-          ),
-          trailing: CircleAvatar(
-            backgroundColor: Colors.black,
-            child: Icon(
-              Icons.forward,
-              size: 18,
-              color: Colors.white,
+            trailing: CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.black,
+              child: Icon(
+                Icons.forward,
+                size: 15,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

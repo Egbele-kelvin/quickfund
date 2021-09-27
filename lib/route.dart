@@ -9,9 +9,11 @@ import 'package:quickfund/ui/dashboard/bill/cable/cable_main.dart';
 import 'package:quickfund/ui/dashboard/dashboard.dart';
 import 'package:quickfund/ui/dashboard/dashboardMain.dart';
 import 'package:quickfund/ui/dashboard/fundAcct/fundAccountUI.dart';
+import 'package:quickfund/ui/dashboard/more/more.dart';
 import 'package:quickfund/ui/dashboard/transaction/saveBeneficiary.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionRef.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionUI.dart';
+import 'package:quickfund/ui/notification/notificationUI.dart';
 import 'package:quickfund/ui/onboarding/get_started.dart';
 import 'package:quickfund/ui/onboarding/onboarding_ui.dart';
 import 'package:quickfund/ui/onboarding/splashscreen.dart';
@@ -105,17 +107,22 @@ class RouteGenerator {
         case AppRouteName.CategoriesOfLoanUI:
         return _pageRoute(settings: settings, widget: CategoriesOfLoanUI());
         break;
-        case AppRouteName.LoanPageUI:
+      case AppRouteName.LoanPageUI:
         return _pageRoute(settings: settings, widget: LoanPageUI());
         break;
-        case AppRouteName.AirtimeUI:
+      case AppRouteName.AirtimeUI:
         return _pageRoute(settings: settings, widget: AirtimeUI());
         break;
-        case AppRouteName.SuccessPage:
+      case AppRouteName.SuccessPage:
         return _pageRoute(settings: settings, widget: SuccessPage());
+        break;
+      case AppRouteName.More:
+        return _pageRoute(settings: settings, widget: More());
         break;
       case AppRouteName.CableMain:
         return _pageRoute(settings: settings, widget: CableMain());
+      case AppRouteName.NotificationUI:
+        return _pageRoute(settings: settings, widget: NotificationUI());
 
       default:
         return _errorRoute(

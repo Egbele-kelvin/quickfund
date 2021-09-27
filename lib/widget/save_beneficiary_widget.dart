@@ -26,8 +26,8 @@ class ChooseFromSavedBeneficiary extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Text(
               'Choose from saved beneficiary',
-              style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w400, fontSize: 9, color: Colors.black),
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400, fontSize: 10, color: Colors.black),
             ),
           ),
           SizedBox(
@@ -75,8 +75,11 @@ class ChooseFromSavedBeneficiary extends StatelessWidget {
               ),
               Expanded(
                 flex: 1,
-                child: Row(
-                  children: rowListForBeneficiary,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: rowListForBeneficiary,
+                  ),
                 ),
               ),
             ],

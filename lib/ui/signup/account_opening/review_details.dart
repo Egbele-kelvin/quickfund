@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,12 +10,12 @@ import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/keyboard.dart';
 import 'package:quickfund/util/size_config.dart';
-import 'package:quickfund/widget/customFile_container.dart';
 import 'package:quickfund/widget/custom_button.dart';
-import 'package:quickfund/widget/custom_selecet_menu.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'accountOpeningWidget.dart';
+import 'accountWidget.dart';
 
 class ReviewDetails extends StatefulWidget {
   @override
@@ -33,8 +34,107 @@ class _ReviewDetailsState extends State<ReviewDetails> {
     'Separated',
     'Divorced'
   ];
+
+  File _image;
+  File _signImage;
+
+  _imgFromCamera() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  _imageFromGallery() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  _imgFromCameraForSignature() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      _signImage = image;
+    });
+  }
+
+  _imageFromGalleryForSignature() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      _signImage = image;
+    });
+  }
+
   List<String> genderData = ['Male', 'Female', 'Neuter'];
-  String title, gender, maritalStatus, stateOO;
+  String title = 'Title',
+      gender = 'Gender',
+      maritalStatus = 'Marital Status',
+      stateOO;
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(Icons.photo_camera),
+                      title: Text('Camera'),
+                      onTap: () {
+                        _imgFromCamera();
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text('Photo Library'),
+                    onTap: () {
+                      _imageFromGallery();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showPickerSign(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(Icons.photo_camera),
+                      title: Text('Camera'),
+                      onTap: () {
+                        _imgFromCameraForSignature();
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text('Photo Library'),
+                    onTap: () {
+                      _imageFromGalleryForSignature();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
   Future<dynamic> buildShowModalBottomSheetForGenderData(
       BuildContext context, Size size) {
@@ -257,232 +357,176 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                         child: SingleChildScrollView(
                           child: Column(
                               children: [
-
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                CustomSelectDropdownMenu(
-                                  widget: RoundedInputField(
-                                    // onSaved: (newValue) => bvn = newValue,
-                                    inputType: TextInputType.number,
-                                    labelText: 'Title',
-                                    customTextHintStyle: GoogleFonts.lato(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                    hintText: title,
-                                    autoCorrect: true,
-                                    hasFocus: AlwaysDisabledFocusNode(),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        buildShowModalBottomSheetForUserTitle(
-                                            context, size);
-                                      },
-                                      child: Container(
-                                        child: Icon(
-                                          Icons.keyboard_arrow_down,
-                                          color: kPrimaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  inputType: TextInputType.number,
-                                  labelText: 'First Name',
-                                  hintText: 'Bolanle',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Middle Name',
-                                  hintText: 'Sandra',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Last Name',
-                                  hintText: 'Samuel',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                CustomSelectDropdownMenu(
-                                  widget: RoundedInputField(
-                                    // onSaved: (newValue) => bvn = newValue,
-                                    inputType: TextInputType.number,
-                                    labelText: 'Gender',
-                                    customTextHintStyle: GoogleFonts.lato(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                    hintText: gender,
-                                    autoCorrect: true,
-                                    hasFocus: AlwaysDisabledFocusNode(),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        buildShowModalBottomSheetForGenderData(
-                                            context, size);
-                                      },
-                                      child: Container(
-                                        child: Icon(
-                                          Icons.keyboard_arrow_down,
-                                          color: kPrimaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Birth Date',
-                                  hintText: '1956',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                CustomSelectDropdownMenu(
-                                  widget: RoundedInputField(
-                                    // onSaved: (newValue) => bvn = newValue,
-                                    inputType: TextInputType.number,
-                                    labelText: 'Marital Status',
-                                    customTextHintStyle: GoogleFonts.lato(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                    hintText: maritalStatus,
-                                    autoCorrect: true,
-                                    hasFocus: AlwaysDisabledFocusNode(),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        buildShowModalBottomSheetForMaritalStatus(
-                                            context, size);
-                                      },
-                                      child: Container(
-                                        child: Icon(
-                                          Icons.keyboard_arrow_down,
-                                          color: kPrimaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Email',
-                                  hintText: 'email@gmail.com',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Phone Number',
-                                  hintText: '+23490897995',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'Address',
-                                  hintText:
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            SelectedCustom(
+                              size: size,
+                              onTap: () {
+                                buildShowModalBottomSheetForUserTitle(
+                                    context, size);
+                              },
+                              title: title,
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              // onSaved: (newValue) => bvn = newValue,
+                              customTextHintStyle: GoogleFonts.lato(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              inputType: TextInputType.number,
+                              labelText: 'First Name',
+                              hintText: 'Bolanle',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Middle Name',
+                              hintText: 'Sandra',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Last Name',
+                              hintText: 'Samuel',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            SelectedCustom(
+                              size: size,
+                              onTap: () {
+                                buildShowModalBottomSheetForGenderData(
+                                    context, size);
+                              },
+                              title: gender,
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.lato(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Birth Date',
+                              hintText: '1956',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            SelectedCustom(
+                              size: size,
+                              onTap: () {
+                                buildShowModalBottomSheetForMaritalStatus(
+                                    context, size);
+                              },
+                              title: maritalStatus,
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Email',
+                              hintText: 'email@gmail.com',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Phone Number',
+                              hintText: '+23490897995',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'Address',
+                              hintText:
                                   '19 Wale Adeleye , ipaja-ayobo. lagos state.',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                                RoundedInputField(
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  // onSaved: (newValue) => bvn = newValue,
-                                  inputType: TextInputType.number,
-                                  labelText: 'State of Origin',
-                                  hintText: 'oyo',
-                                  autoCorrect: true,
-                                  hasFocus: AlwaysDisabledFocusNode(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.06,
-                                ),
-                                CustomButton(
-                                  size: size,
-                                  onTap: () {
-                                    setState(() {
-                                      currentView = 1;
-                                    });
-                                  },
-                                  btnTitle: 'Continue'.toUpperCase(),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.08,
-                                ),
-                              ]
-                          ),
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.02,
+                            ),
+                            RoundedInputField(
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                              // onSaved: (newValue) => bvn = newValue,
+                              inputType: TextInputType.number,
+                              labelText: 'State of Origin',
+                              hintText: 'oyo',
+                              autoCorrect: true,
+                              hasFocus: AlwaysDisabledFocusNode(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.06,
+                            ),
+                            CustomButton(
+                              size: size,
+                              onTap: () {
+                                setState(() {
+                                  currentView = 1;
+                                });
+                              },
+                              btnTitle: 'Continue'.toUpperCase(),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.08,
+                            ),
+                          ]),
                         ),
                       ),
 
@@ -496,60 +540,24 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
-                                  CustomSelectDropdownMenu(
-                                    widget: RoundedInputField(
-                                      // onSaved: (newValue) => bvn = newValue,
-                                      inputType: TextInputType.number,
-                                      labelText: 'Bank State',
-                                      customTextHintStyle: GoogleFonts.lato(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                      hintText: title,
-                                      autoCorrect: true,
-                                      hasFocus: AlwaysDisabledFocusNode(),
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          buildShowModalBottomSheetForUserTitle(
-                                              context, size);
-                                        },
-                                        child: Container(
-                                          child: Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: kPrimaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  SelectedCustom(
+                                    size: size,
+                                    onTap: () {
+                                      buildShowModalBottomSheetForMaritalStatus(
+                                          context, size);
+                                    },
+                                    title: 'Bank Sate',
                                   ),
                                   SizedBox(
                                     height: size.height * 0.02,
                                   ),
-                                  CustomSelectDropdownMenu(
-                                    widget: RoundedInputField(
-                                      // onSaved: (newValue) => bvn = newValue,
-                                      inputType: TextInputType.number,
-                                      labelText: 'Branch',
-                                      customTextHintStyle: GoogleFonts.lato(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                      hintText: gender,
-                                      autoCorrect: true,
-                                      hasFocus: AlwaysDisabledFocusNode(),
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          buildShowModalBottomSheetForGenderData(
-                                              context, size);
-                                        },
-                                        child: Container(
-                                          child: Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: kPrimaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  SelectedCustom(
+                                    size: size,
+                                    onTap: () {
+                                      buildShowModalBottomSheetForMaritalStatus(
+                                          context, size);
+                                    },
+                                    title: 'Bank Branch',
                                   ),
                                   SizedBox(
                                     height: size.height * 0.05,
@@ -558,16 +566,18 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      CustomFileContainerWidget(
-                                        size: size,
-                                        headline: 'Take a selfie',
-                                        imageUrl: 'assets/f_png/avatar.png',
-                                      ),
-                                      CustomFileContainerWidget(
-                                        size: size,
-                                        headline: 'Your signature',
-                                        imageUrl: 'assets/f_png/avatar.png',
-                                      ),
+                                      ProfilePicAndSignature(size: size, image: _image ,
+                                      tag: 'Take Selfie',
+                                      onTap: (){
+                                        _showPicker(context);
+                                      },),
+
+                                       ProfilePicAndSignature(size: size, image: _signImage ,
+                                      tag: 'Upload signature',
+                                      onTap: (){
+                                        _showPickerSign(context);
+                                      },),
+
                                     ],
                                   ),
                                   SizedBox(
@@ -599,4 +609,3 @@ class _ReviewDetailsState extends State<ReviewDetails> {
     );
   }
 }
-

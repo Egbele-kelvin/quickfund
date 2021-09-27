@@ -69,7 +69,7 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
                       flex: 2,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           '0142323939',
@@ -77,6 +77,9 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
                               color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: size.width *0.1,
                         ),
                         Icon(
                           Icons.copy,

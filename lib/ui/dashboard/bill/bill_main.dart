@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:quickfund/model/accountModel.dart';
+import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
@@ -12,6 +14,7 @@ import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:quickfund/widget/form_error.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
+import 'billWidget.dart';
 
 class BillMainUI extends StatefulWidget {
   @override
@@ -28,6 +31,18 @@ class _BillMainUIState extends State<BillMainUI> {
       utilityImg = '',
       amount, pin,
       userAccountNumber = '1019945039';
+
+  List<AirtimePackage> airtimeProviderBundle = [
+    AirtimePackage(bundleType: '100MB', amount: 'N100'),
+    AirtimePackage(bundleType: '200MB', amount: 'N300'),
+    AirtimePackage(bundleType: '1GB', amount: 'N500'),
+    AirtimePackage(bundleType: '1.5 GB', amount: 'N800'),
+    AirtimePackage(bundleType: '2GM', amount: 'N1200'),
+    AirtimePackage(bundleType: '3GB', amount: 'N1500'),
+    AirtimePackage(bundleType: '3.5GB', amount: 'N1600'),
+    AirtimePackage(bundleType: '4.5GB', amount: 'N1900'),
+    AirtimePackage(bundleType: '6.7GB', amount: 'N2000'),
+  ];
   List<String> airtimeProvider = ['Airtel', 'MTN', 'GLO', '9Mobile'];
   List<String> utilityBill = [
     'Eko Prepaid',
@@ -38,7 +53,6 @@ class _BillMainUIState extends State<BillMainUI> {
   ];
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
   List<String> cableTv = ['DStv', 'GOtv', 'Startimes'];
-  List<String> internetServices = ['Spectranet', 'Smile', 'Swift', 'ipNX'];
   bool isLoading = false;
   int currentView = 1;
   bool isEnabled = false;
@@ -60,6 +74,64 @@ class _BillMainUIState extends State<BillMainUI> {
       setState(() {
         errors.remove(error);
       });
+  }
+
+
+  Future<dynamic> buildShowModalBottomSheetForUserTitle(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+        ),
+        builder: (context) {
+          // final postMdl = Provider.of<BankProvider>(context);
+          return WillPopScope(
+            onWillPop: () async {
+              // listener dismiss
+              return true;
+            },
+            child: CustomBottomSheetMenuItem(
+              customWidget: Column(
+                children: [
+                  CustomDetails(
+                    heading: 'List of Bundle',
+                    // onTap: () {
+                    //   Navigator.of(context).pop();
+                    // },
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return CustomItemWidget(
+                            onTap: () {
+                              setState(() {
+                                cableBundle = airtimeProviderBundle[index].bundleType;
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                            descriptionItem: airtimeProviderBundle[index].amount,
+                          );
+                        },
+                        separatorBuilder: (context, index) => Container(),
+                        itemCount: airtimeProviderBundle.length),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   onBackPress() {
@@ -86,7 +158,7 @@ class _BillMainUIState extends State<BillMainUI> {
           isEnabled = false;
           headerText = 'Pay Bills';
           currentView = 5;
-        } else if (currentView == 9) {
+        } else if (currentView == 7) {
           isEnabled = false;
           headerText = 'Pay Bills';
           currentView = 1;
@@ -124,7 +196,7 @@ class _BillMainUIState extends State<BillMainUI> {
         child: Column(
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Container(
                 //color: kPrimaryColor,
                 child: CustomAppBar(
@@ -138,7 +210,7 @@ class _BillMainUIState extends State<BillMainUI> {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 5,
               child: Container(
                 //color: Colors.black,
                 decoration: BoxDecoration(
@@ -193,6 +265,10 @@ class _BillMainUIState extends State<BillMainUI> {
                                 title: 'Electricity',
                                 leadingIcon: Icons.flash_on,
                                 onTap: () {
+                                  setState(() {
+                                    currentView = 7;
+                                    headerText = 'Electricity';
+                                  });
                                   print('');
                                 },
                               ),
@@ -209,7 +285,7 @@ class _BillMainUIState extends State<BillMainUI> {
                                   size: size,
                                   title: e.value,
                                   imgURL:
-                                      'assets/f_svg/${e.value.toLowerCase()}.svg',
+                                      'assets/f_svg/${e.value.toLowerCase().trim()}.svg',
                                   onTap: () {
                                     print(e.value);
                                     setState(() {
@@ -290,6 +366,15 @@ class _BillMainUIState extends State<BillMainUI> {
                                     fontWeight: FontWeight.w600),
                                 hintText: bundle,
                                 autoCorrect: true,
+                              ),
+
+                              SelectedCustom(
+                                size: size,
+                                onTap: () {
+                                  buildShowModalBottomSheetForUserTitle(
+                                      context, size);
+                                },
+                                title: bundle,
                               ),
 
                               SizedBox(
@@ -493,9 +578,113 @@ class _BillMainUIState extends State<BillMainUI> {
                       
                       Visibility(
                           visible: currentView==7,
-                          child: Column(children: [
-                        
-                      ],)),
+                          child: Column(
+                            children: utilityBill
+                                .asMap()
+                                .entries
+                                .map(
+                                  (e) => CustomAirtimeWidget(
+                                size: size,
+                                title: e.value,
+                                imgURL:
+                                'assets/f_svg/${e.value.toLowerCase().characters.take(3)}.svg',
+                                onTap: () {
+                                  print(e.value);
+                                  setState(() {
+                                   currentView = 8;
+                                    airtimeType = e.value;
+                                  });
+                                },
+                              ),
+                            )
+                                .toList(),
+                          ),),
+
+                      Visibility(
+                          visible: currentView == 8,
+                          child: Column(
+                            children: [
+                              BuyingAirtimeCustomPlaceHolder(
+                                  size: size, airtimeType: airtimeType),
+                              SizedBox(
+                                height: size.height * .03,
+                              ),
+                              RoundedInputField(
+                                onSaved: (newValue) => phoneNum = newValue,
+                                inputType: TextInputType.text,
+                                maxLen: 11,
+                                labelText: 'Meter Number',
+                                customTextHintStyle: GoogleFonts.lato(
+                                    fontSize: 12,
+                                    color: Colors.black54.withOpacity(0.3),
+                                    fontWeight: FontWeight.w600),
+                                hintText: 'Meter Number',
+                                autoCorrect: true,
+                                onChanged: (value) {
+                                  if (value.isNotEmpty) {
+                                    removeError(
+                                        error: kPhoneNumberNullError);
+                                  } else if (value.length >= 11) {
+                                    removeError(
+                                        error: kShortPhoneNumberError);
+                                  }
+                                  return null;
+                                },
+
+                                validateForm: (value) {
+                                  if (value.isEmpty) {
+                                    addError(error: kPhoneNumberNullError);
+                                    return "";
+                                  } else if (value.length < 11) {
+                                    addError(error: kShortPhoneNumberError);
+                                    return "";
+                                  }
+                                  return null;
+                                },
+                              ),
+
+                              SizedBox(height: size.height *0.03,),
+                              UserProfileWidget(size: size ,
+                                detail: 'XAZIZKLY-9193-394',),
+                              SizedBox(height: size.height *0.09,),
+                              RoundedInputField(
+                                inputType: TextInputType.text,
+                                maxLen: 11,
+                                labelText: 'Amount',
+                                customTextHintStyle: GoogleFonts.lato(
+                                    fontSize: 12,
+                                    color: Colors.black54.withOpacity(0.3),
+                                    fontWeight: FontWeight.w600),
+                                hintText: 'Amount',
+                                autoCorrect: true,
+                              ),
+
+                              SizedBox(
+                                height: size.height * 0.05,
+                              ),
+                              FormError(errors: errors),
+                              SizedBox(
+                                height: size.height * 0.05,
+                              ),
+                              CustomSignInButton(
+                                size: size,
+                                onTap: () {
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    // if all are valid then go to success screen
+                                    KeyboardUtil.hideKeyboard(context);
+                                    // Navigator.pushReplacementNamed(
+                                    //     context, AppRouteName.DASHBOARD);
+
+                                    setState(() {
+                                      currentView = 4;
+                                    });
+                                  }
+                                },
+                                btnTitle: 'Continue',
+                              ),
+                            ],
+                          )),
                       Spacer(
                         flex: 6,
                       ),
@@ -511,40 +700,3 @@ class _BillMainUIState extends State<BillMainUI> {
   }
 }
 
-class UserProfileWidget extends StatelessWidget {
-  const UserProfileWidget({
-    Key key,
-    @required this.size, this.detail,
-  }) : super(key: key);
-
-  final Size size;
-  final String detail;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      height: size.height *0.045,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-
-          color: Colors.black.withOpacity(0.08),
-        )
-      ),
-      child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,
-        children: [
-        Center(
-          child: Text(detail, style: GoogleFonts.robotoMono(
-            fontWeight: FontWeight.w300,
-            fontSize: 10,
-            color: Colors.black
-
-          ),),
-        ),
-        
-        Icon(Icons.check_circle_sharp, color: Colors.green,size: 14,)
-      ],),
-    );
-  }
-}

@@ -342,95 +342,101 @@ class CardDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      width: size.width * 0.9,
-      height: size.height * 0.18,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/f_png/dashboardbg.png')
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        // width: size.width * 0.9,
+        width: double.infinity,
+        height: size.height * 0.18,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/f_png/dashboardbg.png'),
+            fit: BoxFit.cover
+          ),
+            color: dashBoardColor,
+            borderRadius: BorderRadius.circular(10)
+          ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            Align(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    acctBalanceI,
+                    style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 11,
+                        color: Colors.white),
+                  ),
+
+                  GestureDetector(
+                      onTap: gestureTap,
+                      child: Icon(Icons.add_circle , color: Colors.white,))
+
+                ],
+              ),
+              alignment: Alignment.topLeft,
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            Align(
+              child: Row(
+                children: [
+                  Text(
+                    acctBalanceII,
+                    style: GoogleFonts.roboto(
+                        fontSize: 12.5,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.2,
+                  ),
+                  // Icon(
+                  //   iconData,
+                  //   size: 20,
+                  //   color: Colors.white,
+                  // ),
+
+                  iconWidget,
+                ],
+              ),
+              alignment: Alignment.topLeft,
+            ),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            Align(
+              child: Text(
+                savingsAcct,
+                style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 11,
+                    color: Colors.white),
+              ),
+              alignment: Alignment.topLeft,
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            Align(
+              child: Text(
+                accountNum,
+                style: GoogleFonts.roboto(
+                    fontSize: 13,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
+              ),
+              alignment: Alignment.topLeft,
+            ),
+          ],
         ),
-          // color: dashBoardColor,
-          borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-          Align(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  acctBalanceI,
-                  style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 11,
-                      color: Colors.white),
-                ),
-                
-                GestureDetector(
-                    onTap: gestureTap,
-                    child: Icon(Icons.add_circle , color: Colors.white,))
-
-              ],
-            ),
-            alignment: Alignment.topLeft,
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-          Align(
-            child: Row(
-              children: [
-                Text(
-                  acctBalanceII,
-                  style: GoogleFonts.roboto(
-                      fontSize: 12.5,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  width: size.width * 0.2,
-                ),
-                // Icon(
-                //   iconData,
-                //   size: 20,
-                //   color: Colors.white,
-                // ),
-
-                iconWidget,
-              ],
-            ),
-            alignment: Alignment.topLeft,
-          ),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-          Align(
-            child: Text(
-              savingsAcct,
-              style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 11,
-                  color: Colors.white),
-            ),
-            alignment: Alignment.topLeft,
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-          Align(
-            child: Text(
-              accountNum,
-              style: GoogleFonts.roboto(
-                  fontSize: 13,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
-            ),
-            alignment: Alignment.topLeft,
-          ),
-        ],
       ),
     );
   }
@@ -673,7 +679,7 @@ class AccountSettingProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       //bottom: size.height,
-        top: 150,
+        top: 100,
         child: Container(
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenWidth(140)),
@@ -727,9 +733,9 @@ class AccountSettingCardMenu extends StatelessWidget {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircleAvatar(
-                        radius: 24,
+                        radius: 18,
                         backgroundColor: kPrimaryColor,
-                        child: Icon(iconData)),
+                        child: Icon(iconData , color: Colors.white,size: 18,)),
                     SizedBox(
                       width: size.width * 0.03,
                     ),
@@ -778,12 +784,6 @@ class BeneficiaryCard extends StatelessWidget {
       actionExtentRatio: 0.25,
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'More',
-          color: Colors.black45,
-          icon: Icons.more_horiz,
-          onTap: moreTap,
-        ),
-        IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
@@ -807,7 +807,7 @@ class BeneficiaryCard extends StatelessWidget {
             children: [
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 6),
                 child: CircleAvatar(
                   backgroundColor: Colors.grey.shade50,
                   radius: 35,
@@ -864,7 +864,7 @@ class BeneficiaryCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(2.0),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Icon(

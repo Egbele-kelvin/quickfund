@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:quickfund/util/constants.dart';
 
 class RoundedInputField extends StatelessWidget {
@@ -54,7 +56,7 @@ class RoundedInputField extends StatelessWidget {
     this.passwordvisible = false,
     this.labelText,
     this.hasFocus,
-    this.customTextHintStyle, this.initialValue,
+    this.customTextHintStyle, this.initialValue, List<dynamic> inputFormatters,
   }) : super(key: key);
 
   @override
@@ -93,7 +95,7 @@ class RoundedInputField extends StatelessWidget {
         //   color: Colors.black,
         //   size: 20,
         // ),
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        contentPadding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         counterText: '',
         //filled: true,
         //fillColor: Colors.grey.withOpacity(0.25),
@@ -119,3 +121,27 @@ class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
 }
+
+
+class CurrencyInputFormatter extends TextInputFormatter {
+
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+
+    if(newValue.selection.baseOffset == 0){
+      print(true);
+      return newValue;
+    }
+
+    double value = double.parse(newValue.text);
+
+    final formatter = NumberFormat.simpleCurrency(locale: "pt_Br");
+
+    String newText = formatter.format(value/100);
+
+    return newValue.copyWith(
+        text: newText,
+        selection: new TextSelection.collapsed(offset: newText.length));
+  }
+}
+
+

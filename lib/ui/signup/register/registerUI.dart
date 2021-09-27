@@ -80,8 +80,8 @@ class _RegisterUIState extends State<RegisterUI> {
 
   @override
   void initState() {
-    _passwordVisible = false;
-    _confirPasswordVisible = false;
+    _passwordVisible = true;
+    _confirPasswordVisible = true;
     super.initState();
   }
 
@@ -148,7 +148,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                   Text(
                                     AppStrings.registerLetterHeader,
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.roboto(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: Colors.black),
@@ -162,7 +162,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                         color: Colors.black54.withOpacity(0.3),
                                         fontWeight: FontWeight.w600),
                                     // onSaved: (newValue) => bvn = newValue,
-                                    inputType: TextInputType.number,
+                                    inputType: TextInputType.visiblePassword,
                                     labelText: 'Pin',
                                     hintText: '*********',
                                     autoCorrect: true,
@@ -192,9 +192,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     },
                                     suffixIcon: InkWell(
                                         child: Icon(
-                                          _passwordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
+                                          _passwordVisible ? Icons.visibility_off :   Icons.visibility,
                                           color: Colors.grey[500],
                                           size: 15,
                                         ),
@@ -213,7 +211,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                         color: Colors.black54.withOpacity(0.3),
                                         fontWeight: FontWeight.w600),
                                     // onSaved: (newValue) => bvn = newValue,
-                                    inputType: TextInputType.number,
+                                    inputType: TextInputType.visiblePassword,
                                     labelText: 'Confirm Pin',
                                     hintText: '**********',
                                     autoCorrect: true,
@@ -247,8 +245,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     suffixIcon: InkWell(
                                         child: Icon(
                                           _confirPasswordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
+                                              ? Icons.visibility_off : Icons.visibility,
                                           color: Colors.grey[500],
                                           size: 15,
                                         ),
@@ -302,8 +299,8 @@ class _RegisterUIState extends State<RegisterUI> {
                                       children: [
                                         Text(
                                           'Please enter the OTP we sent to you.',
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 13.0,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 12.0,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black,
                                           ),
@@ -314,11 +311,11 @@ class _RegisterUIState extends State<RegisterUI> {
 
                                         Container(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 60.0, vertical: 15),
+                                              horizontal: 50.0, vertical: 15),
                                           child: PinCodeTextField(
                                             controller: transactPin,
-                                            textStyle: TextStyle(
-                                                fontWeight: FontWeight.normal),
+                                            textStyle: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w400),
                                             obscureText: true,
                                             keyboardType: TextInputType.number,
                                             textInputAction: TextInputAction.done,

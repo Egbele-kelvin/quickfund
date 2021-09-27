@@ -42,8 +42,12 @@ class _DashBoardMainState extends State<DashBoardMain> {
                     child: DashBoardHeader(
                       userName: userName,
                       imgrUrl: 'assets/f_png/businessman.png',
-                      notification: () {},
-                      userAcct: () {},
+                      notification: () {
+                        Navigator.pushNamed(context, AppRouteName.NotificationUI);
+                      },
+                      userAcct: () {
+                        Navigator.pushNamed(context, AppRouteName.More);
+                      },
                     ),
                   ),
 

@@ -12,7 +12,7 @@ class CustomFingerPrint extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Icon(Icons.fingerprint_sharp,
-        size: 70,
+        size: 40,
       ),
     );
   }

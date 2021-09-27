@@ -35,7 +35,7 @@ class Custom_Sign_up_AppBar extends StatelessWidget {
                 ),
               )),
         ),
-        Center(child: SvgPicture.asset(imageUrl)),
+       // Center(child: SvgPicture.asset(imageUrl)),
         Spacer(
           flex: 1,
         ),
@@ -93,8 +93,8 @@ class CustomAppBar extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             pageTitle,
-            style: GoogleFonts.roboto(
-                fontWeight: FontWeight.w400, fontSize: 15.0, color: Colors.white),
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w400, fontSize: 13.0, color: Colors.white),
           ),
         ),
 

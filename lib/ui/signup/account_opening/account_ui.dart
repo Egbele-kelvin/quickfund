@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
@@ -22,8 +23,10 @@ class AccountMain extends StatefulWidget {
 class _AccountMainState extends State<AccountMain> {
   final _formKey = GlobalKey<FormState>();
   String bvn;
-  int currentView = 0;
+  int currentView=0;
   bool checkUI;
+
+  var initialIndex;
 
   final List<String> errors = [];
 
@@ -55,11 +58,18 @@ class _AccountMainState extends State<AccountMain> {
               flex: 2,
               child: Container(
                 //color: kPrimaryColor,
-                child: Custom_Sign_up_AppBar(
+                // child: Custom_Sign_up_AppBar(
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //   },
+                //   imageUrl: 'assets/f_svg/quickfund.svg',
+                //   pageTitle: 'Account Opening',
+                // ),
+
+                child: CustomAppBar(
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  imageUrl: 'assets/f_svg/quickfund.svg',
                   pageTitle: 'Account Opening',
                 ),
               ),
@@ -88,9 +98,9 @@ class _AccountMainState extends State<AccountMain> {
                       ),
                       Text(
                         AppStrings.registerWithBvn,
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w300,
-                            fontSize: 13,
+                            fontSize: 11.5,
                             color: Colors.black),
                       ),
                       SizedBox(
@@ -102,29 +112,62 @@ class _AccountMainState extends State<AccountMain> {
                           minWidth: size.width * 0.43,
                           minHeight: size.height * 0.08,
                           cornerRadius: 30.0,
+                          fontSize: 12,
                           inactiveFgColor: kPrimaryColor,
                           activeBgColor: [
                             kPrimaryColor,
                           ],
                           inactiveBgColor: Colors.grey.withOpacity(0.2),
                           totalSwitches: 2,
-                          initialLabelIndex: 0,
+                          initialLabelIndex: currentView,
                           changeOnTap: false,
                           labels: ['Sign up with BVN', 'with Phone Number'],
                           onToggle: (index) {
                             setState(() {
                               print('switch $index');
                               currentView=index;
-                              // setState(() {
-                              //   currentView =index;
-                              // });
-                              //currentView  !=  currentView;
                             });
 
-                            //  print('switched to: $index');
+                             print('switched to: $index');
                           },
                         ),
                       ),
+
+
+                      // FlutterToggleTab(
+                      //   selectedIndex: currentView,
+                      //   height: size.height *0.08,
+                      //   width: size.width *0.23,
+                      //  initialIndex: currentView,
+                      //   borderRadius: 30,
+                      //  end: Alignment.center,
+                      //  isScroll: false,
+                      //   begin: Alignment.center,
+                      //   selectedBackgroundColors: [
+                      //     kPrimaryColor,
+                      //   ],
+                      //   unSelectedBackgroundColors: [
+                      //     Color(0xffF1EEEE)
+                      //   ],
+                      //   selectedTextStyle: GoogleFonts.poppins(
+                      //       color: Colors.white,
+                      //       fontSize: 12,
+                      //       fontWeight: FontWeight.w400),
+                      //   unSelectedTextStyle: GoogleFonts.poppins(
+                      //
+                      //       color: kPrimaryColor,
+                      //       fontSize: 12,
+                      //       fontWeight: FontWeight.w400),
+                      //   labels: ["Bvn","Phone Number"],
+                      //   selectedLabelIndex: (index) {
+                      //     print("Selected screen $index");
+                      //
+                      //     setState(() {
+                      //       print('switch $index');
+                      //       currentView=index;
+                      //     });
+                      //   },
+                      // ),
 
                       SizedBox(
                         height: size.height * 0.05,
@@ -139,8 +182,8 @@ class _AccountMainState extends State<AccountMain> {
                               inputType: TextInputType.number,
                               maxLen: 11,
                               labelText: 'BVN',
-                              customTextHintStyle: GoogleFonts.lato(
-                                  fontSize: 12,
+                              customTextHintStyle: GoogleFonts.poppins(
+                                  fontSize: 10,
                                   color: Colors.black54.withOpacity(0.3),
                                   fontWeight: FontWeight.w600),
                               hintText: 'Enter your BVN',
@@ -170,13 +213,13 @@ class _AccountMainState extends State<AccountMain> {
                             Text(
                               AppStrings.HAS_NO_BVN,
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w300,
-                                fontSize: 12,
+                                fontSize: 10.5,
                                 color: Colors.black,
                               ),
                             ),
-                            FormError(errors: errors),
+                           /// FormError(errors: errors),
                           ],
                         ),
                       ),
@@ -195,18 +238,18 @@ class _AccountMainState extends State<AccountMain> {
                           autoCorrect: true,
                           onChanged: (value) {
                             if (value.isNotEmpty) {
-                              removeError(error: kBVNNullError);
+                              removeError(error: kPhoneNumberNullError);
                             } else if (value.length >= 11) {
-                              removeError(error: kShortBVNError);
+                              removeError(error: kShortPhoneNumberError);
                             }
                             return null;
                           },
                           validateForm: (value) {
                             if (value.isEmpty) {
-                              addError(error: kBVNNullError);
+                              addError(error: kPhoneNumberNullError);
                               return "";
                             } else if (value.length < 11) {
-                              addError(error: kShortBVNError);
+                              addError(error: kShortPhoneNumberError);
                               return "";
                             }
                             return null;

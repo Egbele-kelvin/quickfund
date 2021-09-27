@@ -13,6 +13,7 @@ class AppRouteName {
   static const String SecurityQuestionUI = '/SecurityQuestionUI';
   static const String RegisterUI = '/RegisterUI';
   static const String HelpUI = '/HelpUI';
+  static const String More = '/More';
   static const String BillMainUI = '/BillMainUI';
   static const String TransactionUI = '/TransactionUI';
   static const String TransactionRef = '/TransactionRef';
@@ -27,4 +28,5 @@ class AppRouteName {
   static const String TransferMainPage = '/TransferMainPage';
   static const String TransferComponent = '/TransferComponent';
   static const String CableMain = '/CableMain';
+  static const String NotificationUI = '/NotificationUI';
 }
