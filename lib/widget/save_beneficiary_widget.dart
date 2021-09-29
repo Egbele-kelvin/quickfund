@@ -18,7 +18,7 @@ class ChooseFromSavedBeneficiary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size.height * 0.18,
+      height: size.height * 0.2,
       // color: Colors.black,
       child: Column(
         children: [
@@ -33,21 +33,6 @@ class ChooseFromSavedBeneficiary extends StatelessWidget {
           SizedBox(
             height: size.height * 0.01,
           ),
-          // Row(
-          //   children: [
-          //     Expanded(
-          //         flex:1,
-          //         child: Container(
-          //           height: size.height *0.02,
-          //           color: Colors.black,
-          //         )),
-          //     Expanded(
-          //         flex: 3,
-          //         child: Container(  height: size.height *0.02 ,
-          //             color:Colors.lightBlue)),
-          //
-          //   ],
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

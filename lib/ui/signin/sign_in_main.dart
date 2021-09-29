@@ -288,12 +288,17 @@ class _SignInMainState extends State<SignInMain> {
                       SizedBox(
                         height: size.height * 0.04,
                       ),
-                      Text(
-                        'Forgot Password',
-                        style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w400,
-                            color: kTap,
-                            fontSize: 12),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, AppRouteName.ForgotPasswordUI);
+                        },
+                        child: Text(
+                          'Forgot Password',
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              color: kTap,
+                              fontSize: 12),
+                        ),
                       ),
                       SizedBox(
                         height: size.height * 0.04,

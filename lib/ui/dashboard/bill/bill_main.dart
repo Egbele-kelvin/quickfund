@@ -49,7 +49,7 @@ class _BillMainUIState extends State<BillMainUI> {
     'Eko Postpaid',
     'Ikeja Disco Prepaid',
     'Ibadan Power Disco',
-    'Enegu Power Disco'
+    'Enugu Power Disco'
   ];
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
   List<String> cableTv = ['DStv', 'GOtv', 'Startimes'];

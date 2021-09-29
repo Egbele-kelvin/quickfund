@@ -29,4 +29,6 @@ class AppRouteName {
   static const String TransferComponent = '/TransferComponent';
   static const String CableMain = '/CableMain';
   static const String NotificationUI = '/NotificationUI';
+  static const String ForgotPasswordUI = '/ForgotPasswordUI';
+  static const String BankStatement = '/BankStatement';
 }

@@ -76,6 +76,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       maritalStatus = 'Marital Status',
       stateOO;
 
+
   void _showPicker(context) {
     showModalBottomSheet(
         context: context,
@@ -567,6 +568,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       ProfilePicAndSignature(size: size, image: _image ,
+                                      imgURL: 'assets/f_png/cameraPic.png',
                                       tag: 'Take Selfie',
                                       onTap: (){
                                         _showPicker(context);
@@ -574,6 +576,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
 
                                        ProfilePicAndSignature(size: size, image: _signImage ,
                                       tag: 'Upload signature',
+                                      imgURL: 'assets/f_png/signature.png',
                                       onTap: (){
                                         _showPickerSign(context);
                                       },),

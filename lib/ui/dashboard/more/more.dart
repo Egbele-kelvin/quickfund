@@ -187,14 +187,14 @@ class _MoreState extends State<More> {
                      iconData: Icons.account_circle,
                       lable: 'Contact Us',
                     ),
-                    // AccountSettingCardMenu(
-                    //   size: size,
-                    //   onTap: () {
-                    //     print('click');
-                    //   },
-                    //  imgURL: 'assets/f_svg/Icon-awesome-credit-card.svg',
-                    //   lable: 'Card Service',
-                    // ),
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        print('click');
+                      },
+                      iconData: Icons.credit_card_sharp,
+                      lable: 'Card Service',
+                    ),
                     AccountSettingCardMenu(
                       size: size,
                       onTap: () {
@@ -212,6 +212,18 @@ class _MoreState extends State<More> {
                       },
                      iconData: Icons.rate_review,
                       lable: 'Rate this App',
+                    ),
+
+                    AccountSettingCardMenu(
+                      size: size,
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRouteName.BankStatement);
+                        print('Bank Statement');
+                       // _showRatingAppDialog();
+
+                      },
+                     iconData: Icons.description,
+                      lable: 'Bank Statement',
                     ),
                     AccountSettingCardMenu(
                       size: size,

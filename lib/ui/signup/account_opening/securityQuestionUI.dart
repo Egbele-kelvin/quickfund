@@ -132,63 +132,7 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                           )
                         ],
                       ),
-                      // child: Row(children: [
-                      //   RoundedInputField(
-                      //     // onSaved: (newValue) => bvn = newValue,
-                      //     onSaved: (newValue) =>
-                      //         answerToSecurityQuestion = newValue,
-                      //     inputType: TextInputType.text,
-                      //     labelText: 'Create a Security Question',
-                      //     customTextHintStyle: GoogleFonts.poppins(
-                      //         fontSize: 12,
-                      //         color: Colors.black54.withOpacity(0.3),
-                      //         fontWeight: FontWeight.w400),
-                      //     hintText: 'Enter your Answer to the Question',
-                      //     autoCorrect: true,
-                      //     onChanged: (value) {
-                      //       if (value.isNotEmpty) {
-                      //         removeError(error: kSecurityNullError);
-                      //       }
-                      //       return null;
-                      //     },
-                      //
-                      //     validateForm: (value) {
-                      //       if (value.isEmpty) {
-                      //         addError(error: kSecurityNullError);
-                      //         return "";
-                      //       }
-                      //       return null;
-                      //     },
-                      //   ),
-                      //   SizedBox(
-                      //     width: size.height * 0.02,
-                      //   ),
-                      //   Icon(
-                      //     Icons.add,
-                      //     size: 30,
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //   )
-                      // // ]),
                     ),
-
-
-                    // Flexible(
-                    //   child: ListView.separated(
-                    //       itemBuilder: (context, index) {
-                    //         return CustomItemWidget(
-                    //           onTap: () {
-                    //             setState(() {
-                    //               title = securityQuestion[index];
-                    //             });
-                    //
-                    //             Navigator.of(context).pop();
-                    //           },
-                    //           descriptionItem: securityQuestion[index],
-                    //         );
-                    //       },
-                    //       separatorBuilder: (context, index) => Container(),
-                    //       itemCount: securityQuestion.length),
-                    // ),
                   ],
                 )
               ],

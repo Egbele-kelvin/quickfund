@@ -74,8 +74,8 @@ class _TransferComponentState extends State<TransferComponent> {
     AccountName(firstName: 'Summer', lastName: 'Bitch'),
     AccountName(firstName: 'Saheed', lastName: 'Shegun'),
     AccountName(firstName: 'kel', lastName: 'ParthClan'),
-    AccountName(firstName: 'duvet', lastName: 'regularly'),
-    AccountName(firstName: 'cheatty', lastName: 'Catrine'),
+    AccountName(firstName: 'Duvet', lastName: 'regularly'),
+    AccountName(firstName: 'Cheatty', lastName: 'Catrine'),
   ];
 
   List<String> bankList = [
@@ -208,7 +208,7 @@ class _TransferComponentState extends State<TransferComponent> {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 9,
               child: Container(
                 //color: Colors.black,
                 decoration: BoxDecoration(
@@ -237,7 +237,7 @@ class _TransferComponentState extends State<TransferComponent> {
                           child: Column(
                             children: [
                               Expanded(
-                                flex: 2,
+                                flex: 3,
                                 child: Padding(
                                   padding: EdgeInsets.all(10.0),
                                   child: ChooseFromSavedBeneficiary(
@@ -265,12 +265,14 @@ class _TransferComponentState extends State<TransferComponent> {
                                                             kPrimaryColor
                                                                 .withOpacity(0.1),
                                                         child: Text(
-                                                          '${e.value.firstName.substring(0, 1)} ' +
-                                                              ' ${e.value.lastName.substring(0, 1)}',
+                                                          '${e.value.firstName.substring(0, 1).toUpperCase()} ' +
+                                                              ' ${e.value.lastName.substring(0, 1).toUpperCase()}',
                                                           style:
                                                               GoogleFonts.poppins(
                                                                   color: Colors
-                                                                      .black),
+                                                                      .black ,
+                                                              fontSize: 20,
+                                                              fontWeight: FontWeight.w600),
                                                         ),
                                                       ),
                                                       SizedBox(

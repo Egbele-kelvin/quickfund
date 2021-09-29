@@ -11,14 +11,14 @@ class ProfilePicAndSignature extends StatelessWidget {
     Key key,
     @required this.size,
     @required File image,
-    this.onTap, this.tag,
+    this.onTap, this.tag, this.imgURL,
   })  : _image = image,
         super(key: key);
 
   final Size size;
   final File _image;
   final Function onTap;
-  final String tag;
+  final String tag  , imgURL;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +51,9 @@ class ProfilePicAndSignature extends StatelessWidget {
 
                 child: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  backgroundImage: _image == null
-                      ? AssetImage('assets/f_png/avatar.png')
-                      : FileImage(File(_image.path)),
+                  child: _image == null
+                      ? Image.asset(imgURL, width: size.width *0.1,)
+                      : Image.file(File(_image.path)),
                 ),
               ),
               Text(

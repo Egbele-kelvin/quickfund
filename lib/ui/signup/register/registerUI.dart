@@ -157,6 +157,8 @@ class _RegisterUIState extends State<RegisterUI> {
                                     height: size.height * 0.05,
                                   ),
                                   RoundedInputField(
+                                    maxLen: 6,
+                                    passwordvisible: _passwordVisible,
                                     customTextHintStyle: GoogleFonts.lato(
                                         fontSize: 12,
                                         color: Colors.black54.withOpacity(0.3),
@@ -192,7 +194,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     },
                                     suffixIcon: InkWell(
                                         child: Icon(
-                                          _passwordVisible ? Icons.visibility_off :   Icons.visibility,
+                                          _passwordVisible ? Icons.visibility : Icons.visibility_off,
                                           color: Colors.grey[500],
                                           size: 15,
                                         ),
@@ -206,6 +208,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     height: size.height * 0.03,
                                   ),
                                   RoundedInputField(
+
                                     customTextHintStyle: GoogleFonts.lato(
                                         fontSize: 12,
                                         color: Colors.black54.withOpacity(0.3),
@@ -213,6 +216,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     // onSaved: (newValue) => bvn = newValue,
                                     inputType: TextInputType.visiblePassword,
                                     labelText: 'Confirm Pin',
+                                    maxLen: 6,
                                     hintText: '**********',
                                     autoCorrect: true,
                                     passwordvisible: _confirPasswordVisible,
@@ -245,7 +249,7 @@ class _RegisterUIState extends State<RegisterUI> {
                                     suffixIcon: InkWell(
                                         child: Icon(
                                           _confirPasswordVisible
-                                              ? Icons.visibility_off : Icons.visibility,
+                                              ?  Icons.visibility : Icons.visibility_off ,
                                           color: Colors.grey[500],
                                           size: 15,
                                         ),

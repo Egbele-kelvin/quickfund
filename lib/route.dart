@@ -10,9 +10,11 @@ import 'package:quickfund/ui/dashboard/dashboard.dart';
 import 'package:quickfund/ui/dashboard/dashboardMain.dart';
 import 'package:quickfund/ui/dashboard/fundAcct/fundAccountUI.dart';
 import 'package:quickfund/ui/dashboard/more/more.dart';
+import 'package:quickfund/ui/dashboard/transaction/bankStatement.dart';
 import 'package:quickfund/ui/dashboard/transaction/saveBeneficiary.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionRef.dart';
 import 'package:quickfund/ui/dashboard/transaction/transactionUI.dart';
+import 'package:quickfund/ui/forgotPassword/forgotPassword.dart';
 import 'package:quickfund/ui/notification/notificationUI.dart';
 import 'package:quickfund/ui/onboarding/get_started.dart';
 import 'package:quickfund/ui/onboarding/onboarding_ui.dart';
@@ -123,6 +125,10 @@ class RouteGenerator {
         return _pageRoute(settings: settings, widget: CableMain());
       case AppRouteName.NotificationUI:
         return _pageRoute(settings: settings, widget: NotificationUI());
+     case AppRouteName.ForgotPasswordUI:
+        return _pageRoute(settings: settings, widget: ForgotPasswordUI());
+      case AppRouteName.BankStatement:
+        return _pageRoute(settings: settings, widget: BankStatement());
 
       default:
         return _errorRoute(
