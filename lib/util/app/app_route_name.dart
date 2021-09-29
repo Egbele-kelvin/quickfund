@@ -31,4 +31,5 @@ class AppRouteName {
   static const String NotificationUI = '/NotificationUI';
   static const String ForgotPasswordUI = '/ForgotPasswordUI';
   static const String BankStatement = '/BankStatement';
+  static const String SettingsMainUI = '/SettingsMainUI';
 }

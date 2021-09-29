@@ -34,6 +34,7 @@ dependencies:
   pin_code_fields: ^7.3.0
   fdottedline: ^1.0.1
 #  flutter_secure_storage:
+  share:
   url_launcher:
   local_auth:
   toggle_switch: ^1.2.0

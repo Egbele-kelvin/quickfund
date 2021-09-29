@@ -198,6 +198,7 @@ class _MoreState extends State<More> {
                     AccountSettingCardMenu(
                       size: size,
                       onTap: () {
+                        Navigator.pushNamed(context, AppRouteName.SettingsMainUI);
                         print('click');
                       },
                       iconData: Icons.settings,

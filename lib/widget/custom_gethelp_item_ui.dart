@@ -20,8 +20,9 @@ class GetHelp_widget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       width: double.infinity,
-      height: size.height * 0.067,
+      height: size.height * 0.085,
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(10),
         vertical: getProportionateScreenHeight(10),
@@ -32,36 +33,39 @@ class GetHelp_widget extends StatelessWidget {
           color: Colors.grey.withOpacity(0.2),
         ),
       ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.symmetric(vertical: 1),
-          height: size.height * 0.05,
-          width: size.width * 0.11,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(
-                color: kPrimaryColor,
-                width: 1,
-              )),
-          child: Icon(
-            leadingIcon,
+      child: Center(
+        child: ListTile(
+          onTap: onTap,
+          leading: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(vertical: 1),
+            height: size.height * 0.05,
+            width: size.width * 0.11,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+
+                border: Border.all(
+                  color: kPrimaryColor,
+                  width: 1,
+                )),
+            child: Icon(
+              leadingIcon,
+              size: 20,
+              color: kPrimaryColor,
+            ),
+          ),
+          title: Text(
+          title,
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+          trailing: Icon(Icons.arrow_forward,
             size: 20,
-            color: kPrimaryColor,
-          ),
+            color: Colors.black,),
         ),
-        title: Text(
-        title,
-          style: GoogleFonts.roboto(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-          ),
-        ),
-        trailing: Icon(Icons.arrow_forward,
-          size: 20,
-          color: Colors.black,),
       ),
     );
   }
