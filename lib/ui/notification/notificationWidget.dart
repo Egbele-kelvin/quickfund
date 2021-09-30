@@ -89,6 +89,7 @@ class NotificationCard extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(height: size.height*0.02,),
             Divider(
               height: 1.0,
               thickness: 1.0,
