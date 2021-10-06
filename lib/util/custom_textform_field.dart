@@ -95,7 +95,7 @@ class RoundedInputField extends StatelessWidget {
         //   color: Colors.black,
         //   size: 20,
         // ),
-        contentPadding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+        contentPadding: EdgeInsets.symmetric(vertical: 22, horizontal: 20),
         counterText: '',
         //filled: true,
         //fillColor: Colors.grey.withOpacity(0.25),

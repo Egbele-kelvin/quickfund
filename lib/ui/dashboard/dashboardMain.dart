@@ -37,18 +37,15 @@ class _DashBoardMainState extends State<DashBoardMain> {
               child: Column(
                 children: [
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: DashBoardHeader(
-                      userName: userName,
-                      imgrUrl: 'assets/f_png/businessman.png',
-                      notification: () {
-                        Navigator.pushNamed(context, AppRouteName.NotificationUI);
-                      },
-                      userAcct: () {
-                        Navigator.pushNamed(context, AppRouteName.More);
-                      },
-                    ),
+                  DashBoardHeader(
+                    userName: userName,
+                    imgrUrl: 'assets/f_png/businessman.png',
+                    notification: () {
+                      Navigator.pushNamed(context, AppRouteName.NotificationUI);
+                    },
+                    userAcct: () {
+                      Navigator.pushNamed(context, AppRouteName.More);
+                    },
                   ),
 
                   SizedBox(
@@ -90,7 +87,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
           flex: 0,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(children: [
               DashBoardGetStartedComponent(),
               SizedBox(
@@ -118,7 +115,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
                 ],
               ),
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.015,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +137,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
                 ],
               ),
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.001,
               ),
             ]),
           ),
@@ -149,7 +146,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
           flex: 1,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(children: [
               Expanded(
                flex: 0,
@@ -203,9 +200,6 @@ class _DashBoardMainState extends State<DashBoardMain> {
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          // Spacer(
-                          //   flex: 9,
-                          // ),
                         ]),
                       )
                     ]),

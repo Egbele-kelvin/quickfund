@@ -18,83 +18,77 @@ class _FundAccountUIState extends State<FundAccountUI> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: kPrimaryColor,
       body: Column(
         children: [
           Expanded(
             flex: 2,
-            child: Container(
+            child:   Container(
               //color: kPrimaryColor,
+              height: size.height * 0.2,
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+              ),
               child: CustomAppBar(
                 onTap: () {
-                  //onBackPress();
-                  Navigator.pushReplacementNamed(
-                      context, AppRouteName.DASHBOARD);
+                 Navigator.pushNamed(context, AppRouteName.DASHBOARD);
                 },
-                pageTitle: 'Fund Your Account',
+                pageTitle: 'Fund Account',
               ),
             ),
           ),
           Expanded(
             flex: 8,
             child: Container(
-              //color: Colors.black,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20),
+                vertical: getProportionateScreenHeight(10),
               ),
-              //
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(20),
-                  vertical: getProportionateScreenHeight(10),
-                ),
-                child: Column(
-                  children: [
-                    Spacer(
-                      flex: 1,
-                    ),
-                    Text(
-                      AppStrings.QUICKFUNDYOURACCOUNT,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.roboto(
-                          fontSize: 13,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.04,
-                    ),
-                    FundAccountWidget(
-                      size: size,
-                      onTap: () {},
-                      subtitle: 'QuickFundMB',
-                      title: 'Bank',
-                      iconData: Icons.account_balance,
-                    ),
-                    FundAccountWidget(
-                      size: size,
-                      onTap: () {},
-                      subtitle: '029199XXXXXX',
-                      title: 'Account Number',
-                      iconData: Icons.account_balance,
-                    ),
-                    FundAccountWidget(
-                      size: size,
-                      onTap: () {},
-                      subtitle: 'Bose Oyelolu',
-                      title: 'Beneficiaries',
-                      iconData: Icons.account_circle,
-                    ),
-                    Spacer(
-                      flex: 6,
-                    ),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Text(
+                    AppStrings.QUICKFUNDYOURACCOUNT,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.04,
+                  ),
+                  FundAccountWidget(
+                    size: size,
+                    onTap: () {},
+                    subtitle: 'QuickFundMB',
+                    title: 'Bank',
+                    iconData: Icons.account_balance,
+                  ),
+                  FundAccountWidget(
+                    size: size,
+                    onTap: () {},
+                    subtitle: '029199XXXXXX',
+                    title: 'Account Number',
+                    iconData: Icons.account_balance,
+                  ),
+                  FundAccountWidget(
+                    size: size,
+                    onTap: () {},
+                    subtitle: 'Bose Oyelolu',
+                    title: 'Beneficiaries',
+                    iconData: Icons.account_circle,
+                  ),
+                  Spacer(
+                    flex: 6,
+                  ),
+                ],
               ),
             ),
           ),

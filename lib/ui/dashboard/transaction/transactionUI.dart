@@ -18,6 +18,58 @@ class _TransactionUIState extends State<TransactionUI> {
   String userName = 'Bose', acctBalance = '239,600';
   final searchController = TextEditingController();
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
+
+  void showMessage(String message) {
+    var size = MediaQuery.of(context).size;
+    showDialog<void>(
+      context: context,
+      // barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+          content: Container(
+            height: size.height * 0.135,
+            width: double.infinity,
+            child: Column(
+              children: [
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'From Date',
+                      style: GoogleFonts.openSans(
+                        color: Colors.black,
+                        fontSize: 11,
+                      ),
+                    ),
+
+                    Text(
+                      'To Date',
+                      style: GoogleFonts.openSans(
+                        color: Colors.black,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.007,
+                ),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomDateSelect(size: size),
+                    CustomDateSelect(size: size)
+                  ],
+                ),],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -66,15 +118,12 @@ class _TransactionUIState extends State<TransactionUI> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: SearchBoxWidget(
-                          searchController: searchController,
-                          onSubmitted: (val) {},
-                          onEditingComplete: () {},
-                          onChanged: (val) {},
-                          onEditing: (val) {},
-                        ),
+                      child: TransactionHistoryDateCalender(
+                        size: size,
+                        searchController: searchController,
+                        onTap: () {
+                          showMessage('');
+                        },
                       ),
                     ),
 
@@ -171,7 +220,6 @@ class _TransactionUIState extends State<TransactionUI> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -183,3 +231,128 @@ class _TransactionUIState extends State<TransactionUI> {
   }
 }
 
+class CustomDateSelect extends StatelessWidget {
+  const CustomDateSelect({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // width: size.width *0.05,
+      child: Row(
+        children: [
+          Text(
+            '2020/10/10',
+            style:
+            GoogleFonts.openSans(fontSize: 11, color: Colors.black),
+          ),
+          SizedBox(
+            width: size.width * 0.03,
+          ),
+          GestureDetector(
+              onTap: () {},
+              child: SvgPicture.asset(
+                'assets/f_svg/calender.svg',
+                width: 10,
+                color: Colors.grey,
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class SelectDate extends StatefulWidget {
+  const SelectDate({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  _SelectDateState createState() => _SelectDateState();
+}
+
+class _SelectDateState extends State<SelectDate> {
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'From Date',
+                  style: GoogleFonts.openSans(
+                    color: Colors.black,
+                    fontSize: 11,
+                  ),
+                ),
+
+                Text(
+                  'To Date',
+                  style: GoogleFonts.openSans(
+                    color: Colors.black,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class TransactionHistoryDateCalender extends StatelessWidget {
+  const TransactionHistoryDateCalender({
+    Key key,
+    @required this.size,
+    @required this.searchController,
+    this.onTap,
+  }) : super(key: key);
+
+  final Size size;
+  final TextEditingController searchController;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          width: size.width / 1.19,
+          child: SearchBoxWidget(
+            searchController: searchController,
+            onSubmitted: (val) {},
+            onEditingComplete: () {},
+            onChanged: (val) {},
+            onEditing: (val) {},
+          ),
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: size.width * 0.1,
+            child: SvgPicture.asset(
+              'assets/f_svg/calender.svg',
+              color: kPrimaryColor,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}

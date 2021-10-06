@@ -84,63 +84,107 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                 SizedBox(
                   height: size.height * 0.01,
                 ),
-                Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      height: size.height *0.1,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: size.width *0.73,
-                            child: RoundedInputField(
-                              // onSaved: (newValue) => bvn = newValue,
-                              onSaved: (newValue) =>
-                              answerToSecurityQuestion = newValue,
-                              inputType: TextInputType.text,
-                              labelText: 'Create a Security Question',
-                              customTextHintStyle: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: Colors.black54.withOpacity(0.3),
-                                  fontWeight: FontWeight.w400),
-                              autoCorrect: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  removeError(error: kSecurityNullError);
-                                }
-                                return null;
-                              },
+                Container(
+                  height: size.height *0.6,
+                  child: Column(
+                    children: [
 
-                              validateForm: (value) {
-                                if (value.isEmpty) {
-                                  addError(error: kSecurityNullError);
-                                  return "";
-                                }
-                                return null;
-                              },
+
+                      Expanded(flex:0, child:   Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        // height: size.height *0.1,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: size.width *0.73,
+                              child: RoundedInputField(
+                                // onSaved: (newValue) => bvn = newValue,
+                                onSaved: (newValue) =>
+                                answerToSecurityQuestion = newValue,
+                                inputType: TextInputType.text,
+                                labelText: 'Create a Security Question',
+                                customTextHintStyle: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: Colors.black54.withOpacity(0.3),
+                                    fontWeight: FontWeight.w400),
+                                autoCorrect: true,
+                                onChanged: (value) {
+                                  if (value.isNotEmpty) {
+                                    removeError(error: kSecurityNullError);
+                                  }
+                                  return null;
+                                },
+
+                                validateForm: (value) {
+                                  if (value.isEmpty) {
+                                    addError(error: kSecurityNullError);
+                                    return "";
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                          ),
 
-                          SizedBox(
-                            width: size.height * 0.02,
-                          ),
-                          Icon(
-                            Icons.add,
-                            size: 30,
-                            color: Colors.grey.withOpacity(0.5),
+                            SizedBox(
+                              width: size.height * 0.02,
+                            ),
+                            Icon(
+                              Icons.add,
+                              size: 30,
+                              color: Colors.grey.withOpacity(0.5),
+                            )
+                          ],
+                        ),
+                      ),),
+                      Expanded(flex:2, child:   Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          height: size.height *0.1,
+                          child: Column(
+                            children: [
+
+                              Container(
+                                height:size.height *0.5,
+                                child: ListView(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  children: securityQuestion.asMap().entries.map((e) => Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 18.0 , vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          onTap: (){},
+                                          title: Text(e.value , style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 11,
+                                              color: Colors.black
+                                          ),),
+                                          trailing: Icon(Icons.tag , size: 12),
+
+                                        ),
+                                        Divider(
+                                          height: 1,
+                                          thickness: 0.5,
+                                        ),
+                                      ],
+                                    ),
+                                  )).toList(),
+                                ),
+                              )
+                            ],
                           )
-                        ],
-                      ),
-                    ),
-                  ],
+                      ),),
+
+                    ],
+                  ),
                 )
               ],
-              ),
+            ),
           );
         });
   }
-
   onBackPress() {
     print("pret" + currentView.toString());
     if (currentView == 0) {

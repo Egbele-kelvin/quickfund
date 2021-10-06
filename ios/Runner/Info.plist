@@ -22,6 +22,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<key>Privacy - Touch Id</key>
+    	<string>QuickMFB requires access to biometric to authenticate your account</string>
+    	<key>NSFaceIDUsageDescription</key>
+    	<string>QuickMFB needs to access your camera to authenticate your app</string>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

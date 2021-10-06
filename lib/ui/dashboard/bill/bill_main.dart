@@ -1,3 +1,4 @@
+import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,7 @@ class BillMainUI extends StatefulWidget {
 
 class _BillMainUIState extends State<BillMainUI> {
   TextEditingController transactPin;
+  TextEditingController phoneNumberController = TextEditingController();
   String headerText = 'Pay Bills',
       airtimeType = '', phoneNum='',
   bundle='100MB - N500 - 1 week',
@@ -61,6 +63,19 @@ class _BillMainUIState extends State<BillMainUI> {
 
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
+
+  Future<String> openContactBook() async {
+    Contact contact = await ContactPicker().selectContact();
+   try{
+     if (contact != null) {
+       var phoneNumber = contact.phoneNumber.number.toString().replaceAll(new RegExp(r"\s+"), "");
+       return phoneNumber;
+     }
+   }catch(e){
+     return e.toString();
+   }
+    return "";
+  }
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -311,8 +326,19 @@ class _BillMainUIState extends State<BillMainUI> {
                                 height: size.height * .03,
                               ),
                               RoundedInputField(
+                                controller: phoneNumberController,
                                 suffixIcon: InkResponse(onTap: (){
                                   print('select from contact');
+                                  openContactBook();
+                                  var contactNumber = openContactBook();
+                                  setState(() {
+
+                                    phoneNum=contactNumber.toString();
+
+                                    phoneNumberController.text=contactNumber.toString();
+                                    print('contact: $contactNumber');
+                                  });
+
                                 },
                                 child: Icon(Icons.contacts, size: 20,color: kPrimaryColor,),),
                                 // onSaved: (newValue) => bvn = newValue,

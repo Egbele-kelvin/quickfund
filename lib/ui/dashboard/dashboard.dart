@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:quickfund/util/constants.dart';
+
 import 'bill/bill_main.dart';
 import 'dashboardMain.dart';
-import 'fundAcct/fundAccountUI.dart';
 import 'more/more.dart';
 import 'transaction/transactionUI.dart';
 
@@ -58,7 +58,7 @@ class _DashboardMainState extends State<DashboardMain> {
                   topRight: Radius.circular(15), topLeft: Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black38.withOpacity(0.06),
+                    color: Colors.black38.withOpacity(0.08),
                     spreadRadius: 0,
                     blurRadius: 10),
               ],
@@ -91,21 +91,16 @@ class _DashboardMainState extends State<DashboardMain> {
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                       icon: Icon(Icons.home_outlined),
-                      label:
-                        'Home',
-                      ),
+                      label: 'Home',),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.wysiwyg_rounded), label: 'Bills'),
+                      icon: Icon(Icons.wysiwyg_rounded),
+                      label: 'Bills'),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.sticky_note_2_outlined),
                       label: 'Transactions'),
                   BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.more_horiz,
-                      ),
-                      label:
-                        'More',
-                      )
+                      icon: Icon(Icons.more_horiz,),
+                      label: 'More',)
                 ],
               ),
             )));

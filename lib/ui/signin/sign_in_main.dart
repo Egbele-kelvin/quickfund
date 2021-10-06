@@ -20,61 +20,79 @@ class SignInMain extends StatefulWidget {
 class _SignInMainState extends State<SignInMain> {
   bool setImage, assetsImageUrl = false;
   bool _passwordVisible;
-  String userName = 'Bose', phoneNumber, password , _message;
+  String userName = 'Bose', phoneNumber, password, _message;
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
 
-  final LocalAuthentication localAuth = LocalAuthentication();
-  String _authorizeText = 'Not Authorized!';
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
 
-  Future<bool> checkingForBioMetrics() async {
-    bool canCheckBiometrics = await localAuth.canCheckBiometrics;
-    print(canCheckBiometrics);
-    return canCheckBiometrics;
+  String _authorizedOrNot = "Not Authorized";
+
+  void checkBioMeTric() async {
+    if (await _getBiometricsSupport()) {
+      await _getAvailableSupport();
+      if (await _authenticateMe()) {
+
+        Navigator.pushReplacementNamed(
+            context, AppRouteName.DASHBOARD);
+
+        // username = await _sharedPreferenceQS.getSharedPrefs(String, 'username');
+        // print('username: $username');
+        //
+        // password = await _sharedPreferenceQS.getSharedPrefs(String, 'password');
+        // print('password: $password');
+        //
+        // var signInR = UserLoginReq(username: username, password: password);
+        // signInReq(signInR, _auth);
+      }
+    } else {
+      print('eror fingerprintDetect');
+    }
+  }
+  List<BiometricType> _availableBuimetricType;
+
+  Future<bool> _getBiometricsSupport() async {
+    bool hasFingerPrintSupport = false;
+    try {
+      hasFingerPrintSupport = await _localAuthentication.canCheckBiometrics;
+      return hasFingerPrintSupport;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
-
-  Future<void> _authenticateMe() async {
-// 8. this method opens a dialog for fingerprint authentication.
-//    we do not need to create a dialog nut it popsup from device natively.
-    bool authenticated = false;
+  Future<void> _getAvailableSupport() async {
+    List<BiometricType> availableBuimetricType;
     try {
-      authenticated = await localAuth.authenticateWithBiometrics(
-        localizedReason: "Authenticate for Testing", // message for dialog
-        useErrorDialogs: true, // show error in dialog
-        stickyAuth: true, // native process
-      );
-      setState(() {
-        _message = authenticated ? "Authorized" : "Not Authorized";
-      });
+      availableBuimetricType =
+      await _localAuthentication.getAvailableBiometrics();
+      print(availableBuimetricType);
     } catch (e) {
       print(e);
     }
     if (!mounted) return;
+    setState(() {
+      _availableBuimetricType = availableBuimetricType;
+    });
   }
 
+  Future<bool> _authenticateMe() async {
+    bool authenticated = false;
+    try {
+      authenticated = await _localAuthentication.authenticateWithBiometrics(
+        localizedReason: "Authenticate for Testing", // message for dialog
+        useErrorDialogs: true, // show error in dialog
+        stickyAuth: true, // native process
+      );
 
-
-  // static Future<bool> authenticateWithBiometrics() async {
-  //   final LocalAuthentication localAuthentication = LocalAuthentication();
-  //   bool isBiometricSupported = await localAuthentication.isDeviceSupported();
-  //   bool canCheckBiometrics = await localAuthentication.canCheckBiometrics;
-  //
-  //   bool isAuthenticated = false;
-  //
-  //   if (isBiometricSupported && canCheckBiometrics) {
-  //     isAuthenticated = await localAuthentication.authenticate(
-  //       localizedReason: 'Please complete the biometrics to proceed.',
-  //       //biometricOnly: true,
-  //       stickyAuth: true,
-  //     );
-  //   }
-  //
-  //   return isAuthenticated;
-  // }
-
-
-
+      print(_authorizedOrNot);
+      return authenticated;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
   void addError({String error}) {
     if (!errors.contains(error))
       setState(() {
@@ -93,7 +111,10 @@ class _SignInMainState extends State<SignInMain> {
   void initState() {
     _passwordVisible = true;
 
-    checkingForBioMetrics();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkBioMeTric();
+    });
+
     super.initState();
   }
 
@@ -170,7 +191,6 @@ class _SignInMainState extends State<SignInMain> {
                   child: SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
                     child: Column(children: [
-
                       SizedBox(
                         height: size.height * 0.03,
                       ),
@@ -289,11 +309,12 @@ class _SignInMainState extends State<SignInMain> {
                         height: size.height * 0.04,
                       ),
                       GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, AppRouteName.ForgotPasswordUI);
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRouteName.ForgotPasswordUI);
                         },
                         child: Text(
-                          'Forgot Password',
+                          'Forgot Password?',
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w400,
                               color: kTap,
@@ -307,21 +328,19 @@ class _SignInMainState extends State<SignInMain> {
                         textI: "Don't have a QFMB account? ",
                         textII: 'Create account',
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                              AppRouteName.getStartedUpdatedUI);
+                          Navigator.of(context)
+                              .pushNamed(AppRouteName.getStartedUpdatedUI);
                         },
                       ),
                       SizedBox(
                         height: size.height * 0.04,
                       ),
                       CustomFingerPrint(
-                        onTap: _authenticateMe,
+                       onTap: checkBioMeTric,
                       ),
-
                       SizedBox(
                         height: size.height * 0.04,
                       ),
-
                     ]),
                   ),
                 ),
