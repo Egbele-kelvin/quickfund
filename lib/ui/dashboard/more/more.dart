@@ -97,7 +97,8 @@ class _MoreState extends State<More> {
           CupertinoDialogAction(
             textStyle: TextStyle(color: Colors.red),
             child: Text(defaultActionText),
-            onPressed: () => exit(0),
+            onPressed: () => Navigator.pushReplacementNamed(
+                context, AppRouteName.LOG_IN),
           ),
         ],
       ),

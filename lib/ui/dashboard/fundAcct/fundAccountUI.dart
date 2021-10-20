@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
+import 'package:quickfund/widget/customFundWallet.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
+import 'package:toast/toast.dart';
 
 class FundAccountUI extends StatefulWidget {
   @override
@@ -12,6 +15,14 @@ class FundAccountUI extends StatefulWidget {
 }
 
 class _FundAccountUIState extends State<FundAccountUI> {
+
+  void showToast(String msg, {int duration, int gravity}) {
+    Toast.show(msg, context, duration: duration, gravity: gravity,
+        backgroundRadius:20.0 ,
+        textColor:Colors.white60);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -73,7 +84,13 @@ class _FundAccountUIState extends State<FundAccountUI> {
                   ),
                   FundAccountWidget(
                     size: size,
-                    onTap: () {},
+                    copyIcon:Icons.copy,
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(
+                          text: '870690696669'));
+
+                      showToast('Account Number copied');
+                    },
                     subtitle: '029199XXXXXX',
                     title: 'Account Number',
                     iconData: Icons.account_balance,
@@ -98,64 +115,3 @@ class _FundAccountUIState extends State<FundAccountUI> {
   }
 }
 
-class FundAccountWidget extends StatelessWidget {
-  const FundAccountWidget({
-    Key key,
-    @required this.size,
-    this.onTap,
-    this.title,
-    this.subtitle,
-    this.iconData,
-  }) : super(key: key);
-
-  final Size size;
-  final Function onTap;
-  final String title, subtitle;
-  final IconData iconData;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: size.height * 0.095,
-          width: double.infinity,
-          //padding: EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.grey.withOpacity(0.25),
-            ),
-          ),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: kShadowColor,
-              radius: 20,
-              child: Icon(
-                iconData,
-                size: 18,
-                color: kPrimaryColor,
-              ),
-            ),
-            title: Text(
-              title,
-              style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 11,
-                  color: Colors.black),
-            ),
-            subtitle: Text(
-              subtitle,
-              style: GoogleFonts.roboto(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

@@ -145,25 +145,42 @@ class _AirtimeUIState extends State<AirtimeUI> {
                             Visibility(
                               visible: currentView == 0,
                               child: Column(
-                                children: airtimeProvider
-                                    .asMap()
-                                    .entries
-                                    .map(
-                                      (e) => CustomAirtimeWidget(
-                                        size: size,
-                                        title: e.value,
-                                        imgURL:
-                                            'assets/f_svg/${e.value.toLowerCase()}.svg',
-                                        onTap: () {
-                                          print(e.value);
-                                          setState(() {
-                                            currentView = 1;
-                                            airtimeType = e.value;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                    .toList(),
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'Select your service provider',
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.symmetric(horizontal: 15),
+                                  ),
+
+                                  SizedBox(height: size.height*0.01,),
+                                  Column(
+                                    children: airtimeProvider
+                                        .asMap()
+                                        .entries
+                                        .map(
+                                          (e) => CustomAirtimeWidget(
+                                            size: size,
+                                            title: e.value,
+                                            imgURL:
+                                                'assets/f_svg/${e.value.toLowerCase()}.svg',
+                                            onTap: () {
+                                              print(e.value);
+                                              setState(() {
+                                                currentView = 1;
+                                                airtimeType = e.value;
+                                              });
+                                            },
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ],
                               ),
                             ),
                             Visibility(
@@ -178,7 +195,7 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                   RoundedInputField(
                                     // onSaved: (newValue) => bvn = newValue,
                                     onSaved: (newValue) => phoneNum = newValue,
-                                    inputType: TextInputType.text,
+                                    inputType: TextInputType.number,
                                     maxLen: 11,
                                     labelText: 'Phone Number',
                                     customTextHintStyle: GoogleFonts.lato(
@@ -338,6 +355,7 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                   size: size,
                                   amount: 'N $amount',
                                   date: tfDate,
+                                  selectedBank: 'QuickMFB',
                                   userAccount: userAccountNumber,
                                   receipientNumber: phoneNum,
                                   transactPin: transactPin,

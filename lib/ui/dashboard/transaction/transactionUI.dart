@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:quickfund/ui/quickHelp/ui_design/contact_info.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
-import 'package:quickfund/widget/custom_search.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
+import 'package:quickfund/widget/searchHistory.dart';
 
 class TransactionUI extends StatefulWidget {
   @override
@@ -15,9 +16,111 @@ class TransactionUI extends StatefulWidget {
 }
 
 class _TransactionUIState extends State<TransactionUI> {
-  String userName = 'Bose', acctBalance = '239,600';
+  String userName = 'Bose', acctBalance = '239,600',toDate='', fromDate='';
+  DateTime selectedDate , fromDateCal, toDateCal = DateTime.now();
+  var date;
   final searchController = TextEditingController();
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
+
+  _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    assert(theme.platform != null);
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return buildMaterialDatePicker(context);
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return buildCupertinoDatePicker(context);
+    }
+  }
+
+  /// This builds material date picker in Android
+  buildMaterialDatePicker(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2025),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
+  /// This builds cupertion date picker in iOS
+  buildCupertinoDatePicker(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext builder) {
+          return Container(
+            height: MediaQuery.of(context).copyWith().size.height / 2.7,
+            color: Colors.white,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: (){
+                     // if(selectedDate!=date){
+                     //   fromDate=date.toString();
+                     //   Navigator.pop(context);
+                     // }
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text('Done', style: GoogleFonts.poppins(
+                        color: Colors.white,
+                      ),),
+                      width: MediaQuery.of(context).size.width *0.2,
+                      height:MediaQuery.of(context).size.height*0.04 ,
+                      color: Colors.grey,
+
+                    ),
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).copyWith().size.height / 3.2,
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (picked) {
+                      if (picked != null && picked != selectedDate)
+                        setState(() {
+                          selectedDate = picked;
+
+                          fromDate =
+                          "${selectedDate.toLocal().year}-${selectedDate.toLocal().month}-${selectedDate.toLocal().day}";
+                          print('issuedDate: $fromDate');
+
+                          toDate =
+                          "${selectedDate.toLocal().year}-${selectedDate.toLocal().month}-${selectedDate.toLocal().day}";
+                          print('issuedDate: $fromDate');
+
+
+                          // date =
+                          // "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+                        });
+                    },
+                    initialDateTime: selectedDate,
+                    minimumYear: 1970,
+                    maximumYear: 2025,
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   void showMessage(String message) {
     var size = MediaQuery.of(context).size;
@@ -29,40 +132,17 @@ class _TransactionUIState extends State<TransactionUI> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15))),
           content: Container(
-            height: size.height * 0.135,
+            height: size.height * 0.16,
             width: double.infinity,
-            child: Column(
-              children: [
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'From Date',
-                      style: GoogleFonts.openSans(
-                        color: Colors.black,
-                        fontSize: 11,
-                      ),
-                    ),
-
-                    Text(
-                      'To Date',
-                      style: GoogleFonts.openSans(
-                        color: Colors.black,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: size.height * 0.007,
-                ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomDateSelect(size: size),
-                    CustomDateSelect(size: size)
-                  ],
-                ),],
+            child: SelectDateRange(
+              size: size,
+              fromDate:  fromDate ==null? '10-05-2020' : '$fromDate',
+              toDate: toDate ==null?'10-05-2021':'$toDate',
+              fromDateSelect: (){
+                _selectDate(context);
+              },
+              toDateSelect: (){},
+              proceedOnTap: (){ Navigator.pop(context);},
             ),
           ),
         );
@@ -126,9 +206,6 @@ class _TransactionUIState extends State<TransactionUI> {
                         },
                       ),
                     ),
-
-
-                    ///-----concept to --- work on ------
                     Expanded(
                       flex: 10,
                       child: CustomScrollView(
@@ -227,132 +304,6 @@ class _TransactionUIState extends State<TransactionUI> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomDateSelect extends StatelessWidget {
-  const CustomDateSelect({
-    Key key,
-    @required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // width: size.width *0.05,
-      child: Row(
-        children: [
-          Text(
-            '2020/10/10',
-            style:
-            GoogleFonts.openSans(fontSize: 11, color: Colors.black),
-          ),
-          SizedBox(
-            width: size.width * 0.03,
-          ),
-          GestureDetector(
-              onTap: () {},
-              child: SvgPicture.asset(
-                'assets/f_svg/calender.svg',
-                width: 10,
-                color: Colors.grey,
-              ))
-        ],
-      ),
-    );
-  }
-}
-
-class SelectDate extends StatefulWidget {
-  const SelectDate({
-    Key key,
-    @required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  _SelectDateState createState() => _SelectDateState();
-}
-
-class _SelectDateState extends State<SelectDate> {
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'From Date',
-                  style: GoogleFonts.openSans(
-                    color: Colors.black,
-                    fontSize: 11,
-                  ),
-                ),
-
-                Text(
-                  'To Date',
-                  style: GoogleFonts.openSans(
-                    color: Colors.black,
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ),
-
-          ],
-        )
-      ],
-    );
-  }
-}
-
-class TransactionHistoryDateCalender extends StatelessWidget {
-  const TransactionHistoryDateCalender({
-    Key key,
-    @required this.size,
-    @required this.searchController,
-    this.onTap,
-  }) : super(key: key);
-
-  final Size size;
-  final TextEditingController searchController;
-  final Function onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          width: size.width / 1.19,
-          child: SearchBoxWidget(
-            searchController: searchController,
-            onSubmitted: (val) {},
-            onEditingComplete: () {},
-            onChanged: (val) {},
-            onEditing: (val) {},
-          ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: size.width * 0.1,
-            child: SvgPicture.asset(
-              'assets/f_svg/calender.svg',
-              color: kPrimaryColor,
-            ),
-          ),
-        )
-      ],
     );
   }
 }

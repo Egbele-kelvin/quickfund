@@ -2,7 +2,7 @@ import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:quickfund/model/accountModel.dart';
+import 'package:quickfund/data/model/accountModel.dart';
 import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
@@ -15,6 +15,7 @@ import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:quickfund/widget/form_error.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
+
 import 'billWidget.dart';
 
 class BillMainUI extends StatefulWidget {
@@ -70,6 +71,8 @@ class _BillMainUIState extends State<BillMainUI> {
      if (contact != null) {
        var phoneNumber = contact.phoneNumber.number.toString().replaceAll(new RegExp(r"\s+"), "");
        return phoneNumber;
+     }else{
+       return '';
      }
    }catch(e){
      return e.toString();
@@ -244,13 +247,14 @@ class _BillMainUIState extends State<BillMainUI> {
                   ),
                   child: Column(
                     children: [
-                      Spacer(
-                        flex: 1,
-                      ),
+                      // Spacer(
+                      //   flex: 1,
+                      // ),
                       Visibility(
                           visible: currentView == 1,
                           child: Column(
                             children: [
+
                               BillWidget(
                                 size: size,
                                 title: 'Cable TV',
@@ -292,28 +296,43 @@ class _BillMainUIState extends State<BillMainUI> {
                       Visibility(
                         visible: currentView == 2,
                         child: Column(
-                          children: airtimeProvider
-                              .asMap()
-                              .entries
-                              .map(
-                                (e) => CustomAirtimeWidget(
-                                  size: size,
-                                  title: e.value,
-                                  imgURL:
-                                      'assets/f_svg/${e.value.toLowerCase().trim()}.svg',
-                                  onTap: () {
-                                    print(e.value);
-                                    setState(() {
-                                      currentView = 3;
-                                      airtimeType = e.value;
-                                    });
-                                  },
-                                ),
-                              )
-                              .toList(),
-
-
-
+                          children: [
+                            Container(
+                              child: Text(
+                                'Select your service provider',
+                                style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.01,
+                            ),
+                            Column(
+                              children: airtimeProvider
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (e) => CustomAirtimeWidget(
+                                      size: size,
+                                      title: e.value,
+                                      imgURL:
+                                          'assets/f_svg/${e.value.toLowerCase().trim()}.svg',
+                                      onTap: () {
+                                        print(e.value);
+                                        setState(() {
+                                          currentView = 3;
+                                          airtimeType = e.value;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
                         ),
                       ),
                       Visibility(
@@ -417,6 +436,7 @@ class _BillMainUIState extends State<BillMainUI> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: OTPTransaction(
+                            selectedBank: 'QuickMFB',
                             size: size,
                             amount: cableBundle !=null ? 'N $bundle' : cableBundle ,
                             date: tfDate,
@@ -471,25 +491,42 @@ class _BillMainUIState extends State<BillMainUI> {
                       Visibility(
                           visible: currentView==5,
                           child: Column(
-                            children: cableTv
-                                .asMap()
-                                .entries
-                                .map(
-                                  (e) => CustomAirtimeWidget(
-                                    size: size,
-                                    title: e.value,
-                                    imgURL:
-                                    'assets/f_svg/${e.value.toLowerCase()}.svg',
-                                    onTap: () {
-                                      print(e.value);
-                                      setState(() {
-                                       currentView = 6;
-                                        airtimeType = e.value;
-                                      });
-                                    },
-                                  ),
-                            )
-                                .toList(),
+                            children: [
+                              Container(
+                                child: Text(
+                                  'Select your biller provider',
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                              ),
+
+                              SizedBox(height: size.height*0.01,),
+                              Column(
+                                children: cableTv
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (e) => CustomAirtimeWidget(
+                                        size: size,
+                                        title: e.value,
+                                        imgURL:
+                                        'assets/f_svg/${e.value.toLowerCase()}.svg',
+                                        onTap: () {
+                                          print(e.value);
+                                          setState(() {
+                                           currentView = 6;
+                                            airtimeType = e.value;
+                                          });
+                                        },
+                                      ),
+                                )
+                                    .toList(),
+                              ),
+                            ],
                           ),),
 
                       Visibility(

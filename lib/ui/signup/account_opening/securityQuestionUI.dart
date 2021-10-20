@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/createAccountBvnResp.dart';
+import 'package:quickfund/data/model/securityQuestionReq.dart';
+import 'package:quickfund/provider/accountSetupProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
@@ -22,11 +26,14 @@ class SecurityQuestionUI extends StatefulWidget {
 }
 
 class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int currentView = 0;
-  String accountNumber = '0897966945';
+  String accountNumber = '';
   bool _passwordVisible, _confirPasswordVisible;
   bool showDataplan = false, showPhoneEdit = false;
   TextEditingController transactPin;
+  TextEditingController securityQuestionController;
+
   String _pin, answerToSecurityQuestion;
   List<String> securityQuestion = [
     AppStrings.SecurityQuestionI,
@@ -40,8 +47,8 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
   final _formKey = GlobalKey<FormState>();
   String email;
   String password;
-  String conform_password;
-  bool remember = false;
+  String conform_password , responseData;
+  bool remember = false , isLoading;
   final List<String> errors = [];
 
   void addError({String error}) {
@@ -58,6 +65,64 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
       });
   }
 
+  responseMessage(String message, Color color) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+            color: Colors.white, fontSize: 11, fontWeight: FontWeight.w400),
+      ),
+      backgroundColor: color,
+    ));
+  }
+
+  void securityQuestionPayLoad(
+      SetupSecurityQuestion setupSecurityQuestion, SetupAccountViaBVNandViaPhone authProvider) async {
+    setState(() {
+      print('printing Loader');
+      isLoading = true;
+    });
+    try {
+      await authProvider.setupSecurityQuestion(setupSecurityQuestion);
+      if (authProvider.setupSecurityQuestionR != null) {
+        final setupSecurityQuestionResp =
+        CreateAccountBvnResp.fromJson(authProvider.setupSecurityQuestionR);
+        if (setupSecurityQuestionResp.status==true) {
+          setState(() {
+            isLoading = false;
+          });
+          responseData = setupSecurityQuestionResp.message.toString();
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.green);
+          Navigator.pushReplacementNamed(context, AppRouteName.AccountOpeningUI);
+        }else{
+          setState(() {
+            isLoading=false;
+          });
+          responseData = setupSecurityQuestionResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.red);
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('LoadingData: $isLoading');
+        print('dataResp: ${authProvider.initiateBvnR.toString()}');
+
+        responseMessage('$responseData', Colors.red);
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      responseMessage('Server Auth Error', Colors.red);
+    }
+  }
+
+
+  
   Future<dynamic> buildShowModalBottomSheetForUserTitle(
       BuildContext context, Size size) {
     return showModalBottomSheet(
@@ -99,6 +164,7 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                             Container(
                               width: size.width *0.73,
                               child: RoundedInputField(
+                                controller: securityQuestionController,
                                 // onSaved: (newValue) => bvn = newValue,
                                 onSaved: (newValue) =>
                                 answerToSecurityQuestion = newValue,
@@ -115,7 +181,6 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                                   }
                                   return null;
                                 },
-
                                 validateForm: (value) {
                                   if (value.isEmpty) {
                                     addError(error: kSecurityNullError);
@@ -129,10 +194,12 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                             SizedBox(
                               width: size.height * 0.02,
                             ),
-                            Icon(
-                              Icons.add,
-                              size: 30,
-                              color: Colors.grey.withOpacity(0.5),
+                            AddSecurityQuestion(
+                              onTap: (){
+                                setState(() {
+                                  title=securityQuestionController.text;
+                                });
+                              },
                             )
                           ],
                         ),
@@ -200,7 +267,20 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
       print('printght' + currentView.toString());
     }
   }
-@override
+
+   parseAuthData(SetupAccountViaBVNandViaPhone authProvider) {
+    try {
+      if (authProvider.createAccountUsingBvn != null) {
+        final userData = CreateAccountBvnResp.fromJson(authProvider.createAccountUsingBvn);
+        accountNumber = userData.data.accountNumber;
+      }
+    } catch (e) {
+      print('Server Auth Error');
+    }
+  }
+
+
+  @override
   void initState() {
   _passwordVisible = true;
   _confirPasswordVisible = true;
@@ -210,13 +290,16 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     SizeConfig().init(context);
-    return WillPopScope(
+    return Consumer<SetupAccountViaBVNandViaPhone>(
+  builder: (context, provider, child) {
+  return WillPopScope(
       onWillPop: () {
         return onBackPress();
       },
       child: Form(
         key: _formKey,
         child: Scaffold(
+          key: scaffoldKey,
           resizeToAvoidBottomInset: false,
           backgroundColor: kPrimaryColor,
           body: Column(
@@ -229,7 +312,7 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                     onTap: () {
                       onBackPress();
                     },
-                    pageTitle: 'QFMB account no: ${accountNumber}',
+                    pageTitle: 'QFMB account no: $accountNumber',
                   ),
                 ),
               ),
@@ -256,9 +339,6 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                         SliverFillRemaining(
                           hasScrollBody: false,
                           child:    Column(children: [
-                            Spacer(
-                              flex: 1,
-                            ),
                             SizedBox(
                               height: size.height * 0.02,
                             ),
@@ -456,16 +536,6 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                                         return null;
                                       });
                                     },
-                                    // validator:(value) {
-                                    //   // if (value.isEmpty) {
-                                    //   //   addError(error: kPinNullError);
-                                    //   //   return "";
-                                    //   // } else if (value.length < 4) {
-                                    //   //   addError(error: kShortPinError);
-                                    //   //   return "";
-                                    //   // }
-                                    //   // return null;
-                                    // } ,
                                   ),
                                 ),
                               ],
@@ -500,17 +570,33 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
                         ),
                       ],
                     ),
-
-
-
-
-
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  },
+);
+  }
+}
+
+class AddSecurityQuestion extends StatelessWidget {
+  final Function onTap;
+  const AddSecurityQuestion({
+    Key key, this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap:onTap,
+      child: Icon(
+        Icons.add,
+        size: 30,
+        color: Colors.grey.withOpacity(0.5),
       ),
     );
   }

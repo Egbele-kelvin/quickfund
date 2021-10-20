@@ -15,7 +15,7 @@ class UserProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      height: size.height *0.045,
+      height: size.height *0.07,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           border: Border.all(

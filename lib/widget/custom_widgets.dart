@@ -297,9 +297,9 @@ class RecentTransactionHead extends StatelessWidget {
         children: [
           Text(
             'Recent Transactions',
-            style: GoogleFonts.roboto(
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
+                fontSize: 11.8,
                 color: Colors.black),
           ),
           InkWell(
@@ -307,7 +307,7 @@ class RecentTransactionHead extends StatelessWidget {
             onTap: onTap,
             child: Text(
               'See All',
-              style: GoogleFonts.roboto(
+              style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
                   fontSize: 11,
                   color: Colors.black),
@@ -572,7 +572,7 @@ class TransactionHistorySummary extends StatelessWidget {
                         child: Text(
                           transferName,
                           style: GoogleFonts.poppins(
-                              fontSize: 9.3,
+                              fontSize: 10,
                               fontWeight: FontWeight.w400,
                               color: Colors.black),
                         ),
@@ -585,7 +585,7 @@ class TransactionHistorySummary extends StatelessWidget {
                         child: Text(
                           code,
                           style: GoogleFonts.poppins(
-                              fontSize: 8.2,
+                              fontSize: 9.1,
                               fontWeight: FontWeight.w400,
                               color: Colors.black.withOpacity(0.6)),
                         ),
@@ -608,7 +608,7 @@ class TransactionHistorySummary extends StatelessWidget {
                         child: Text(
                           amount,
                           style: GoogleFonts.roboto(
-                              fontSize: 8.7,
+                              fontSize: 9,
                               fontWeight: FontWeight.w400,
                               color: amountColor),
                         ),
@@ -621,7 +621,7 @@ class TransactionHistorySummary extends StatelessWidget {
                         child: Text(
                           tfDate,
                           style: GoogleFonts.roboto(
-                              fontSize: 9,
+                              fontSize: 9.5,
                               fontWeight: FontWeight.w300,
                               color: Colors.grey.withOpacity(1)),
                         ),

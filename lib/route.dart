@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickfund/cubit/sign_up_with_bvn_cubit.dart';
+import 'package:quickfund/data/repository/repository.dart';
 import 'package:quickfund/ui/Loan/categoriesOfLoan.dart';
 import 'package:quickfund/ui/Loan/loanMain.dart';
 import 'package:quickfund/ui/Loan/loanPage.dart';
@@ -37,16 +40,23 @@ import 'package:universal_platform/universal_platform.dart';
 import 'ui/onboarding/welcomeui.dart';
 
 class RouteGenerator {
+
+  Repository repository;
+
+  RouteGenerator() {
+    repository = Repository();
+  }
+
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     // final args = settings.arguments;
     switch (settings.name) {
       case AppRouteName.app:
         return _pageRoute(widget: SplashScreen(), settings: settings);
         break;
-        case AppRouteName.TransferMainPage:
+      case AppRouteName.TransferMainPage:
         return _pageRoute(settings: settings, widget: TransferMainPage());
         break;
-        case AppRouteName.TransferComponent:
+      case AppRouteName.TransferComponent:
         return _pageRoute(settings: settings, widget: TransferComponent());
         break;
 
@@ -86,28 +96,28 @@ class RouteGenerator {
       case AppRouteName.RegisterUI:
         return _pageRoute(settings: settings, widget: RegisterUI());
         break;
-        case AppRouteName.BillMainUI:
+      case AppRouteName.BillMainUI:
         return _pageRoute(settings: settings, widget: BillMainUI());
         break;
-        case AppRouteName.DashBoardMain:
+      case AppRouteName.DashBoardMain:
         return _pageRoute(settings: settings, widget: DashBoardMain());
         break;
-        case AppRouteName.FundAccountUI:
+      case AppRouteName.FundAccountUI:
         return _pageRoute(settings: settings, widget: FundAccountUI());
         break;
-        case AppRouteName.TransactionUI:
+      case AppRouteName.TransactionUI:
         return _pageRoute(settings: settings, widget: TransactionUI());
         break;
-        case AppRouteName.TransactionRef:
+      case AppRouteName.TransactionRef:
         return _pageRoute(settings: settings, widget: TransactionRef());
         break;
-        case AppRouteName.SaveBeneficiary:
+      case AppRouteName.SaveBeneficiary:
         return _pageRoute(settings: settings, widget: SaveBeneficiary());
         break;
-        case AppRouteName.LoanMainUI:
+      case AppRouteName.LoanMainUI:
         return _pageRoute(settings: settings, widget: LoanMainUI());
         break;
-        case AppRouteName.CategoriesOfLoanUI:
+      case AppRouteName.CategoriesOfLoanUI:
         return _pageRoute(settings: settings, widget: CategoriesOfLoanUI());
         break;
       case AppRouteName.LoanPageUI:
@@ -126,7 +136,7 @@ class RouteGenerator {
         return _pageRoute(settings: settings, widget: CableMain());
       case AppRouteName.NotificationUI:
         return _pageRoute(settings: settings, widget: NotificationUI());
-     case AppRouteName.ForgotPasswordUI:
+      case AppRouteName.ForgotPasswordUI:
         return _pageRoute(settings: settings, widget: ForgotPasswordUI());
       case AppRouteName.BankStatement:
         return _pageRoute(settings: settings, widget: BankStatement());

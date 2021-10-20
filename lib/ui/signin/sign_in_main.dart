@@ -133,18 +133,27 @@ class _SignInMainState extends State<SignInMain> {
                 flex: 0,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: size.height * 0.1,
-                    ),
                     //Spacer(flex: 1,),
-                    CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: assetsImageUrl != null
-                            ? AssetImage('assets/f_png/businessman.png')
-                            : NetworkImage('https://placebeard.it/640x360')),
+                    SizedBox(height: size.height*0.05,),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                        color: Colors.grey.shade300
+                      ),
+                      child:  CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: assetsImageUrl != null
+                              ? AssetImage('assets/f_png/businessman.png')
+                              : NetworkImage('https://placebeard.it/640x360')),
+                    ),
+
                     SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.02,
                     ),
                     Text(
                       'Welcome back, $userName',
@@ -154,7 +163,7 @@ class _SignInMainState extends State<SignInMain> {
                           color: Colors.white),
                     ),
                     SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.02,
                     ),
                   ],
                 )),
@@ -285,12 +294,9 @@ class _SignInMainState extends State<SignInMain> {
                               });
                             }),
                       ),
-                      SizedBox(
-                        height: size.height * 0.04,
-                      ),
                       FormError(errors: errors),
                       SizedBox(
-                        height: size.height * 0.04,
+                        height: size.height * 0.06,
                       ),
                       CustomSignInButton(
                         size: size,
@@ -337,9 +343,6 @@ class _SignInMainState extends State<SignInMain> {
                       ),
                       CustomFingerPrint(
                        onTap: checkBioMeTric,
-                      ),
-                      SizedBox(
-                        height: size.height * 0.04,
                       ),
                     ]),
                   ),

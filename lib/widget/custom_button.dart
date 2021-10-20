@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             btnTitle,
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: Colors.white,

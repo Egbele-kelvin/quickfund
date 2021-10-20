@@ -19,7 +19,7 @@ class SelectedCustom extends StatelessWidget {
     return InkResponse(
       onTap: onTap,
       child: Container(
-        height: size.height*0.075,
+        height: size.height*0.07,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           border: Border.all(

@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
+import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/size_config.dart';
+import 'package:quickfund/widget/bankStatementWidget.dart';
 import 'package:quickfund/widget/custom_button.dart';
+import 'package:quickfund/widget/custom_expandable.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 
 class BankStatement extends StatefulWidget {
@@ -15,15 +19,22 @@ class BankStatement extends StatefulWidget {
 }
 
 class _BankStatementState extends State<BankStatement> {
-  String accountNum = '0119695695',
+  bool isExpanded = false;
+  int selectIndex;
+  dynamic accountNum = '0119695695',
       acctBalance = '239,600',
       issueDate = 'Select Start Date',
       expiryDate = 'Select End Date';
   DateTime selectedDate = DateTime.now();
+  DateTime issueDat = DateTime.now();
+  DateTime expiryDat = DateTime.now();
 
   List selectFileType = ['pdf', 'xls'];
+  final dateOfBirth = TextEditingController();
+  final issuedDate = TextEditingController();
+  final expiredDate = TextEditingController();
 
-  _selectDate(BuildContext context) async {
+  _selectExpiryDate(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
     assert(theme.platform != null);
     switch (theme.platform) {
@@ -31,19 +42,34 @@ class _BankStatementState extends State<BankStatement> {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return buildMaterialDatePicker(context);
+      return buildMaterialDatePickerForExpiryDate(context);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return buildCupertinoDatePicker(context);
+        return buildCupertinoDatePickerForExpiryDate(context);
+    }
+  }
+  _selectIssuedDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    assert(theme.platform != null);
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+      return buildMaterialDatePickerForIssuedDate(context);
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return buildCupertinoDatePickerForIssuedDate(context);
     }
   }
 
+  //
   /// This builds material date picker in Android
-  buildMaterialDatePicker(BuildContext context) async {
+  buildMaterialDatePickerForIssuedDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       cancelText: 'Cancel',
       context: context,
-      initialDate: selectedDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
       builder: (context, child) {
@@ -53,58 +79,65 @@ class _BankStatementState extends State<BankStatement> {
         );
       },
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null)
       setState(() {
-        selectedDate = picked;
+        issuedDate.text =DateFormat('dd-MM-yyyy').format(picked);
+        print('issueDate : ${issuedDate.text}');
       });
   }
 
-  /// This builds cupertion date picker in iOS
-  buildCupertinoDatePicker(BuildContext context) {
+  buildCupertinoDatePickerForIssuedDate(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext builder) {
-          return Container(
-            height: MediaQuery.of(context).copyWith().size.height * 0.4,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).copyWith().size.width * 0.15,
-                    height:
-                        MediaQuery.of(context).copyWith().size.height * 0.05,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                    ),
-                    child: Text(
-                      'Done',
-                      style: GoogleFonts.poppins(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).copyWith().size.height / 3,
-                  //  color: Colors.white,
-                  child: CupertinoDatePicker(
-                    mode: CupertinoDatePickerMode.date,
-                    onDateTimeChanged: (picked) {
-                      if (picked != null && picked != selectedDate)
-                        setState(() {
-                          selectedDate = picked;
-                        });
-                    },
-                    initialDateTime: selectedDate,
-                    minimumYear: 2000,
-                    maximumYear: 2025,
-                  ),
-                ),
-              ],
-            ),
+          return SelectDatePickerByFunmi(
+            onDateTimeChanged: (picked) {
+              if (picked != null) {
+                setState(() {
+                  issuedDate.text = DateFormat('dd-MM-yyyy').format(picked);
+                });
+
+                print('date : ${issuedDate.text}');
+              }
+            },
+          );
+        });
+  }  /// This builds material date picker in Android
+  buildMaterialDatePickerForExpiryDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      cancelText: 'Cancel',
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+    if (picked != null)
+      setState(() {
+        expiredDate.text =DateFormat('dd-MM-yyyy').format(picked);
+        print('issueDate : $expiredDate');
+      });
+  }
+
+  buildCupertinoDatePickerForExpiryDate(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext builder) {
+          return SelectDatePickerByFunmi(
+            onDateTimeChanged: (picked) {
+              if (picked != null) {
+                setState(() {
+                  expiredDate.text = DateFormat('dd-MM-yyyy').format(picked);
+                });
+
+                print('date : ${expiredDate.text}');
+              }
+            },
           );
         });
   }
@@ -113,6 +146,17 @@ class _BankStatementState extends State<BankStatement> {
   void initState() {
     super.initState();
   }
+
+  _toggleAccountType() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
+
+  List<BankTypeProfiling> accountType = [
+    BankTypeProfiling(accountNumber: '1205695939', accountType: 'Savings'),
+    BankTypeProfiling(accountType: 'Current', accountNumber: '8059329495')
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -169,28 +213,86 @@ class _BankStatementState extends State<BankStatement> {
                             child: Column(children: [
                               SelectedCustom(
                                 size: size,
-                                onTap: () {},
+                                onTap: () {
+                                  _toggleAccountType();
+                                },
                                 title: accountNum,
                               ),
                               SizedBox(
-                                height: size.height * 0.02,
+                                height: size.height * 0.005,
                               ),
-                              CalenderPickWidget(
-                                size: size,
-                                onSelect: () {
-                                  _selectDate(context);
-                                },
-                                titleMessage: issueDate,
+                              ExpandedSection(
+                                expand: isExpanded,
+                                child: AccountTypeWidgetForBankStateMent(
+                                  size: size,
+                                  widgetCard: Column(
+                                    children: accountType
+                                        .asMap()
+                                        .entries
+                                        .map((e) => AccountTypeWidget(
+                                              borderRad: selectIndex == e.key
+                                                  ? BorderRadius.circular(4)
+                                                  : BorderRadius.circular(0),
+                                              onTap: () {
+                                                setState(() {
+                                                  selectIndex = e.key;
+                                                  accountNum =
+                                                      e.value.accountNumber;
+                                                });
+                                                print(selectIndex);
+                                              },
+                                              textColor: selectIndex == e.key
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              colorTap: selectIndex == e.key
+                                                  ? kPrimaryColor
+                                                  : Colors.transparent,
+                                              size: size,
+                                              accountType: e.value.accountType,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
-                              CalenderPickWidget(
-                                size: size,
-                                onSelect: () {
-                                  _selectDate(context);
+                              RoundedInputField(
+                                controller: issuedDate,
+                                suffixIcon:Icon(Icons.calendar_today_sharp, color: kPrimaryColor,size: 15,),
+                                readOnly: true,
+                                onTap: () {
+                                  _selectIssuedDate(context);
+                                  },
+                                maxLen: 11,
+                                hintText: 'Select Start Date',
+                                autoCorrect: true,
+                                validateForm: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter date.';
+                                  }
+                                  return null;
                                 },
-                                titleMessage: expiryDate,
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              RoundedInputField(
+                                suffixIcon:Icon(Icons.calendar_today_sharp, color: kPrimaryColor,size: 15,),
+                                controller: expiredDate,
+                                readOnly: true,
+                                onTap: () {
+                                  _selectExpiryDate(context);
+                                },
+                                maxLen: 11,
+                                hintText: 'Select End Date',
+                                autoCorrect: true,
+                                validateForm: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter date.';
+                                  }
+                                  return null;
+                                },
                               ),
                               SizedBox(
                                 height: size.height * 0.03,
@@ -211,10 +313,10 @@ class _BankStatementState extends State<BankStatement> {
                                     ),
                                   ),
                                   FileTypeWidget(
-                                    onTap: (){
-                                    },
-                                      selectFileType: selectFileType,
-                                      size: size,),
+                                    onTap: () {},
+                                    selectFileType: selectFileType,
+                                    size: size,
+                                  ),
                                 ],
                               )
                             ]),

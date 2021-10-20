@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:money2/money2.dart';
-import 'package:quickfund/model/accountModel.dart';
+import 'package:quickfund/data/model/accountModel.dart';
 import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
@@ -296,7 +296,7 @@ class _TransferComponentState extends State<TransferComponent> {
                                 ),
                               ),
                               Expanded(
-                                flex: 7,
+                                flex: 9,
                                 child: SingleChildScrollView(
                                   // slivers: [
                                     child: Padding(
@@ -309,9 +309,6 @@ class _TransferComponentState extends State<TransferComponent> {
                                       child: Column(
                                         children: [
                                           Column(children: [
-                                            SizedBox(
-                                              height: size.height * 0.02,
-                                            ),
                                             RoundedInputField(
                                             maxLen: 7,
                                             controller: amountController,
@@ -366,7 +363,7 @@ class _TransferComponentState extends State<TransferComponent> {
                                             // onSaved: (newValue) => bvn = newValue,
                                             onSaved: (newValue) =>
                                                 accountNum = newValue,
-                                            inputType: TextInputType.text,
+                                            inputType: TextInputType.number,
                                             maxLen: 11,
                                             labelText: 'Account Number',
                                             customTextHintStyle:
@@ -442,9 +439,10 @@ class _TransferComponentState extends State<TransferComponent> {
                                               padding: const EdgeInsets.all(8.0),
                                               child: OTPTransaction(
                                                 size: size,
+                                                selectedBank: bankName,
                                                 amount: 'N $amount',
                                                 date: tfDate,
-                                                userAccount: bankName ,
+                                                userAccount: 'QuickMFB' ,
                                                 receipientNumber: accountNum,
                                                transactPin: transactPin,
                                                 onChanged: (value) {
@@ -501,7 +499,8 @@ class _TransferComponentState extends State<TransferComponent> {
                             size: size,
                             amount: 'N $amount',
                             date: tfDate,
-                            userAccount: bankName,
+                            selectedBank: bankName,
+                            userAccount: 'QuickMFB',
                             receipientNumber: accountNum,
                             transactPin: transactPin,
                             onChanged: (value) {

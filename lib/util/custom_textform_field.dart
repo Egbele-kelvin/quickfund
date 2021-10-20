@@ -25,8 +25,9 @@ class RoundedInputField extends StatelessWidget {
   final String initialValue;
   final FormFieldValidator<String> validateForm;
   final FocusNode hasFocus;
-
+  final Function onTap;
   final controller;
+  final bool readOnly;
 
   // final ValueChanged<dynamic> contentPadding;
 
@@ -56,12 +57,14 @@ class RoundedInputField extends StatelessWidget {
     this.passwordvisible = false,
     this.labelText,
     this.hasFocus,
-    this.customTextHintStyle, this.initialValue, List<dynamic> inputFormatters,
+    this.customTextHintStyle, this.initialValue, List<dynamic> inputFormatters, this.onTap, this.readOnly,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly !=null ? readOnly : false,
+      onTap: onTap,
       cursorColor: kDashBoardCardColor,
       initialValue: initialValue,
       obscureText: passwordvisible,

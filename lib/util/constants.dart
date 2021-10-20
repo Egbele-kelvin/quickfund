@@ -64,6 +64,7 @@ const String kSalaryAmountNullError = "Please Enter your Salary";
 const String kLoanAmountNullErrorII = "Loan amount should\'nt exceed 1,000,000";
 const String kLoanAmountNullError = "Please Enter Loan Amount";
 const String kAmount = "Please Enter Amount";
+const String basURL = "http://3.144.238.224";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

@@ -18,11 +18,11 @@ class OTPTransaction extends StatelessWidget {
         this.userAccount,
         this.receipientNumber,
         this.date,
-        this.amount, this.onTap, this.cancelOnTap, this.validator})
+        this.amount, this.onTap, this.cancelOnTap, this.validator, this.selectedBank})
       : super(key: key);
   final Size size;
   final transactPin;
-  final String userAccount, receipientNumber, date, amount;
+  final String userAccount, receipientNumber, date, amount, selectedBank;
   final ValueChanged<String> onChanged;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onComplete;
@@ -40,7 +40,7 @@ class OTPTransaction extends StatelessWidget {
               labelI: userAccount,
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.03,
             ),
             SummaryRe(
               size: size,
@@ -48,7 +48,15 @@ class OTPTransaction extends StatelessWidget {
               labelI: receipientNumber,
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.03,
+            ),
+            SummaryRe(
+              size: size,
+              tag: 'Bank',
+              labelI: selectedBank,
+            ),
+            SizedBox(
+              height: size.height * 0.03,
             ),
             SummaryRe(
               size: size,
@@ -56,7 +64,7 @@ class OTPTransaction extends StatelessWidget {
               labelI: date,
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.03,
             ),
             SummaryRe(
               size: size,
