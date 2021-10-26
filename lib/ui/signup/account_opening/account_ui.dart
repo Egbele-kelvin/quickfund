@@ -5,8 +5,12 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/initiateBvnReq.dart';
 import 'package:quickfund/data/model/initiateBvnResp.dart';
+import 'package:quickfund/data/model/initiatePhoneNumResp.dart';
+import 'package:quickfund/data/model/inititatePhoneNumReq.dart';
 import 'package:quickfund/data/model/verifyBvnReq.dart';
 import 'package:quickfund/data/model/verifyBvnResp.dart';
+import 'package:quickfund/data/model/verifyPhoneNumReq.dart';
+import 'package:quickfund/data/model/verifyPhoneNumResp.dart';
 import 'package:quickfund/data/network-service/networkServices.dart';
 import 'package:quickfund/data/repository/repository.dart';
 import 'package:quickfund/provider/accountSetupProvider.dart';
@@ -16,6 +20,7 @@ import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/customLoader.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/keyboard.dart';
+import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_button.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
@@ -30,6 +35,8 @@ class AccountMain extends StatefulWidget {
 }
 
 class _AccountMainState extends State<AccountMain> {
+
+  SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   final _formKey = GlobalKey<FormState>();
   Repository repository = Repository(networkService: NetworkService());
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -58,6 +65,7 @@ class _AccountMainState extends State<AccountMain> {
 
   var initialIndex;
   String responseData = '';
+
   final List<String> errors = [];
 
   void addError({String error}) {
@@ -66,6 +74,7 @@ class _AccountMainState extends State<AccountMain> {
         errors.add(error);
       });
   }
+
   void removeError({String error}) {
     if (errors.contains(error))
       setState(() {
@@ -86,7 +95,7 @@ class _AccountMainState extends State<AccountMain> {
   }
 
   void initiateBvnReq(
-      InitiateBvn initiateBvn, SetupAccountViaBVNandViaPhone authProvider) async {
+      InitiateBvn initiateBvn, SetupAccountViaBVNandViaPhoneProvider authProvider) async {
     setState(() {
       print('printing Loader');
       isLoading = true;
@@ -134,8 +143,57 @@ class _AccountMainState extends State<AccountMain> {
     }
   }
 
+  void initiatePhoneReq(
+      InitiatePhoneReq initiatePhoneReq, SetupAccountViaBVNandViaPhoneProvider authProvider) async {
+    setState(() {
+      print('printing Loader');
+      isLoading = true;
+    });
+    try {
+      await authProvider.initiatePhoneNumberForAccount(initiatePhoneReq);
+      if (authProvider.initiatePhoneNumber != null) {
+        final initiatePhoneResp =
+        InitiatePhoneNumResp.fromJson(authProvider.initiatePhoneNumber);
+        if (initiatePhoneResp.status == true) {
+          setState(() {
+            userPhoneNUmber= initiatePhoneResp.data.phone;
+            isLoading = false;
+          });
+          responseData = initiatePhoneResp.message;
+
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.green);
+          setState(() {
+            currentView = 3;
+          });
+        }
+        else{
+          setState(() {
+            isLoading=false;
+          });
+          responseData = initiatePhoneResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.red);
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('LoadingData: $isLoading');
+        print('dataResp: ${authProvider.initiateBvnR.toString()}');
+
+        responseMessage('$responseData', Colors.red);
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      responseMessage('Server Auth Error', Colors.red);
+    }
+  }
+
   void verifyBvnOtp(
-      VerifyBvn verifyBvn, SetupAccountViaBVNandViaPhone authProvider) async {
+      VerifyBvn verifyBvn, SetupAccountViaBVNandViaPhoneProvider authProvider) async {
     setState(() {
       print('printing Loader');
       isLoading = true;
@@ -180,11 +238,57 @@ class _AccountMainState extends State<AccountMain> {
     }
   }
 
+  void verifyPhoneOtp(
+      VerifyPhoneNumReq verifyPhone, SetupAccountViaBVNandViaPhoneProvider authProvider) async {
+    setState(() {
+      print('printing Loader');
+      isLoading = true;
+    });
+    try {
+      await authProvider.verifyOtpPhoneNumber(verifyPhone);
+      if (authProvider.verifyPhoneOtp != null) {
+        final initiateBvnResp =
+        VerifyPhoneNumResp.fromJson(authProvider.verifyPhoneOtp);
+        if (initiateBvnResp.status == true) {
+          setState(() {
+            isLoading = false;
+          });
+          responseData = initiateBvnResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.green);
+          Navigator.pushReplacementNamed(
+              context, AppRouteName.ReviewDetails);
+        }
+        else{
+          setState(() {
+            isLoading=false;
+          });
+          responseData = initiateBvnResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.red);
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('LoadingData: $isLoading');
+        print('dataResp: ${authProvider.initiateBvnR.toString()}');
+
+        responseMessage('$responseData', Colors.red);
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      responseMessage('Server Auth Error', Colors.red);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     SizeConfig().init(context);
-    return Consumer<SetupAccountViaBVNandViaPhone>(
+    return Consumer<SetupAccountViaBVNandViaPhoneProvider>(
       builder: (context, provider, child) {
         return WillPopScope(
           onWillPop: () {
@@ -231,7 +335,7 @@ class _AccountMainState extends State<AccountMain> {
                               Spacer(
                                 flex: 1,
                               ),
-                              currentView == 2
+                              currentView == 2 || currentView == 3
                                   ? Container()
                                   : Column(
                                       children: [
@@ -334,40 +438,111 @@ class _AccountMainState extends State<AccountMain> {
                               ),
                               Visibility(
                                 visible: currentView == 1,
-                                child: RoundedInputField(
-                                  onSaved: (newValue) => phoneNumber = newValue,
-                                  inputType: TextInputType.number,
-                                  maxLen: 11,
-                                  labelText: 'Phone Number',
-                                  customTextHintStyle: GoogleFonts.lato(
-                                      fontSize: 12,
-                                      color: Colors.black54.withOpacity(0.3),
-                                      fontWeight: FontWeight.w600),
-                                  hintText: 'Enter your phone number',
-                                  autoCorrect: true,
-                                  onChanged: (value) {
-                                    if (value.isNotEmpty) {
-                                      removeError(error: kPhoneNumberNullError);
-                                    } else if (value.length >= 11) {
-                                      removeError(
-                                          error: kShortPhoneNumberError);
-                                    }
-                                    return null;
-                                  },
-                                  validateForm: (value) {
-                                    if (value.isEmpty) {
-                                      addError(error: kPhoneNumberNullError);
-                                      return "";
-                                    } else if (value.length < 11) {
-                                      addError(error: kShortPhoneNumberError);
-                                      return "";
-                                    }
-                                    return null;
-                                  },
+                                child: Column(
+                                  children: [
+                                    RoundedInputField(
+                                      onSaved: (newValue) => phoneNumber = newValue,
+                                      inputType: TextInputType.number,
+                                      maxLen: 11,
+                                      labelText: 'Phone Number',
+                                      customTextHintStyle: GoogleFonts.lato(
+                                          fontSize: 12,
+                                          color: Colors.black54.withOpacity(0.3),
+                                          fontWeight: FontWeight.w600),
+                                      hintText: 'Enter your phone number',
+                                      autoCorrect: true,
+                                      onChanged: (value) {
+                                        if (value.isNotEmpty) {
+                                          phoneNumber=value;
+                                          removeError(error: kPhoneNumberNullError);
+                                          return "";
+                                        } else if (value.length >= 11) {
+                                          removeError(
+                                              error: kShortPhoneNumberError);
+                                          return "";
+                                        }
+                                        return null;
+                                      },
+                                      validateForm: (value) {
+                                        if (value.isEmpty) {
+                                          addError(error: kPhoneNumberNullError);
+                                          return "";
+                                        } else if (value.length < 11) {
+                                          addError(error: kShortPhoneNumberError);
+                                          return "";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                               Visibility(
                                 visible: currentView == 2,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50.0, vertical: 15),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Kindly enter the OTP sent to $userPhoneNUmber',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: size.height * 0.05),
+                                      PinCodeTextField(
+                                        controller: transactPin,
+                                        textStyle: TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                        obscureText: true,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.done,
+                                        enableActiveFill: true,
+                                        pinTheme: PinTheme(
+                                            shape: PinCodeFieldShape.box,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            fieldHeight: 45,
+                                            selectedFillColor:
+                                                Colors.grey.withOpacity(0.1),
+                                            disabledColor: Colors.white,
+                                            selectedColor: Colors.white,
+                                            fieldWidth: 45,
+                                            activeColor: kPrimaryColor,
+                                            inactiveColor:
+                                                Colors.grey.withOpacity(0.15),
+                                            inactiveFillColor: Colors.white,
+                                            activeFillColor: colorPrimaryWhite),
+                                        length: 4,
+                                        appContext: context,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _pin = value;
+                                          });
+                                        },
+                                        onCompleted: (value) async {
+                                          setState(() {
+                                            if (value.isEmpty) {
+                                              addError(error: kPinNullError);
+                                              return "";
+                                            } else if (value.length < 4) {
+                                              addError(error: kShortPinError);
+                                              return "";
+                                            }
+                                            return null;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              Visibility(
+                                visible: currentView == 3,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50.0, vertical: 15),
@@ -445,6 +620,13 @@ class _AccountMainState extends State<AccountMain> {
                                     KeyboardUtil.hideKeyboard(context);
 
                                     if (currentView == 1) {
+                                      var initiatePhoneReqParams= InitiatePhoneReq(
+                                          phone: phoneNumber
+                                      );
+
+                                      initiatePhoneReq(
+                                          initiatePhoneReqParams, provider);
+
                                     } else if (currentView == 2) {
                                       print('phoneNumber: $userPhoneNUmber');
                                       var verifyBVN= VerifyBvn(
@@ -452,21 +634,30 @@ class _AccountMainState extends State<AccountMain> {
                                         otp: _pin,
                                         phone: userPhoneNUmber
                                       );
-
                                       verifyBvnOtp(verifyBVN, provider);
 
                                     } else if (currentView == 0) {
                                       print('bvn : $bvn');
+                                     // Navigator.pushReplacementNamed(context, AppRouteName.ReviewDetails);
                                       var initiateBvnParams =InitiateBvn(bvn: bvn);
 
                                       initiateBvnReq(
                                           initiateBvnParams, provider);
-                                      // Navigator.pushNamed(
-                                      //     context, AppRouteName.ReviewDetails);
+                                    }
+                                    else if (currentView==3){
+                                      print('currentView : $currentView');
+
+                                      var verifyPhoneParams= VerifyPhoneNumReq(
+                                          otp: _pin,
+                                          phone: userPhoneNUmber
+                                      );
+                                      _sharedPreferenceQS.setData('String', 'customPhoneNumber',
+                                          verifyPhoneParams.phone);
+                                      verifyPhoneOtp(verifyPhoneParams , provider);
                                     }
                                   }
                                 },
-                                btnTitle: 'Continue'.toUpperCase(),
+                                btnTitle: 'Continue',
                               ),
                               Spacer(
                                 flex: 7,
@@ -486,3 +677,4 @@ class _AccountMainState extends State<AccountMain> {
     );
   }
 }
+

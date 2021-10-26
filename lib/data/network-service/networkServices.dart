@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 // import 'package:http/http.dart' as http;
+import 'package:quickfund/data/api-service/ApiInterception.dart';
 import 'package:quickfund/data/api-service/apiManager.dart';
 import 'package:quickfund/data/model/createAccountBvnReq.dart';
 import 'package:quickfund/data/model/createAccountViaPhoneNumReq.dart';
 import 'package:quickfund/data/model/initiateBvnReq.dart';
 import 'package:quickfund/data/model/inititatePhoneNumReq.dart';
+import 'package:quickfund/data/model/listOfState.dart';
 import 'package:quickfund/data/model/loginReq.dart';
 import 'package:quickfund/data/model/otpReq.dart';
 import 'package:quickfund/data/model/securityQuestionReq.dart';
@@ -79,7 +82,7 @@ class NetworkService {
     return responseJson;
   }
 
-  Future<dynamic> createAccountViaBvn(CreateAccountBvn createAccountBvn) async {
+  Future<dynamic> createAccountViaBvn(dynamic createAccountBvn) async {
     print('UserReqNetwork: ${createAccountBvn.bvn}');
     var url = '/api/v1/register/create/account/bvn';
     var responseJson;
@@ -126,6 +129,20 @@ class NetworkService {
     return responseJson;
   }
 
+  Future<ListOfState> getListOfState() async {
+    print('UserReqNetwork: dfaCreateAccount');
+    var url = '/api/v1/states';
+    var responseJson;
+    try {
+      final response = await apiManager.get(url);
+      return ListOfState.fromJson(response);
+     // print('ServerData $response');
+      responseJson = response;
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+    //return responseJson;
+  }
 
 
   Future<dynamic> setupSecurityQuestion(
@@ -156,7 +173,8 @@ class NetworkService {
     } catch (e) {
       print('ServerData $e');
     }
-
     return responseJson;
   }
+
+
 }

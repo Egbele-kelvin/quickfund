@@ -1,5 +1,6 @@
 class CreateAccountBvnResp {
-  CreateAccountBvnResp({
+  CreateAccountBvnResp( {
+    this.error,
     this.status,
     this.message,
     this.data,
@@ -8,6 +9,7 @@ class CreateAccountBvnResp {
   final bool status;
   final String message;
   final Data data;
+  final Error error;
 
   factory CreateAccountBvnResp.fromJson(Map<String, dynamic> json) => CreateAccountBvnResp(
     status: json['status'] == null ? null : json['status'],
@@ -41,7 +43,25 @@ class Data {
     'user': user == null ? null : user.toJson(),
   };
 }
+class Error {
+  Error({
+    this.email,
+    this.password,
+  });
 
+  final List<String> email;
+  final List<String> password;
+
+  factory Error.fromJson(Map<String, dynamic> json) => Error(
+    email: json["email"] == null ? null : List<String>.from(json["email"].map((x) => x)),
+    password: json["password"] == null ? null : List<String>.from(json["password"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "email": email == null ? null : List<dynamic>.from(email.map((x) => x)),
+    "password": password == null ? null : List<dynamic>.from(password.map((x) => x)),
+  };
+}
 class User {
   User({
     this.firstName,

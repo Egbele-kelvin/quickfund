@@ -52,8 +52,11 @@ class ProfilePicAndSignature extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: Colors.transparent,
                   child: _image == null
-                      ? Image.asset(imgURL, width: size.width *0.1,)
-                      : Image.file(File(_image.path)),
+                      ? Image.asset(imgURL,width: size.width *0.1,)
+                      : CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius:60,
+                      backgroundImage: FileImage(File(_image.path))),
                 ),
               ),
               Text(

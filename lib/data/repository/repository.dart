@@ -38,7 +38,7 @@ class Repository {
     return apiCall;
   }
 
-  Future<dynamic> createAccountViaBvn(CreateAccountBvn createAccountBvn) async {
+  Future<dynamic> createAccountViaBvn(dynamic createAccountBvn) async {
     final apiCall =
         await networkService?.createAccountViaBvn((createAccountBvn));
     return apiCall;
@@ -65,4 +65,17 @@ class Repository {
     final apiCall = await networkService?.signIn((loginReq));
     return apiCall;
   }
+  Future<dynamic> refreshSession(String refreshToken) async {
+   // final resp ;
+    //= await networkService?.refreshSession(refreshToken);
+
+ //   return resp;
+  }
+
+  Future<dynamic> getListOfState() async {
+    final apiCall = await networkService?.getListOfState();
+
+    return apiCall.data;
+  }
+
 }

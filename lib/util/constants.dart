@@ -66,6 +66,10 @@ const String kLoanAmountNullError = "Please Enter Loan Amount";
 const String kAmount = "Please Enter Amount";
 const String basURL = "http://3.144.238.224";
 
+
+
+const String kIsBiometricOn = 'isBiometricsOn';
+const String kHasAlreadyLogin = 'hasNeverLogin';
 final otpInputDecoration = InputDecoration(
   contentPadding:
       EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),

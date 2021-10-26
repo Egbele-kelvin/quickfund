@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/constants.dart';
@@ -259,9 +260,9 @@ class DashBoardHeader extends StatelessWidget {
         child: CircleAvatar(
           radius: 25,
           backgroundColor: Colors.grey.withOpacity(0.3),
-          backgroundImage: AssetImage(
-            imgrUrl,
-          ),
+          backgroundImage: imgrUrl ==null ? AssetImage(
+            'assets/f_png/businessman.png',
+          ) : NetworkImage(imgrUrl),
         ),
       ),
       title: Text(
@@ -539,7 +540,7 @@ class TransactionHistorySummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Container(
-          height: size.height * 0.085,
+          height: size.height * 0.09,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),

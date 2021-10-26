@@ -10,6 +10,7 @@ import 'package:quickfund/provider/otpProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
+import 'package:quickfund/util/customLoader.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_button.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
@@ -24,12 +25,16 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context, duration: duration, gravity: gravity,
-    backgroundRadius:20.0 ,
-    textColor:Colors.white60);
+    Toast.show(msg, context,
+        duration: duration,
+        gravity: gravity,
+        backgroundRadius: 20.0,
+        textColor: Colors.white60);
   }
-  String accountNumber , phoneNumber,responseData;
-  bool      isLoading = false;
+
+  String accountNumber, phoneNumber, responseData;
+  bool isLoading = false;
+
   responseMessage(String message, Color color) {
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(
@@ -42,7 +47,7 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
     ));
   }
 
-  parseAuthData(SetupAccountViaBVNandViaPhone authProvider) {
+  parseAuthData(SetupAccountViaBVNandViaPhoneProvider authProvider) {
     try {
       if (authProvider.createAccountUsingBvn != null) {
         final userData = CreateAccountBvnResp.fromJson(authProvider.createAccountUsingBvn);
@@ -75,9 +80,8 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
           print('responseMessage : $responseData');
           responseMessage('$responseData', Colors.green);
           Navigator.pushReplacementNamed(
-              context, AppRouteName.ReviewDetails);
-        }
-        else{
+              context, AppRouteName.SecurityQuestionUI);
+        } else{
           setState(() {
             isLoading=false;
           });
@@ -98,111 +102,116 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Consumer2<SetupAccountViaBVNandViaPhone ,OtpProvider>(
+    return Consumer2<SetupAccountViaBVNandViaPhoneProvider ,OtpProvider>(
   builder: (context, provider, otpProvider , child) {
     parseAuthData(provider);
-  return Scaffold(
-    key: scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      backgroundColor: kPrimaryColor,
-      body: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              //color: kPrimaryColor,
-              child: CustomAppBar(
-                onTap: () {
-                  //onBackPress();
-                  Navigator.of(context).pop();
-                },
-                pageTitle: 'Account Opening',
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: Container(
-              //color: Colors.black,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
-              //
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(20),
-                  vertical: getProportionateScreenHeight(10),
-                ),
-                child: Column(
-                  children: [
-                    Spacer(
-                      flex: 2,
+        return LoadingOverlay(
+          isLoading: isLoading,
+          child: Scaffold(
+            key: scaffoldKey,
+            resizeToAvoidBottomInset: false,
+            backgroundColor: kPrimaryColor,
+            body: Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    //color: kPrimaryColor,
+                    child: CustomAppBar(
+                      onTap: () {
+                        //onBackPress();
+                        Navigator.of(context).pop();
+                      },
+                      pageTitle: 'Account Opening',
                     ),
-                    Text(
-                     AppStrings.QUICKFUND_ACCOUNT_NUMBER_HEADER,
-                      style: GoogleFonts.poppins(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
+                  ),
+                ),
+                Expanded(
+                  flex: 8,
+                  child: Container(
+                    //color: Colors.black,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
                       ),
                     ),
-                    Spacer(
-                      flex: 2,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        await Clipboard.setData(ClipboardData(
-                            text: accountNumber));
-
-                        showToast('Account Number copied');
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    //
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(20),
+                        vertical: getProportionateScreenHeight(10),
+                      ),
+                      child: Column(
                         children: [
+                          Spacer(
+                            flex: 2,
+                          ),
                           Text(
-                            '$accountNumber',
+                            AppStrings.QUICKFUND_ACCOUNT_NUMBER_HEADER,
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13.1,
-                                color: Colors.black),
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            ),
                           ),
-                          SizedBox(
-                            width: size.width *0.1,
+                          Spacer(
+                            flex: 2,
                           ),
-                          Icon(
-                            Icons.copy,
-                            color: kPrimaryColor,
-                            size: 14,
-                          )
+                          GestureDetector(
+                            onTap: () async {
+                              await Clipboard.setData(
+                                  ClipboardData(text: accountNumber));
+
+                              showToast('Account Number copied');
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$accountNumber',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13.1,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  width: size.width * 0.1,
+                                ),
+                                Icon(
+                                  Icons.copy,
+                                  color: kPrimaryColor,
+                                  size: 14,
+                                )
+                              ],
+                            ),
+                          ),
+                          Spacer(
+                            flex: 7,
+                          ),
+                          CustomButton(
+                            size: size,
+                            onTap: () {
+                              var verifyParams = OtpReq(phone: phoneNumber);
+                              verifyOtp(verifyParams, otpProvider);
+                            },
+                            btnTitle: 'Almost done',
+                          ),
+                          Spacer(
+                            flex: 6,
+                          ),
                         ],
                       ),
                     ),
-                    Spacer(
-                      flex: 7,
-                    ),
-                    CustomButton(
-                      size: size,
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, AppRouteName.SecurityQuestionUI);
-                      },
-                      btnTitle: 'Almost done',
-                    ),
-
-                    Spacer(flex: 6,),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
-  },
-);
   }
 }

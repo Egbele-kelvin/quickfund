@@ -30,11 +30,12 @@ class CustomFileContainerWidget extends StatefulWidget {
 class _CustomFileContainerWidgetState extends State<CustomFileContainerWidget> {
   File imageFile;
   String imagePath;
-
+  final ImagePicker picker = ImagePicker();
   void pickImage() async {
-    var selectImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    PickedFile image = await picker.getImage(
+        source: ImageSource.gallery, imageQuality: 50);
     setState(() {
-      imageFile = selectImage;
+      imageFile =  File(image.path);
     });
   }
 

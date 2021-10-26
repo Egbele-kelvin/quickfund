@@ -3,6 +3,7 @@ import 'package:quickfund/data/model/createAccountBvnReq.dart';
 import 'package:quickfund/data/model/createAccountViaPhoneNumReq.dart';
 import 'package:quickfund/data/model/initiateBvnReq.dart';
 import 'package:quickfund/data/model/inititatePhoneNumReq.dart';
+import 'package:quickfund/data/model/listOfState.dart';
 import 'package:quickfund/data/model/loginReq.dart';
 import 'package:quickfund/data/model/securityQuestionReq.dart';
 import 'package:quickfund/data/model/verifyBvnReq.dart';
@@ -10,9 +11,10 @@ import 'package:quickfund/data/model/verifyPhoneNumReq.dart';
 import 'package:quickfund/data/network-service/networkServices.dart';
 import 'package:quickfund/data/repository/repository.dart';
 
-class SetupAccountViaBVNandViaPhone with ChangeNotifier {
+class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
   Repository repository = Repository(networkService: NetworkService());
-
+  bool loading = false;
+  List stateList=[];
   Map _initiateBvnR;
 
   Map get initiateBvnR => _initiateBvnR;
@@ -37,10 +39,26 @@ class SetupAccountViaBVNandViaPhone with ChangeNotifier {
 
   Map get createAccountUsingPhone => _createAccountUsingPhone;
 
-  Map _setupSecurityQuestionR;
+ Map _listOfState;
 
-  Map get setupSecurityQuestionR => _setupSecurityQuestionR;
+  Map get listOfState => _listOfState;
 
+
+
+
+
+  Future<void> _getListOfState() async{
+    try {
+      loading = true;
+      final stateListResp = await repository.getListOfState();
+      stateList = stateListResp;
+      loading = false;
+      print('stateList : $stateList');
+      notifyListeners();
+    }catch(e){
+      print('Error ${e.toString()}');
+    }
+  }
 
 
   Future<void> _initiateBvn(InitiateBvn initiateBvn) async {
@@ -87,7 +105,7 @@ class SetupAccountViaBVNandViaPhone with ChangeNotifier {
     }
   }
 
-  Future<void> _createAccountViaBvn(CreateAccountBvn createAccountBvn) async {
+  Future<void> _createAccountViaBvn(dynamic createAccountBvn) async {
     try {
       final otpVerification =
           await repository.createAccountViaBvn(createAccountBvn);
@@ -111,18 +129,6 @@ class SetupAccountViaBVNandViaPhone with ChangeNotifier {
   }
 
 
-  Future<void> _setupSecurityQuestion(
-      SetupSecurityQuestion setupSecurityQuestion) async {
-    try {
-      final otpVerification = await repository
-          .setupSecurityQuestion(setupSecurityQuestion);
-      _setupSecurityQuestionR = otpVerification;
-      notifyListeners();
-    } catch (e) {
-      print('Error ${e.toString()}');
-    }
-  }
-
 
   //---------------------Public Access-----------//
   Future<void> initiateBvn(InitiateBvn initiateBvn) async {
@@ -142,7 +148,7 @@ class SetupAccountViaBVNandViaPhone with ChangeNotifier {
     return await _verifyOtpPhoneNumber(verifyPhoneNumReq);
   }
 
-  Future<void> createAccountViaBvn(CreateAccountBvn createAccountBvn) async {
+  Future<dynamic> createAccountViaBvn(dynamic createAccountBvn) async {
     return await _createAccountViaBvn(createAccountBvn);
   }
 
@@ -151,8 +157,8 @@ class SetupAccountViaBVNandViaPhone with ChangeNotifier {
     return await _createAccountViaPhone(createAccountViaPhoneNumReq);
   }
 
-  Future<void> setupSecurityQuestion(SetupSecurityQuestion setupSecurityQuestion) async {
-    return await _setupSecurityQuestion(setupSecurityQuestion);
+  Future<void> getListOfState() async{
+    return await _getListOfState();
   }
 
 

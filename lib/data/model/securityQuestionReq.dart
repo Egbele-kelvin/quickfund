@@ -11,7 +11,7 @@ class SetupSecurityQuestion {
     this.pinConfirmation,
   });
 
-  final int quest1;
+  final dynamic quest1;
   final String quest2;
   final String answer1;
   final String answer2;

@@ -93,9 +93,19 @@ class ApiManager {
         var responseJson = json.decode(response.toString());
         return responseJson;
 
-      case 401:
+      case 400:
+        var responseJson = json.decode(response.toString());
+        print('Error 400 here: $responseJson');
+        return responseJson;
+
+        case 401:
         var responseJson = json.decode(tokenExp.toString());
         print('Me here: $responseJson');
+        return responseJson;
+
+        case 422:
+        var responseJson = json.decode(response.toString());
+        print('shitty Error LameAss 422:   $responseJson');
         return responseJson;
 
       default:

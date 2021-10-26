@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/createAccountBvnResp.dart';
+import 'package:quickfund/data/model/loginResp.dart';
+import 'package:quickfund/provider/accountSetupProvider.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
@@ -12,27 +18,68 @@ class DashBoardMain extends StatefulWidget {
 }
 
 class _DashBoardMainState extends State<DashBoardMain> {
-  String userName = 'Bose', acctBalance = '239,600' , closedBal = 'XXXXXXX';
+  String userName = 'Bose',acctN='', acctBalance = '239,600' ,accountNum='2993204939', accountType='Savings Account' , closedBal = 'XXXXXXX';
   bool _passwordVisible;
+  List<Account> accountList;
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
   @override
   void initState() {
     _passwordVisible = false;
+    SchedulerBinding.instance.addPostFrameCallback((_) => getAcct());
     super.initState();
+  }
+  var selfie, username;
+  parseAuthData(AuthProvider setupAccountViaBVNandViaPhoneProvider) {
+    try {
+      if (setupAccountViaBVNandViaPhoneProvider.login != null) {
+        final userData = LoginResp.fromJson(setupAccountViaBVNandViaPhoneProvider.login);
+       setState(() {
+         selfie = userData.data.user.selfie;
+         print('selfie: $selfie');
+         username = userData.data.user.firstName;
+         print('username: $username');
+         accountList = userData.data.accounts;
+         print('accountNum: $accountNum');
+         username = userData.data.user.firstName;
+         print('username: $username');
+         selfie = userData.data.user.selfie;
+         print('selfie: $selfie');
+         username = userData.data.user.firstName;
+         print('username: $username');
+       });
+      }
+    } catch (e) {
+      print('Server Auth Error');
+    }
+  }
+
+  getAcct() async {
+    await Future.forEach(accountList, (Account account) async {
+      print('Account ${account.accountNumber}');
+      print('Account ${account.accountType}');
+      acctN = account.accountNumber;
+      accountType=account.accountType;
+
+      //acctCode=account.
+      print('account number: $acctN');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     SizeConfig().init(context);
-    return Scaffold(
+    return Consumer<AuthProvider>(
+  builder: (context, provider, child) {
+    parseAuthData(provider);
+  return Scaffold(
       resizeToAvoidBottomInset: false,
       // backgroundColor: kPrimaryColor,
       body: Stack(
         children: [
           Positioned(
             // draw a red marble
-            top: 48,
+            top: 32,
             right: 21.0,
             child: Icon(Icons.brightness_1, size: 8.0, color: Colors.redAccent),
           ),
@@ -45,8 +92,8 @@ class _DashBoardMainState extends State<DashBoardMain> {
                   child: Column(
                     children: [
                       DashBoardHeader(
-                        userName: userName,
-                        imgrUrl: 'assets/f_png/businessman.png',
+                        userName: username ==null ? '$userName' :'$username',
+                        imgrUrl:selfie ==null ?'http://via.placeholder.com/640x360': '$selfie',
                         notification: () {
                           Navigator.pushNamed(
                               context, AppRouteName.NotificationUI);
@@ -68,11 +115,11 @@ class _DashBoardMainState extends State<DashBoardMain> {
                           Navigator.pushReplacementNamed(
                               context, AppRouteName.FundAccountUI);
                         },
-                        accountNum: '2993204939',
+                        accountNum: acctN==null ? '--------':'$acctN',
                         acctBalanceI: 'Account Balance',
                         acctBalanceII:
                             _passwordVisible ? 'N $acctBalance' : 'XXXXXXXXXX',
-                        savingsAcct: 'Savings Account',
+                        savingsAcct:accountType ==null ? 'Account Type is not available!' :'$accountType',
                         iconWidget: InkWell(
                             child: Icon(
                               _passwordVisible
@@ -223,5 +270,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
         ],
       ),
     );
+  },
+);
   }
 }

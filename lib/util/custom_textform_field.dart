@@ -125,6 +125,11 @@ class AlwaysDisabledFocusNode extends FocusNode {
   bool get hasFocus => false;
 }
 
+class NotAlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => true;
+}
+
 
 class CurrencyInputFormatter extends TextInputFormatter {
 
