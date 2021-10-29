@@ -1,29 +1,62 @@
+import 'dart:ui';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/activateDeviceReq.dart';
+import 'package:quickfund/data/model/activateDeviceResp.dart';
+import 'package:quickfund/data/model/loginResp.dart';
 import 'package:quickfund/data/model/otpReq.dart';
 import 'package:quickfund/data/model/otpResp.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/otpProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
+import 'package:quickfund/util/keyboard.dart';
+import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/widget/addQuestions.dart';
-import 'package:quickfund/widget/custom_widgets.dart';
+import 'package:quickfund/widget/custom_button.dart';
+import 'package:quickfund/widget/custom_resend_otp.dart';
+import 'package:toast/toast.dart';
+
+import 'accountOpeningWidget.dart';
 
 class ActivateDevice extends StatefulWidget {
   final phoneNumber;
   final passWord;
-  const ActivateDevice({Key key, this.phoneNumber, this.passWord}) : super(key: key);
+
+  const ActivateDevice({Key key, this.phoneNumber, this.passWord})
+      : super(key: key);
 
   @override
   _ActivateDeviceState createState() => _ActivateDeviceState();
 }
 
 class _ActivateDeviceState extends State<ActivateDevice> {
-  TextEditingController transactPin=TextEditingController();
-  String _pin,responseData;
-  bool isLoading=false;
+  TextEditingController transactPin = TextEditingController();
+  SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
+  String _pin, responseData;
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+  String phoneNumber, deviceId, deviceName, password;
+
+  getSignInDetails() async {
+    phoneNumber =
+        await _sharedPreferenceQS.getSharedPrefs(String, 'phoneNumber') ?? '';
+    deviceId =
+        await _sharedPreferenceQS.getSharedPrefs(String, 'deviceId') ?? '';
+    deviceName =
+        await _sharedPreferenceQS.getSharedPrefs(String, 'deviceName') ?? '';
+    password =
+        await _sharedPreferenceQS.getSharedPrefs(String, 'password') ?? '';
+    print('phoneNumber: $phoneNumber');
+    print('phoneNumber: $deviceId');
+    print('phoneNumber: $deviceName');
+    print('phoneNumber: $password');
+  }
+
   final List<String> errors = [];
 
   void addError({String error}) {
@@ -39,7 +72,8 @@ class _ActivateDeviceState extends State<ActivateDevice> {
         errors.remove(error);
       });
   }
-  void responseMessage(BuildContext context, String message , Color color) {
+
+  void responseMessage(BuildContext context, String message, Color color) {
     Flushbar(
       margin: EdgeInsets.symmetric(vertical: 20),
       backgroundColor: color,
@@ -48,82 +82,95 @@ class _ActivateDeviceState extends State<ActivateDevice> {
       duration: Duration(seconds: 3),
     )..show(context);
   }
+
   OtpProvider otpProvider;
+
   @override
   void initState() {
-    print('phoneNumber: ${widget.phoneNumber}');
-    print('passWord: ${widget.passWord}');
+    getSignInDetails();
     // TODO: implement initState
     super.initState();
   }
-  void verifyOtp(
-      OtpReq otpReq, otpProvider ) async {
-    setState(() {
-      print('printing Loader');
-      isLoading = true;
-    });
+
+  void showToast(String msg, {int duration, int gravity}) {
+    Toast.show(msg, context,
+        duration: duration,
+        gravity: gravity,
+        backgroundRadius: 20.0,
+        textColor: Colors.white60);
+  }
+
+  void verifyOtp(OtpReq otpReq, OtpProvider otpProvider) async {
     try {
       await otpProvider.otpVerificationForAll(otpReq);
       if (otpProvider.otpVerificate != null) {
-        final otpResp =
-        OtpResp.fromJson(otpProvider.otpVerificate);
+        final otpResp = OtpResp.fromJson(otpProvider.otpVerificate);
         if (otpResp.status == true) {
+          responseData = otpResp.message;
+          print('responseMessage : $responseData');
+          showToast('$responseData');
+        } else {
+          responseData = otpResp.message;
+          print('responseMessage : $responseData');
+          responseMessage(context, '$responseData', Colors.red);
+        }
+      }
+    } catch (e) {
+      responseMessage(context, 'Server Auth Error', Colors.red);
+    }
+  }
+
+  void activateDevice(
+      ActivateDeviceReq activateDeviceReq, AuthProvider authProvider) async {
+    try {
+      setState(() {
+        print('printing Loader');
+        isLoading = true;
+        print('isLoading $isLoading');
+      });
+      await authProvider.activateDevice(activateDeviceReq);
+      if (authProvider.activateD != null) {
+        final loginResp = LoginResp.fromJson(authProvider.activateD);
+        if (loginResp.status == true) {
+          setState(() {
+            responseData = loginResp.message;
+            isLoading = false;
+          });
+          Navigator.of(context).pushReplacementNamed(AppRouteName.LOG_IN);
+        } else {
+          responseData = loginResp.message;
+          print('responseMessage : $responseData');
           setState(() {
             isLoading = false;
           });
-          responseData = otpResp.message;
-          print('responseMessage : $responseData');
-          responseMessage(context ,'$responseData', Colors.green);
-          Navigator.pushReplacementNamed(
-              context, AppRouteName.SecurityQuestionUI);
-        } else{
-          setState(() {
-            isLoading=false;
-          });
-          responseData = otpResp.message;
-          print('responseMessage : $responseData');
-          responseMessage(context ,'$responseData', Colors.red);
+          responseMessage(context, '${loginResp.message}', Colors.red);
         }
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage(context ,'Server Auth Error', Colors.red);
+      responseMessage(context, '$responseData', Colors.red);
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    var size= MediaQuery.of(context).size;
-    var verifyParams = OtpReq(phone: widget.phoneNumber);
-    return Consumer<OtpProvider>(
-        builder: (context, otp , child) {
-          otpProvider=otp;
-          //verifyOtp(verifyParams, otpProvider);
-      //parseAuthData(otpProvider);
-    return   Container(
-      padding: EdgeInsets.symmetric(horizontal: 20 ),
-      height: size.height*0.8,
-      child: Column(
-        children: [
-          CustomDetails(
-            heading: 'Activate Profile',
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-
-          Column(
+    var size = MediaQuery.of(context).size;
+    return Consumer2<OtpProvider, AuthProvider>(
+        builder: (context, otp, authProvider, child) {
+      otpProvider = otp;
+      return Form(
+        key: _formKey,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          height: size.height * 0.79,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Enter OTP',
-                style: GoogleFonts.roboto(
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black,
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 48.0, bottom: 40),
+                child: ActivateDeviceNumberWidget(widget: widget),
               ),
               Container(
                   padding: const EdgeInsets.symmetric(
@@ -147,13 +194,56 @@ class _ActivateDeviceState extends State<ActivateDevice> {
                         return null;
                       });
                     },
-                  )
+                  )),
+              SizedBox(
+                height: size.height * 0.04,
               ),
+              ResendOTP(
+                textI: 'NO OTP RECEIVED? ',
+                textII: 'TAP HERE TO RESEND IT',
+                onTap: () {
+                  var otpParams = OtpReq(phone: widget.phoneNumber);
+
+                  verifyOtp(otpParams, otpProvider);
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.2,
+              ),
+              isLoading
+                  ? SpinKitThreeBounce(
+                      size: 30,
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: kPrimaryColor,
+                          ),
+                        );
+                      },
+                    )
+                  : CustomSignInButton(
+                      btnTitle: 'Activate Device',
+                      size: size,
+                      onTap: () {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          KeyboardUtil.hideKeyboard(context);
+                          var activateParams = ActivateDeviceReq(
+                            phone: phoneNumber,
+                            deviceId: deviceId,
+                            deviceName: deviceName,
+                            otp: _pin,
+                            password: password
+
+                          );
+                          activateDevice(activateParams, authProvider);
+                        }
+                      })
             ],
           ),
-        ],
-      ),
-    );
-  });
+        ),
+      );
+    });
   }
 }

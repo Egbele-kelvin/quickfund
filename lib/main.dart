@@ -8,6 +8,7 @@ import 'package:quickfund/provider/accountSetupProvider.dart';
 import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/otpProvider.dart';
 import 'package:quickfund/provider/securityQuestionProvider.dart';
+import 'package:quickfund/provider/settingsProvider.dart';
 import 'package:quickfund/route.dart';
 import 'package:quickfund/theme.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
@@ -124,6 +125,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [ ChangeNotifierProvider(create: (context) => SetupAccountViaBVNandViaPhoneProvider()),
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
         ChangeNotifierProvider(create: (context) => OtpProvider()),
         ChangeNotifierProvider(create: (context) => SecurityQuestionProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),

@@ -18,7 +18,7 @@ class DashBoardMain extends StatefulWidget {
 }
 
 class _DashBoardMainState extends State<DashBoardMain> {
-  String userName = 'Bose',acctN='', acctBalance = '239,600' ,accountNum='2993204939', accountType='Savings Account' , closedBal = 'XXXXXXX';
+  String userName = 'Bose',acctN='', acctBalance = '...' ,accountNum='2993204939', accountType='Savings Account' , closedBal = 'XXXXXXX';
   bool _passwordVisible;
   List<Account> accountList;
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
@@ -58,10 +58,14 @@ class _DashBoardMainState extends State<DashBoardMain> {
       print('Account ${account.accountNumber}');
       print('Account ${account.accountType}');
       acctN = account.accountNumber;
+      acctBalance=account.accountBalance.toString();
+
       accountType=account.accountType;
 
       //acctCode=account.
       print('account number: $acctN');
+      print('account bal: $acctBalance');
+      print('account type: $accountType');
     });
   }
 

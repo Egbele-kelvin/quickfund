@@ -900,7 +900,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     SizedBox(
                                       height: size.height * 0.06,
                                     ),
-                                    CustomButton(
+                                    CustomSignInButton(
                                       size: size,
                                       onTap: () {
                                         KeyboardUtil.hideKeyboard(context);
@@ -1058,7 +1058,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     SizedBox(
                                       height: size.height * 0.04,
                                     ),
-                                    CustomButton(
+                                    CustomSignInButton(
                                       size: size,
                                       onTap: () {
                                         if (_formKey.currentState.validate()) {

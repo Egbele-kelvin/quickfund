@@ -33,15 +33,20 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap:onTap,
-      title: Text(title , style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w400,
-          fontSize: 11,
-          color: Colors.black
-      ),),
-      trailing: Icon(Icons.tag , size: 12),
+    return Column(
+      children: [
+        ListTile(
+          onTap:onTap,
+          title: Text(title , style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w400,
+              fontSize: 11,
+              color: Colors.black
+          ),),
+          trailing: Icon(Icons.tag , size: 12),
 
+        ),
+        Divider()
+      ],
     );
   }
 }

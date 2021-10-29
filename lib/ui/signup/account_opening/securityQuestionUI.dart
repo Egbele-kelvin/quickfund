@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/createAccountBvnResp.dart';
 import 'package:quickfund/data/model/otpReq.dart';
@@ -83,6 +82,22 @@ bool question1=true , question2=true;
     try {
       if (authProvider.createAccountUsingBvn != null) {
         final userData = CreateAccountBvnResp.fromJson(authProvider.createAccountUsingBvn);
+        accountNumber = userData.data.accountNumber;
+        phoneNumber= userData.data.user.phone;
+        userID = userData.data.user.id.toString();
+        print(accountNumber);
+        print(phoneNumber);
+        print(userID);
+      }
+    } catch (e) {
+      print('Server Auth Error');
+    }
+  }
+
+  parseAuthDataFromOldCustomer(OtpProvider otpProvider) {
+    try {
+      if (otpProvider.completeOnBoardOldC != null) {
+        final userData = CreateAccountBvnResp.fromJson(otpProvider.completeOnBoardOldC);
         accountNumber = userData.data.accountNumber;
         phoneNumber= userData.data.user.phone;
         userID = userData.data.user.id.toString();
@@ -228,20 +243,15 @@ bool question1=true , question2=true;
                           children: securityQuestion.asMap().entries.map((e) => Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18.0 , vertical: 10),
                             child:
-                            Column(
-                              children: [
-                                CustomListTile(
-                                  title: e.value,
-                                  onTap: (){
-                                    setState(() {
-                                      qst1 = e.value;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                Divider()
-                              ],
-                           ),
+                            CustomListTile(
+                              title: e.value,
+                              onTap: (){
+                                setState(() {
+                                  qst1 = e.value;
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
                           )).toList(),
                         ),
                       ),),
@@ -659,7 +669,7 @@ bool question1=true , question2=true;
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          CustomButton(
+                          CustomSignInButton(
                             size: size,
                             onTap: () {
                               if (_formKey.currentState.validate()) {
@@ -698,7 +708,7 @@ bool question1=true , question2=true;
 
                             },
                           ), SizedBox(
-                            height: size.height * 0.04,
+                            height: size.height * 0.2,
                           ),
 
                         ]),

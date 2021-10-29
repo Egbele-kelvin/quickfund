@@ -62,7 +62,7 @@ class CustomSignInButton extends StatelessWidget {
         width: double.infinity,
         height: size.height * 0.07,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
 
             color: kPrimaryColor
         ),

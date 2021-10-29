@@ -9,7 +9,7 @@ import 'interception.dart';
 
 class ApiManager {
   // static String baseURL ='https://www.google.com';
-  static String baseURL = 'http://3.144.238.224';
+  static String baseURL = 'http://13.59.82.31';
   // static String baseURL = 'http://staging.quickfund.rimotechnology.com';
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   String token;
@@ -31,6 +31,8 @@ class ApiManager {
       "Accept": "application/json",
       "Authorization": "Bearer $token"
     };
+
+    print('headers: $headers');
   }
 
   Future<dynamic> get(String url) async {
@@ -106,6 +108,11 @@ class ApiManager {
         case 422:
         var responseJson = json.decode(response.toString());
         print('shitty Error LameAss 422:   $responseJson');
+        return responseJson;
+
+        case 423:
+        var responseJson = json.decode(response.toString());
+        print('shitty Error LameAss 423:   $responseJson');
         return responseJson;
 
       default:

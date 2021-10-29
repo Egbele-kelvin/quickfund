@@ -690,11 +690,9 @@ class AccountSettingProfile extends StatelessWidget {
           child: CircleAvatar(
             backgroundColor: Colors.grey.shade50,
             radius: 50,
-            child: Image.asset(
-              imgURL,
-              width: size.width * 0.2,
-              height: size.height * 0.2,
-            ),
+            backgroundImage: imgURL ==null ? AssetImage(
+              'assets/f_png/businessman.png',
+            ): NetworkImage(imgURL),
           ),
         ));
   }

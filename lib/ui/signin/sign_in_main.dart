@@ -477,7 +477,7 @@ class _SignInMainState extends State<SignInMain> {
                             ),
                             RoundedInputField(
                               onSaved: (newValue) => phoneNumber = newValue,
-                              inputType: TextInputType.number,
+                              inputType: TextInputType.phone,
                               maxLen: 11,
                               labelText: 'Phone Number',
                               customTextHintStyle: GoogleFonts.poppins(
@@ -571,6 +571,10 @@ class _SignInMainState extends State<SignInMain> {
 
                                   _sharedPreferenceQS.setData('String',
                                       'phoneNumber', signParams.phone);
+                                  _sharedPreferenceQS.setData('String',
+                                      'deviceId', signParams.deviceId);
+                                  _sharedPreferenceQS.setData('String',
+                                      'deviceName', signParams.deviceName);
                                   _sharedPreferenceQS.setData('String',
                                       'password', signParams.password);
                                   signIn(signParams, provider, false);

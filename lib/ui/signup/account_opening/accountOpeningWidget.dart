@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/constants.dart';
 
+import 'activateDeviceUI.dart';
+
 class SelectedCustom extends StatelessWidget {
   const SelectedCustom({
     Key key,
@@ -47,3 +49,35 @@ class SelectedCustom extends StatelessWidget {
   }
 }
 
+class ActivateDeviceNumberWidget extends StatelessWidget {
+  const ActivateDeviceNumberWidget({
+    Key key,
+    @required this.widget,
+  }) : super(key: key);
+
+  final ActivateDevice widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      textAlign: TextAlign.center,
+      softWrap: true,
+      text: TextSpan(
+        text: 'Enter OTP sent to ',
+        style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w300, fontSize: 12,
+            color: Colors.black),
+        children: <TextSpan>[
+          TextSpan(
+              text: '${widget.phoneNumber}',
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500, fontSize: 12)),
+          TextSpan(
+              text: ' \n To Activate Device',
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300, fontSize: 12)),
+        ],
+      ),
+    );
+  }
+}

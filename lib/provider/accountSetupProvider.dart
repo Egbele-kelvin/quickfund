@@ -14,7 +14,7 @@ import 'package:quickfund/data/repository/repository.dart';
 class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
   Repository repository = Repository(networkService: NetworkService());
   bool loading = false;
-  List stateList=[];
+  List stateList = [];
   Map _initiateBvnR;
 
   Map get initiateBvnR => _initiateBvnR;
@@ -39,15 +39,11 @@ class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
 
   Map get createAccountUsingPhone => _createAccountUsingPhone;
 
- Map _listOfState;
+  Map _listOfState;
 
   Map get listOfState => _listOfState;
 
-
-
-
-
-  Future<void> _getListOfState() async{
+  Future<void> _getListOfState() async {
     try {
       loading = true;
       final stateListResp = await repository.getListOfState();
@@ -55,11 +51,10 @@ class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
       loading = false;
       print('stateList : $stateList');
       notifyListeners();
-    }catch(e){
+    } catch (e) {
       print('Error ${e.toString()}');
     }
   }
-
 
   Future<void> _initiateBvn(InitiateBvn initiateBvn) async {
     try {
@@ -128,8 +123,6 @@ class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
     }
   }
 
-
-
   //---------------------Public Access-----------//
   Future<void> initiateBvn(InitiateBvn initiateBvn) async {
     return await _initiateBvn(initiateBvn);
@@ -157,9 +150,7 @@ class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
     return await _createAccountViaPhone(createAccountViaPhoneNumReq);
   }
 
-  Future<void> getListOfState() async{
+  Future<void> getListOfState() async {
     return await _getListOfState();
   }
-
-
 }

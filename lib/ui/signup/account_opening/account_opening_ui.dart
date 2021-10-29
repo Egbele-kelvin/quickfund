@@ -191,7 +191,7 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
                           Spacer(
                             flex: 7,
                           ),
-                          CustomButton(
+                          CustomSignInButton(
                             size: size,
                             onTap: () {
                               var verifyParams = OtpReq(phone: phoneNumber);
