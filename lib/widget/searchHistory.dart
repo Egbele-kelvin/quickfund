@@ -11,11 +11,12 @@ class TransactionHistoryDateCalender extends StatelessWidget {
     Key key,
     @required this.size,
     @required this.searchController,
-    this.onTap,
+    this.onTap, this.onChange,
   }) : super(key: key);
 
   final Size size;
   final TextEditingController searchController;
+  final ValueChanged onChange;
   final Function onTap;
 
   @override
@@ -29,7 +30,7 @@ class TransactionHistoryDateCalender extends StatelessWidget {
             searchController: searchController,
             onSubmitted: (val) {},
             onEditingComplete: () {},
-            onChanged: (val) {},
+            onChanged: onChange,
             onEditing: (val) {},
           ),
         ),

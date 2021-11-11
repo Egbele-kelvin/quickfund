@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:quickfund/data/network-service/networkServices.dart';
+import 'package:quickfund/data/repository/repository.dart';
 import 'package:quickfund/ui/settings/resetSecurityQuestion.dart';
 import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
 import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/keyboard.dart';
+import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/addQuestions.dart';
 import 'package:quickfund/widget/custom_button.dart';
@@ -33,16 +36,23 @@ class _SettingsMainUIState extends State<SettingsMainUI> {
   bool showDataplan = false, showPhoneEdit = false, _btnEnabled = false;
   int currentView = 1, selectedIndex;
   String headerText= 'settings' ,  answerToSecurityQuestion;
+  bool isBiometricsOn= false;
+  bool status = false;
+  Repository repository = Repository(networkService: NetworkService());
+  SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   bool _oldPassword, _passwordVisible, _confirPasswordVisible;
   final List<String> errors = [];
-  List<String> securityQuestion = [
-    AppStrings.SecurityQuestionI,
-    AppStrings.SecurityQuestionII,
-    AppStrings.SecurityQuestionIII,
-    AppStrings.SecurityQuestionIV,
-    AppStrings.SecurityQuestionV,
-    AppStrings.SecurityQuestionVI
-  ];
+  void getBiometric()async{
+    isBiometricsOn =
+    await _sharedPreferenceQS.getSharedPrefs(bool, kIsBiometricOn) ;
+    setState(() {});
+    print('isbometric $isBiometricsOn');
+  }
+
+  void saveBiometricState(bool val) async{
+    await _sharedPreferenceQS.setData('bool', kIsBiometricOn, val);
+  }
+
   void addError({String error}) {
     if (!errors.contains(error))
       setState(() {
@@ -92,9 +102,9 @@ class _SettingsMainUIState extends State<SettingsMainUI> {
     }
   }
 
-
   @override
   void initState() {
+    getBiometric();
     _passwordVisible = true;
     _oldPassword = true;
     _confirPasswordVisible = true;
@@ -196,13 +206,22 @@ class _SettingsMainUIState extends State<SettingsMainUI> {
                                 print('');
                               },
                             ),
-                            GetHelp_widget(
-                              size: size,
-                              title: 'Biometric',
-                              leadingIcon: Icons.fingerprint,
-                              onTap: () {
-                                print('');
-                              },
+                            Padding(
+                              padding:  EdgeInsets.only(right: 18.0),
+                              child: CustomProfileChildRowWidget(
+                                  size: size,
+                                  title: 'Enable or Disable Biometrics',
+                                  svgURL: 'assets/f_svg/wifi.svg',
+                                  widgetIcon: CustomFlushToggle(
+                                    size: size,
+                                    status: isBiometricsOn,
+                                    onToggle: (val) {
+                                      setState(() {
+                                        isBiometricsOn = val;
+                                      });
+                                      saveBiometricState(val);
+                                    },
+                                  )),
                             ),
                           ],
                         ),

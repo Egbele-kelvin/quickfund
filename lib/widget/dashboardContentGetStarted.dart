@@ -16,7 +16,7 @@ class DashBoardGetStartedComponent extends StatelessWidget {
           'Get Started',
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w500,
-              fontSize: 11.8,
+              fontSize: 13,
               color: Colors.black),
         ),
       ),

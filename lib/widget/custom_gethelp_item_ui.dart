@@ -85,22 +85,23 @@ class BillWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: size.height * 0.08,
-      margin: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(8),
-        vertical: getProportionateScreenHeight(8),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+    return InkResponse(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: size.height * 0.08,
+        margin: EdgeInsets.symmetric(
+          horizontal: getProportionateScreenWidth(8),
+          vertical: getProportionateScreenHeight(8),
         ),
-      ),
-      child: Center(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.2),
+          ),
+        ),
         child: ListTile(
-          onTap: onTap,
+        //  onTap: onTap,
           leading: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 4),
@@ -120,7 +121,7 @@ class BillWidget extends StatelessWidget {
           ),
           title: Text(
           title,
-            style: GoogleFonts.lato(
+            style: GoogleFonts.poppins(
               color: Colors.black,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -169,14 +170,7 @@ class CustomAirtimeWidget extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 1),
           height: size.height * 0.04,
           width: size.width * 0.09,
-          // decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(40),
-          //     border: Border.all(
-          //       color: kPrimaryColor.withOpacity(0.6),
-          //       width: 1,
-          //     ),
-          // ),
-          child: SvgPicture.asset(imgURL),
+          child: imgURL==null ? SvgPicture.asset(imgURL):Image.asset(imgURL),
         ),
         title: Text(
         title,

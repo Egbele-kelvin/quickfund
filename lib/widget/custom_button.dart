@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickfund/util/constants.dart';
 
@@ -153,6 +154,33 @@ class FileTypeWidget extends StatelessWidget {
         ),
       ))
           .toList(),
+    );
+  }
+}
+
+class CustomFlushToggle extends StatelessWidget {
+  const CustomFlushToggle({Key key, this.size, this.onToggle, this.status})
+      : super(key: key);
+
+  final Size size;
+  final bool status;
+  final ValueChanged onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: FlutterSwitch(
+        activeColor: kPrimaryColor,
+        width: size.width * 0.085,
+        height: size.height * 0.02,
+        valueFontSize: 8.0,
+        toggleSize: 8.0,
+        value: status,
+        borderRadius: 30.0,
+        padding: 2.0,
+        //showOnOff: true,
+        onToggle: onToggle,
+      ),
     );
   }
 }

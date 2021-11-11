@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'custom_button.dart';
 
 class AddSecurityQuestion extends StatelessWidget {
   final Function onTap;
@@ -143,3 +146,204 @@ class OTPClassWidget extends StatelessWidget {
   }
 }
 //
+class SecurityQuestionListWidget extends StatelessWidget {
+  final String questItem;
+  final Function onTap;
+  SecurityQuestionListWidget({
+    Key key, this.questItem, this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: 18.0, vertical: 10),
+      child: Column(
+        children: [
+          ListTile(
+            onTap:onTap,
+            title: Text(
+              questItem,
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 11,
+                  color: Colors.black),
+            ),
+            trailing: Icon(Icons.tag, size: 12),
+          ),
+          Divider(
+            height: 1,
+            thickness: 0.5,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class CustomWidget extends StatelessWidget {
+
+  final double width;
+  final double height;
+  final ShapeBorder shapeBorder;
+
+  const CustomWidget.rectangular({
+    this.width = double.infinity,
+     this.height
+  }): this.shapeBorder = const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10))
+  );
+
+  const CustomWidget.circular({
+    this.width = double.infinity,
+     this.height,
+    this.shapeBorder = const CircleBorder()
+  });
+
+  @override
+  Widget build(BuildContext context)  => Shimmer.fromColors(
+    baseColor: Colors.grey.withOpacity(0.06),
+    highlightColor: Colors.grey.shade50,
+    period: Duration(seconds: 2),
+    child: Container(
+      width: width,
+      height: height,
+      decoration: ShapeDecoration(
+        color: Colors.grey[400],
+        shape: shapeBorder,
+
+
+      ),
+    ),
+  );
+}
+
+
+class NoActivity extends StatelessWidget {
+  final String tag;
+  const NoActivity({
+    Key key, this.tag,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var size=MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: size.height *0.1,
+          ),
+          Icon(
+            Icons.baby_changing_station,
+            size: 65,
+            color: Colors.grey.withOpacity(0.3),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0 , vertical: 20),
+            child: Text(tag ==null ? 'OH, You don\'t have any Activity at the \n Moment!': tag, textAlign:TextAlign.center ,style: GoogleFonts.poppins(
+              fontSize: 10,
+              fontWeight: FontWeight.w400,
+            ),),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ResultPage extends StatelessWidget {
+  const ResultPage({
+    Key key,
+    @required this.userResultData, this.checking, this.switchWidget,
+  }) : super(key: key);
+
+  final String userResultData;
+  final bool checking;
+  final Widget switchWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Visibility(
+      visible: checking,
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.check_circle_sharp, size: 9,color: kOnBoardingII,),
+              SizedBox(
+                width: 5,
+              ),
+              Text('$userResultData' , style: GoogleFonts.poppins(
+                  fontSize: 8.5,
+                  fontWeight: FontWeight.w500,
+                  color: kOnBoardingII
+              ),),
+            ],
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text('Add to Beneficiary', style: GoogleFonts.poppins(
+                fontSize: 11,
+                color:kOnBoardingII
+              ),),SizedBox(width: size.width*0.02,),
+              switchWidget,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomDataWidget extends StatelessWidget {
+  const CustomDataWidget({
+    Key key, this.title, this.amountLabel, this.onTap,
+  }) : super(key: key);
+
+  final String title , amountLabel;
+  final Function onTap;
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            height: size.height * 0.06,
+            child: ListTile(
+              title: Text(
+                title,
+                style: GoogleFonts.nunito(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
+              ),
+              trailing: Text(
+                amountLabel,
+                textAlign: TextAlign.left,
+                style: GoogleFonts.nunito(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
+              ),
+              horizontalTitleGap: 10.0,
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.05,
+          ),
+          Divider(
+            height: 0.4,
+          )
+        ],
+      ),
+    );
+  }
+}

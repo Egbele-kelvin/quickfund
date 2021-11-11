@@ -1,16 +1,21 @@
+import 'package:quickfund/data/model/NameEnquiry.dart';
 import 'package:quickfund/data/model/activateDeviceReq.dart';
 import 'package:quickfund/data/model/completeOnBoardOldCustomerReq.dart';
 import 'package:quickfund/data/model/createAccountBvnReq.dart';
 import 'package:quickfund/data/model/createAccountViaPhoneNumReq.dart';
+import 'package:quickfund/data/model/deleteSaveBeneficiary.dart';
 import 'package:quickfund/data/model/forgotPasswordReq.dart';
 import 'package:quickfund/data/model/initiateBvnReq.dart';
 import 'package:quickfund/data/model/initiateOnboardOldCustomer.dart';
 import 'package:quickfund/data/model/inititatePhoneNumReq.dart';
 import 'package:quickfund/data/model/loginReq.dart';
 import 'package:quickfund/data/model/otpReq.dart';
+import 'package:quickfund/data/model/payBillsReq.dart';
 import 'package:quickfund/data/model/resetPasswordReq.dart';
 import 'package:quickfund/data/model/resetPinReq.dart';
+import 'package:quickfund/data/model/resetSecurityQuestion.dart';
 import 'package:quickfund/data/model/securityQuestionReq.dart';
+import 'package:quickfund/data/model/transferFundsReq.dart';
 import 'package:quickfund/data/model/verifyBvnReq.dart';
 import 'package:quickfund/data/model/verifyOtpReq.dart';
 import 'package:quickfund/data/model/verifyPhoneNumReq.dart';
@@ -57,6 +62,7 @@ class Repository {
         ?.createAccountViaPhoneNumber((createAccountViaPhoneNumReq));
     return apiCall;
   }
+
   Future<dynamic> verifyOtpForAll(OtpReq otpReq) async {
     final apiCall = await networkService?.verifyOtpForAll((otpReq));
     return apiCall;
@@ -67,25 +73,34 @@ class Repository {
     return apiCall;
   }
 
-  Future<dynamic> initiateOnBoardOldCustomer(InitiateOnBoardOldCustomer initiateOnBoardOldCustomer) async {
-    final apiCall = await networkService?.initiateOnBoardOldCustomer((initiateOnBoardOldCustomer));
+  Future<dynamic> initiateOnBoardOldCustomer(
+      InitiateOnBoardOldCustomer initiateOnBoardOldCustomer) async {
+    final apiCall = await networkService
+        ?.initiateOnBoardOldCustomer((initiateOnBoardOldCustomer));
     return apiCall;
   }
 
-  Future<dynamic> completeOnBoardOldCustomerReq(CompleteOnBoardOldCustomerReq completeOnBoardOldCustomerReq) async {
-    final apiCall = await networkService?.completeOnBoardOldCustomerReq((completeOnBoardOldCustomerReq));
+  Future<dynamic> completeOnBoardOldCustomerReq(
+      CompleteOnBoardOldCustomerReq completeOnBoardOldCustomerReq) async {
+    final apiCall = await networkService
+        ?.completeOnBoardOldCustomerReq((completeOnBoardOldCustomerReq));
     return apiCall;
   }
 
   Future<dynamic> setupSecurityQuestion(
       SetupSecurityQuestion setupSecurityQuestion) async {
-    final apiCall = await networkService
-        ?.setupSecurityQuestion((setupSecurityQuestion));
+    final apiCall =
+        await networkService?.setupSecurityQuestion((setupSecurityQuestion));
     return apiCall;
   }
 
   Future<dynamic> signIn(LoginReq loginReq) async {
     final apiCall = await networkService?.signIn((loginReq));
+    return apiCall;
+  }
+
+  Future<dynamic> payBills(PayBillsReq payBillsReq) async {
+    final apiCall = await networkService?.payBills((payBillsReq));
     return apiCall;
   }
 
@@ -108,11 +123,35 @@ class Repository {
     final apiCall = await networkService?.resetPin((resetPin));
     return apiCall;
   }
-  Future<dynamic> refreshSession(String refreshToken) async {
-   // final resp ;
-    //= await networkService?.refreshSession(refreshToken);
 
- //   return resp;
+  Future<dynamic> resetSecurityQuestionQuery(
+      ResetSecurityQuestionReq resetSecurityQuestionReq) async {
+    final apiCall = await networkService
+        ?.resetSecurityQuestionQuery((resetSecurityQuestionReq));
+    return apiCall;
+  }
+
+  Future<dynamic> nameEnquiry(NameEnquiry nameEnquiry) async {
+    final apiCall = await networkService?.nameEnquiry((nameEnquiry));
+    return apiCall;
+  }
+
+  Future<dynamic> transferFunds(TransferFunds transferFunds) async {
+    final apiCall = await networkService?.transferFunds((transferFunds));
+    return apiCall;
+  }
+
+  Future<dynamic> deleteSaveBeneficiary(
+      DeleteSaveBeneficiary deleteSaveBeneficiary) async {
+    final apiCall =
+        await networkService?.deleteSaveBeneficiary((deleteSaveBeneficiary));
+    return apiCall;
+  }
+
+  Future<dynamic> refreshSession(String refreshToken) async {
+    final resp = await networkService?.refreshSession(refreshToken);
+
+    return resp;
   }
 
   Future<dynamic> getListOfState() async {
@@ -127,4 +166,51 @@ class Repository {
     return apiCall.data;
   }
 
+  Future<dynamic> getAccountDetails() async {
+    final apiCall = await networkService?.getAccountDetails();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getAccountBal(String userBal) async {
+    return await networkService?.getUserAccountBal(userBal);
+  }
+
+  Future<dynamic> getListOfBanks() async {
+    final apiCall = await networkService?.getListOfBanks();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getListOfBillersCategory() async {
+    final apiCall = await networkService?.getListOfBillersCategory();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getListOfAirtime() async {
+    final apiCall = await networkService?.getListOfAirtime();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getAllSaveBeneficiary() async {
+    final apiCall = await networkService?.getAllSaveBeneficiary();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getAllTransactionHistory() async {
+    final apiCall = await networkService?.getAllTransactionHistory();
+
+    return apiCall.data;
+  }
+
+  Future<dynamic> getBillsByCode(String codeID) async {
+    return await networkService?.getBillsByCode(codeID);
+  }
+
+  Future<dynamic> getBillerDataByCodeId(String billerID) async {
+    return await networkService?.getBillerDataByCodeId(billerID);
+  }
 }

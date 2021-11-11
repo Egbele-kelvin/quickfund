@@ -139,6 +139,9 @@ class _ChangePassWordState extends State<ChangePassWord> {
           responseMessage(context,'$responseData', Colors.red);
         }
       }else{
+        setState(() {
+          isLoading = false;
+        });
         print('responseMessage : $responseData');
         responseMessage(context,'$responseData', Colors.red);
       }

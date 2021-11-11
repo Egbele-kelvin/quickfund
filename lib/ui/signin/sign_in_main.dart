@@ -162,7 +162,7 @@ class _SignInMainState extends State<SignInMain> {
   void checkBioMeTric() async {
     if (await _getBiometricsSupport()) {
       selfie = await _sharedPreferenceQS.getSharedPrefs(String, 'selfie') ?? '';
-      print('username: $selfie');
+      print('selfie: $selfie');
       username = await _sharedPreferenceQS.getSharedPrefs(String, 'firstName');
       print('username: $username');
       await _getAvailableSupport();
@@ -353,7 +353,7 @@ class _SignInMainState extends State<SignInMain> {
             }
           }
         } else if (loginResponse.status == false &&
-            loginResponse.responseCode == 403) {
+            loginResponse.responsecode == 403) {
           setState(() {
             isLoading = false;
           });
@@ -432,7 +432,7 @@ class _SignInMainState extends State<SignInMain> {
                             child: Text(
                               'Welcome back, $username',
                               style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white),
                             ),
@@ -469,7 +469,7 @@ class _SignInMainState extends State<SignInMain> {
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 11,
+                                  fontSize: 13,
                                   color: Colors.black),
                             ),
                             SizedBox(
@@ -595,7 +595,7 @@ class _SignInMainState extends State<SignInMain> {
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w400,
                                     color: kTap,
-                                    fontSize: 12),
+                                    fontSize: 13),
                               ),
                             ),
                             SizedBox(

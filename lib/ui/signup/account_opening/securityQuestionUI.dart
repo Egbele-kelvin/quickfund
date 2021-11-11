@@ -101,6 +101,8 @@ bool question1=true , question2=true;
         accountNumber = userData.data.accountNumber;
         phoneNumber= userData.data.user.phone;
         userID = userData.data.user.id.toString();
+
+        print('complete old customer');
         print(accountNumber);
         print(phoneNumber);
         print(userID);
@@ -378,6 +380,7 @@ bool question1=true , question2=true;
     return Consumer3<SetupAccountViaBVNandViaPhoneProvider , SecurityQuestionProvider , OtpProvider>(
   builder: (context, setUpAccountProvider,securityProvider , otpProvider, child) {
     parseAuthData(setUpAccountProvider);
+    parseAuthDataFromOldCustomer(otpProvider);
   return LoadingOverlay(
     isLoading: isLoading,
     child: WillPopScope(

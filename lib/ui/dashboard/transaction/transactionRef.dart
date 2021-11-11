@@ -4,42 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:quickfund/data/model/transactionHistory.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/customReferenceWidget.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 
-class TransactionRef extends StatefulWidget {
-  @override
-  _TransactionRefState createState() => _TransactionRefState();
-}
+class TransactionRef extends StatelessWidget {
+  final TransactionHistoryDatum transactionHistoryDatum;
+ const TransactionRef({Key key, this.transactionHistoryDatum}) : super(key: key);
 
-class _TransactionRefState extends State<TransactionRef> {
-  var dateNow = DateTime.now();
-  String tfDate = DateFormat.yMMMd().format(DateTime.now());
-
-  var f, now;
-
-  String getUTCDate() {
-    try {
-      f = DateFormat('d MMM yyyy HH:mm:ss');
-      now = DateTime.now().toUtc();
-      return f.format(now) + ' GMT';
-    } catch (e) {
-      print('Error ******' + e.toString());
-      throw e;
-    }
-  }
-
-  @override
-  void initState() {
-    print(dateNow);
-    print(DateFormat('MMM dd,  yyyy').format(dateNow));
-    print(getUTCDate());
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +85,8 @@ class _TransactionRefState extends State<TransactionRef> {
                               RefrenceContent(
                                 size: size,
                                 tag: 'Payer',
-                                labelI: 'abosede Glory clan',
-                                labelII: '0800040402',
+                                labelI: '${transactionHistoryDatum.payerName.toUpperCase()}',
+                                labelII: '${transactionHistoryDatum.payerAccount}',
                                 labelIII: 'QuickFundMB',
                               ),
                               SizedBox(
@@ -120,9 +95,9 @@ class _TransactionRefState extends State<TransactionRef> {
                               RefrenceContent(
                                 size: size,
                                 tag: 'Receiver',
-                                labelI: 'Fatoki iyanu olufunmilayo',
-                                labelII: '0800040402',
-                                labelIII: 'First Bank',
+                                labelI: '${transactionHistoryDatum.receiverName}',
+                                labelII: '${transactionHistoryDatum.receiverAccount}',
+                                labelIII: '${transactionHistoryDatum.bank}',
                               ),
                               SizedBox(
                                 height: size.height * .02,
@@ -130,9 +105,9 @@ class _TransactionRefState extends State<TransactionRef> {
                               RefrenceContent(
                                 size: size,
                                 tag: 'Transaction',
-                                labelI: 'NGN 50,000',
+                                labelI: 'NGN ${transactionHistoryDatum.amount}',
                                 labelII: 'Transfer',
-                                labelIII: '${f.format(now) + ' GMT +1'}',
+                                labelIII: '${transactionHistoryDatum.date} GMT +1',
                               ),
                               SizedBox(
                                 height: size.height * .02,
@@ -141,8 +116,8 @@ class _TransactionRefState extends State<TransactionRef> {
                                 size: size,
                                 tag: 'Narration',
                                 labelI: '',
-                                labelII: '0XF10103zqwTPQOEOCGOGOG',
-                                labelIII: 'Depositor account X02933*****',
+                                labelII: '${transactionHistoryDatum.narration}',
+                                labelIII: '${transactionHistoryDatum.payerName} ${transactionHistoryDatum.payerAccount}*****',
                               ),
                               SizedBox(
                                 height: size.height * .02,
@@ -151,8 +126,8 @@ class _TransactionRefState extends State<TransactionRef> {
                                 size: size,
                                 tag: 'Reference',
                                 labelI: '',
-                                labelII: '086959303VCKDKcsoowqZ',
-                                labelIII: 'Successful',
+                                labelII: '${transactionHistoryDatum.reference}',
+                                labelIII: '',
                               ),
                             ]),
                           ),

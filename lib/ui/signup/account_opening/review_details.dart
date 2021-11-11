@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/createAccountBvnReq.dart';
 import 'package:quickfund/data/model/createAccountBvnResp.dart';
+import 'package:quickfund/data/model/listOfState.dart';
 import 'package:quickfund/data/model/verifyBvnResp.dart';
 import 'package:quickfund/provider/accountSetupProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
@@ -21,6 +22,7 @@ import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/bankStatementWidget.dart';
 import 'package:quickfund/widget/custom_button.dart';
+import 'package:quickfund/widget/custom_search.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -38,6 +40,7 @@ class ReviewDetails extends StatefulWidget {
 class _ReviewDetailsState extends State<ReviewDetails> {
   int currentView = 0;
   TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController searchController = TextEditingController();
   final List<String> errors = [];
   final ImagePicker picker = ImagePicker();
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
@@ -172,7 +175,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
     }
   }
 
-  List stateList = [];
+  List<StateData> stateList = [];
 
   @override
   void initState() {
@@ -245,6 +248,25 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       // responseMessage('$e', Colors.red);
     }
   }
+
+
+  void filterSearchResults(String query) {
+    final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context, listen: false);
+    //setState(() {
+      if (query.isNotEmpty) {
+        stateList =  postMdl.stateList;
+        print('filteredList: ${stateList.toList()}');
+        stateList= postMdl.stateList
+            .where((i) => i.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else {
+        stateList =
+            stateList = postMdl.stateList;
+      }
+      print('filter ${stateList.toString()}');
+    //});
+  }
+
 
   parseAuthData(authProvider) {
     try {
@@ -522,6 +544,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       BuildContext context, Size size) {
     return showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         barrierColor: Colors.black.withOpacity(0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -535,12 +558,20 @@ class _ReviewDetailsState extends State<ReviewDetails> {
           final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context, listen: false);
           postMdl.getListOfState();
           return Container(
-            height: size.height *1,
+            height: size.height *0.8,
             child: Column(
               children: [
                 postMdl.stateList.isEmpty
                     ?Container():    CustomDetails(
                   heading: 'List Of State',
+                ),
+                stateList == null
+                    ? Container(): Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
+                  child: SearchBoxWidget(
+                    searchController: searchController,
+                    onChanged:(val)=>filterSearchResults(val),
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -562,11 +593,11 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                             .map((e) => CustomItemWidget(
                             onTap: () {
                               setState(() {
-                                state = e.value;
+                                state = e.value.name;
                               });
                               Navigator.of(context).pop();
                             },
-                            descriptionItem: e.value))
+                            descriptionItem: e.value.name))
                             .toList()))
               ],
             ),
@@ -621,7 +652,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                           onTap: () {
                             onBackPress();
                           },
-                          pageTitle: 'Enter/Review Details',
+                          pageTitle: 'Setup Account',
                         ),
                       ),
                     ),

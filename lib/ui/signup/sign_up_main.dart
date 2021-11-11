@@ -86,14 +86,6 @@ class _GetStartedUpdatedUIState extends State<GetStartedUpdatedUI> {
                     title: 'New user?',
                     subTitle: 'register',
                   ),
-                  CustomQuickFundSelectMenu(
-                    size: size,
-                    onTap: () {
-                      print('already have an account?');
-                    },
-                    title: 'Already have an account?',
-                    subTitle: 'Activate this Device',
-                  ),
                   Spacer(
                     flex: 5,
                   ),

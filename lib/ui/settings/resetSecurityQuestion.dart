@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
-import 'package:quickfund/util/app/app_string.dart';
+import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/listOfSecurityQuestionResp.dart';
+import 'package:quickfund/data/model/loginResp.dart';
+import 'package:quickfund/data/model/resetPinReq.dart';
+import 'package:quickfund/data/model/resetSecurityQuestion.dart';
+import 'package:quickfund/provider/authProvider.dart';
+import 'package:quickfund/provider/securityQuestionProvider.dart';
+import 'package:quickfund/provider/settingsProvider.dart';
+import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/keyboard.dart';
+import 'package:quickfund/widget/addQuestions.dart';
 import 'package:quickfund/widget/custom_button.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 
@@ -17,35 +25,62 @@ class ResetSecurityQuestion extends StatefulWidget {
 }
 
 class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
-  String email, _pin , oldPassword, password, confirmPassword;
-  String title = 'Security Question';
+  String email, _pin,phone, oldPassword, password, confirmPassword, userId, quest1, quest2, answer1, answer2,responseData, title = 'Security Question';
   TextEditingController transactPin;
-  bool showDataplan = false, showPhoneEdit = false, _btnEnabled = false;
+  bool showDataplan = false, showPhoneEdit = false, _btnEnabled = false, isLoading = false;
   int currentView = 1, selectedIndex;
-  String headerText= 'settings' ,  answerToSecurityQuestion;
+
+  bool question1=true , question2=true;
+  final question1Controller=TextEditingController();
+  final question2Controller=TextEditingController();
+  String headerText = 'settings', answerToSecurityQuestion;
   bool _oldPassword, _passwordVisible, _confirPasswordVisible;
   final List<String> errors = [];
-  List<String> securityQuestion = [
-    AppStrings.SecurityQuestionI,
-    AppStrings.SecurityQuestionII,
-    AppStrings.SecurityQuestionIII,
-    AppStrings.SecurityQuestionIV,
-    AppStrings.SecurityQuestionV,
-    AppStrings.SecurityQuestionVI
-  ];
+  List<ListedQuestionData> securityQuestion = [];
   void addError({String error}) {
     if (!errors.contains(error))
       setState(() {
         errors.add(error);
       });
   }
+
   final _formKey = GlobalKey<FormState>();
+
   void removeError({String error}) {
     if (errors.contains(error))
       setState(() {
         errors.remove(error);
       });
   }
+
+  @override
+  void initState() {
+    isLoading = true;
+    final postMdl =
+        Provider.of<SecurityQuestionProvider>(context, listen: false);
+    postMdl.getListOfSecurityQuestion();
+    setState(() {
+      securityQuestion = postMdl.data;
+    });
+    _passwordVisible = true;
+    _oldPassword = true;
+    _confirPasswordVisible = true;
+    super.initState();
+  }
+
+  responseMessage(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message,
+        style: GoogleFonts.openSans(
+          fontWeight: FontWeight.w400,
+          fontSize: 11,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: color,
+    ));
+  }
+
   Future<dynamic> buildShowModalBottomSheetForUserTitle(
       BuildContext context, Size size) {
     return showModalBottomSheet(
@@ -66,272 +101,324 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
             height: size.height * 0.8,
             child: Column(
               children: [
-                CustomDetails(
+                securityQuestion.isEmpty ? Container():  CustomDetails(
                   heading: 'Security Question',
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
-                Container(
-                  height: size.height *0.6,
-                  child: Column(
-                    children: [
-
-
-                      Expanded(flex:0, child:   Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        // height: size.height *0.1,
-                        child: Row(
-                          children: [
-                            Container(
-                              width: size.width *0.73,
-                              child: RoundedInputField(
-                                // onSaved: (newValue) => bvn = newValue,
-                                onSaved: (newValue) =>
-                                answerToSecurityQuestion = newValue,
-                                inputType: TextInputType.text,
-                                labelText: 'Create a Security Question',
-                                customTextHintStyle: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    color: Colors.black54.withOpacity(0.3),
-                                    fontWeight: FontWeight.w400),
-                                autoCorrect: true,
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    removeError(error: kSecurityNullError);
-                                  }
-                                  return null;
-                                },
-
-                                validateForm: (value) {
-                                  if (value.isEmpty) {
-                                    addError(error: kSecurityNullError);
-                                    return "";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-
-                            SizedBox(
-                              width: size.height * 0.02,
-                            ),
-                            Icon(
-                              Icons.add,
-                              size: 30,
-                              color: Colors.grey.withOpacity(0.5),
-                            )
-                          ],
-                        ),
-                      ),),
-                      Expanded(flex:2, child:   Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 25),
-                          height: size.height *0.1,
-                          child: Column(
-                            children: [
-
-                              Container(
-                                height:size.height *0.5,
-                                child: ListView(
-                                  physics: BouncingScrollPhysics(),
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  children: securityQuestion.asMap().entries.map((e) => Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 18.0 , vertical: 10),
-                                    child: Column(
-                                      children: [
-                                        ListTile(
-                                          onTap: (){},
-                                          title: Text(e.value , style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 11,
-                                              color: Colors.black
-                                          ),),
-                                          trailing: Icon(Icons.tag , size: 12),
-
-                                        ),
-                                        Divider(
-                                          height: 1,
-                                          thickness: 0.5,
-                                        ),
-                                      ],
-                                    ),
-                                  )).toList(),
+                securityQuestion == null
+                    ? Center(
+                        child: SpinKitFadingCircle(
+                            size: 20,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
                                 ),
-                              )
-                            ],
-                          )
-                      ),),
+                              );
+                            }))
+                    : securityQuestion.isNotEmpty
+                        ? ListView(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: securityQuestion
+                                .asMap()
+                                .entries
+                                .map((e) => SecurityQuestionListWidget(
+                                      onTap: () {
+                                        setState(() {
+                                          question1Controller.text=e.value.question;
+                                          quest1 = e.value.id.toString();
+                                          print('quest1: $quest1');
+                                        });
 
-                    ],
-                  ),
-                )
+                                        Navigator.pop(context);
+                                      },
+                                      questItem: e.value.question,
+                                    ))
+                                .toList(),
+                          )
+                        : NoActivity(),
+              ],
+            ),
+          );
+        });
+  }
+  Future<dynamic> buildShowModalBottomSheetForUserT(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+        ),
+        builder: (context) {
+          return Container(
+            height: size.height * 0.8,
+            child: Column(
+              children: [
+                securityQuestion.isEmpty ? Container():  CustomDetails(
+                  heading: 'Security Question',
+                ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                securityQuestion == null
+                    ? Center(
+                        child: SpinKitFadingCircle(
+                            size: 20,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                ),
+                              );
+                            }))
+                    : securityQuestion.isNotEmpty
+                        ? ListView(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: securityQuestion
+                                .asMap()
+                                .entries
+                                .map((e) => SecurityQuestionListWidget(
+                                      onTap: () {
+                                        setState(() {
+                                          question2Controller.text=e.value.question;
+                                          quest2 = e.value.id.toString();
+                                          print('quest1: $quest1');
+                                        });
+
+                                        Navigator.pop(context);
+                                      },
+                                      questItem: e.value.question,
+                                    ))
+                                .toList(),
+                          )
+                        : NoActivity(),
               ],
             ),
           );
         });
   }
 
+  void resetSecurityQuestion(
+      ResetSecurityQuestionReq resetSecurityQuestionReq, SettingsProvider settingsProvider) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await settingsProvider.resetSecurityQuestion(resetSecurityQuestionReq);
+      if (settingsProvider.changePin != null) {
+        final changePinResp =
+        LoginResp.fromJson(settingsProvider.changePin);
+        if (changePinResp.status == true) {
+          setState(() {
+            isLoading = false;
+          });
+          responseData = changePinResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.green);
+          Navigator.of(context).pushReplacementNamed(AppRouteName.DASHBOARD);
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          responseData = changePinResp.message;
+          print('responseMessage : $responseData');
+          responseMessage('$responseData', Colors.red);
+        }
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      responseMessage('Server Auth Error', Colors.red);
+    }
+  }
+
+
+  parseAuthData(AuthProvider setupAccountViaBVNandViaPhoneProvider) {
+    try {
+      if (setupAccountViaBVNandViaPhoneProvider.login != null) {
+        final userData =
+            LoginResp.fromJson(setupAccountViaBVNandViaPhoneProvider.login);
+        setState(() {
+          userId = userData.data.user.id.toString();
+          print('userId: $userId');
+          phone = userData.data.user.phone;
+          print('userId: $phone');
+
+
+        });
+      }
+    } catch (e) {
+      print('Server Auth Error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var size =MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 69.0,
+    var size = MediaQuery.of(context).size;
+    return Consumer2<AuthProvider , SettingsProvider>(builder: (context, provider,settingProvider, child) {
+      parseAuthData(provider);
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 69.0,
+            ),
+            child: Text(
+              'Please Answer One Question And Enter Your New Pin',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
+            ),
           ),
-          child: Text(
-            'Please Answer One Question And Enter Your New Pin',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.black),
+          SizedBox(
+            height: size.height * 0.05,
           ),
-        ),
-        SizedBox(
-          height: size.height * 0.05,
-        ),
-        SelectedCustom(
-          size: size,
-          onTap: () {  buildShowModalBottomSheetForUserTitle(
-              context, size);},
-          title: title,
-        ),
-        SizedBox(
-          height: size.height * 0.03,
-        ),
-        RoundedInputField(
-          passwordvisible: _passwordVisible,
-          customTextHintStyle: GoogleFonts.lato(
-              fontSize: 12,
-              color: Colors.black54.withOpacity(0.3),
-              fontWeight: FontWeight.w600),
-          // onSaved: (newValue) => bvn = newValue,
-          inputType: TextInputType.visiblePassword,
-          labelText: 'Enter Answer ',
-          hintText: '',
-          autoCorrect: true,
-          onSaved: (newValue) => oldPassword = newValue,
-          onChanged: (value) {
-            if (value.isNotEmpty) {
-              removeError(error: kPinNullError);
-            } else if (value.length >= 4) {
-              removeError(error: kShortPinError);
-            }
-            oldPassword = value;
-          },
-          validateForm: (value) {
-            setState(() {
+          RoundedInputField(
+            controller: question1Controller,
+            onTap: (){buildShowModalBottomSheetForUserTitle(context, size);},
+            readOnly: question1,
+            inputType: TextInputType.text,
+            labelText: 'Question One',
+            hintText: title,
+            customTextHintStyle: GoogleFonts.poppins(
+                fontSize: 12,
+                color: Colors.black,
+                fontWeight: FontWeight.w400),
+            autoCorrect: true,
+          ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
+          RoundedInputField(
+            // onSaved: (newValue) => bvn = newValue,
+            onSaved: (newValue) =>
+            answer1 = newValue,
+            inputType: TextInputType.text,
+            labelText: 'Answer one',
+            hintText: 'Enter your Answer to the Question',
+            autoCorrect: true,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                setState(() {
+                  answer1=value;
+                });
+                removeError(error: kSecurityNullError);
+              }
+              return null;
+            },
+
+            validateForm: (value) {
               if (value.isEmpty) {
-                addError(error: kPinNullError);
-                return "";
-              } else if (value.length < 4) {
-                addError(error: kShortPinError);
+                addError(error: kSecurityNullError);
                 return "";
               }
-            });
-
-            return null;
-          },
-          suffixIcon: InkWell(
-              child: Icon(
-                _oldPassword
-                    ? Icons.visibility
-                    : Icons.visibility_off,
-                color: Colors.grey[500],
-                size: 15,
-              ),
-              onTap: () {
-                setState(() {
-                  _oldPassword = !_passwordVisible;
-                });
-              }),
-        ),
-        SizedBox(
-          height: size.height * 0.05,
-        ),
-        Text(
-          'Enter Your Pin',
-          style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black),
-        ),
-        SizedBox(
-          height: size.height * 0.05,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 38.0),
-          child: PinCodeTextField(
-            controller: transactPin,
-            textStyle:
-            TextStyle(fontWeight: FontWeight.normal),
-            obscureText: true,
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            enableActiveFill: true,
-            pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(10),
-                fieldHeight: 45,
-                selectedFillColor:
-                Colors.grey.withOpacity(0.1),
-                disabledColor: Colors.white,
-                selectedColor: Colors.white,
-                fieldWidth: 45,
-                activeColor: kPrimaryColor,
-                inactiveColor:
-                Colors.grey.withOpacity(0.15),
-                inactiveFillColor: Colors.white,
-                activeFillColor: colorPrimaryWhite),
-            length: 4,
-            appContext: context,
-            onChanged: (value) {
-              setState(() {
-                _pin = value;
-              });
-            },
-            onCompleted: (value) async {
-              setState(() {
-                if (value.isEmpty) {
-                  addError(error: kPinNullError);
-                  return "";
-                } else if (value.length < 4) {
-                  addError(error: kShortPinError);
-                  return "";
-                }
-                return null;
-              });
+              return null;
             },
           ),
-        ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
+          RoundedInputField(
+            controller: question2Controller,
+            onTap: (){buildShowModalBottomSheetForUserT(context, size);},
+            readOnly: question1,
+            inputType: TextInputType.text,
+            labelText: 'Question Two',
+            hintText: title,
+            customTextHintStyle: GoogleFonts.poppins(
+                fontSize: 12,
+                color: Colors.black,
+                fontWeight: FontWeight.w400),
+            autoCorrect: true,
+          ), SizedBox(
+            height: size.height * 0.02,
+          ),
+          RoundedInputField(
+            // onSaved: (newValue) => bvn = newValue,
+            onSaved: (newValue) =>
+            answer2 = newValue,
+            inputType: TextInputType.text,
+            labelText: 'Answer Two',
+            hintText: 'Enter your Answer to the Question',
+            autoCorrect: true,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                setState(() {
+                  answer2=value;
+                });
+                removeError(error: kSecurityNullError);
+              }
+              return null;
+            },
 
-        SizedBox(height: size.height *0.1,),
-        CustomSignInButton(
-          size: size,
-          onTap: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              // if all are valid then go to success screen
-              KeyboardUtil.hideKeyboard(context);
-              // Navigator.pushReplacementNamed(
-              //     context, AppRouteName.DASHBOARD);
+            validateForm: (value) {
+              if (value.isEmpty) {
+                addError(error: kSecurityNullError);
+                return "";
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          isLoading
+              ? SpinKitThreeBounce(
+            size: 30,
+            itemBuilder: (BuildContext context, int index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: kPrimaryColor,
+                ),
+              );
+            },
+          )
+              :CustomSignInButton(
+            size: size,
+            onTap: () {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                // if all are valid then go to success screen
+                KeyboardUtil.hideKeyboard(context);
+                // Navigator.pushReplacementNamed(
+                //     context, AppRouteName.DASHBOARD);
 
-              setState(() {
-                //   currentView = 2;
-              });
-            }
-          },
-          btnTitle: 'Continue',
-        ),
-      ],
-    );
+                var resetQuestParam= ResetSecurityQuestionReq(
+                  phone: phone,
+                  quest1: quest1,
+                  quest2: quest2,
+                  answer2: answer2,
+                  answer1: answer1,
+                  userId: userId
+
+                );
+
+                resetSecurityQuestion(resetQuestParam, settingProvider);
+
+              }
+            },
+            btnTitle: 'Continue',
+          ),
+        ],
+      );
+    });
   }
 }
-
-

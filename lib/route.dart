@@ -39,15 +39,16 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'ui/onboarding/welcomeui.dart';
 
-class RouteGenerator {
+// class RouteGenerator {
+//   Repository repository;
+//
+//   RouteGenerator() {
+//     repository = Repository();
+//   }
 
-  Repository repository;
+ // static
 
-  RouteGenerator() {
-    repository = Repository();
-  }
-
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  Route<dynamic> onGenerateRoute(RouteSettings settings) {
     // final args = settings.arguments;
     switch (settings.name) {
       case AppRouteName.app:
@@ -109,7 +110,12 @@ class RouteGenerator {
         return _pageRoute(settings: settings, widget: TransactionUI());
         break;
       case AppRouteName.TransactionRef:
-        return _pageRoute(settings: settings, widget: TransactionRef());
+        var mData = settings.arguments;
+        return _pageRoute(
+            settings: settings,
+            widget: TransactionRef(
+              transactionHistoryDatum: mData,
+            ));
         break;
       case AppRouteName.SaveBeneficiary:
         return _pageRoute(settings: settings, widget: SaveBeneficiary());
@@ -144,37 +150,36 @@ class RouteGenerator {
         return _pageRoute(settings: settings, widget: SettingsMainUI());
 
       default:
-        return _errorRoute(
-          settings: settings,
-        );
+        return _pageRoute(settings: settings, widget: SignInMain());
+
     }
   }
 
-  static Route<dynamic> _errorRoute({@required RouteSettings settings}) {
-    return MaterialPageRoute(
-        settings: settings,
-        builder: (_) {
-          if (UniversalPlatform.isAndroid) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Error'),
-                centerTitle: true,
-              ),
-            );
-          } else if (UniversalPlatform.isIOS) {
-            return CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(
-                  middle: Text('Error'),
-                ),
-                child: Center(child: Text('Hi')));
-          } else {
-            return Center(
-              child: Text('Invalid Device'),
-            );
-          }
-        });
-  }
-}
+  // static Route<dynamic> _errorRoute({@required RouteSettings settings}) {
+  //   return MaterialPageRoute(
+  //       settings: settings,
+  //       builder: (_) {
+  //         if (UniversalPlatform.isAndroid) {
+  //           return Scaffold(
+  //             appBar: AppBar(
+  //               title: Text('Error'),
+  //               centerTitle: true,
+  //             ),
+  //           );
+  //         } else if (UniversalPlatform.isIOS) {
+  //           return CupertinoPageScaffold(
+  //               navigationBar: CupertinoNavigationBar(
+  //                 middle: Text('Error'),
+  //               ),
+  //               child: Center(child: Text('Hi')));
+  //         } else {
+  //           return Center(
+  //             child: Text('Invalid Device'),
+  //           );
+  //         }
+  //       });
+  // }
+//}
 
 PageRoute _pageRoute(
     {@required RouteSettings settings, @required Widget widget}) {

@@ -3,26 +3,26 @@ class LoginResp {
     this.status,
     this.message,
     this.data,
-    this.responseCode,
+    this.responsecode,
   });
 
   final bool status;
   final String message;
   final Data data;
-  final int responseCode;
+  final int responsecode;
 
   factory LoginResp.fromJson(Map<String, dynamic> json) => LoginResp(
     status: json['status'] == null ? null : json['status'],
     message: json['message'] == null ? null : json['message'],
     data: json['data'] == null ? null : Data.fromJson(json['data']),
-    responseCode: json['responsecode'] == null ? null : json['responsecode'],
+    responsecode: json['responsecode'] == null ? null : json['responsecode'],
   );
 
   Map<String, dynamic> toJson() => {
     'status': status == null ? null : status,
     'message': message == null ? null : message,
     'data': data == null ? null : data.toJson(),
-    'responsecode': responseCode == null ? null : responseCode,
+    'responsecode': responsecode == null ? null : responsecode,
   };
 }
 
@@ -55,12 +55,14 @@ class Account {
     this.id,
     this.userId,
     this.accountNumber,
+    this.accountNumberLong,
     this.customerName,
     this.accessLevel,
     this.accountType,
     this.dateCreated,
     this.accountBalance,
-    this.nuban,
+    this.availableBalance,
+    this.ledgerBalance,
     this.createdAt,
     this.updatedAt,
   });
@@ -68,12 +70,14 @@ class Account {
   final int id;
   final int userId;
   final String accountNumber;
-  final dynamic customerName;
-  final dynamic accessLevel;
-  final dynamic accountType;
+  final String accountNumberLong;
+  final String customerName;
+  final String accessLevel;
+  final String accountType;
   final dynamic dateCreated;
-  final int accountBalance;
-  final dynamic nuban;
+  final dynamic accountBalance;
+  final String availableBalance;
+  final String ledgerBalance;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -81,12 +85,14 @@ class Account {
     id: json['id'] == null ? null : json['id'],
     userId: json['user_id'] == null ? null : json['user_id'],
     accountNumber: json['account_number'] == null ? null : json['account_number'],
-    customerName: json['customer_name'],
-    accessLevel: json['access_level'],
-    accountType: json['account_type'],
+    accountNumberLong: json['account_number_long'] == null ? null : json['account_number_long'],
+    customerName: json['customer_name'] == null ? null : json['customer_name'],
+    accessLevel: json['access_level'] == null ? null : json['access_level'],
+    accountType: json['account_type'] == null ? null : json['account_type'],
     dateCreated: json['date_created'],
     accountBalance: json['account_balance'] == null ? null : json['account_balance'],
-    nuban: json['nuban'],
+    availableBalance: json['available_balance'] == null ? null : json['available_balance'],
+    ledgerBalance: json['ledger_balance'] == null ? null : json['ledger_balance'],
     createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
     updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
   );
@@ -95,12 +101,14 @@ class Account {
     'id': id == null ? null : id,
     'user_id': userId == null ? null : userId,
     'account_number': accountNumber == null ? null : accountNumber,
-    'customer_name': customerName,
-    'access_level': accessLevel,
-    'account_type': accountType,
+    'account_number_long': accountNumberLong == null ? null : accountNumberLong,
+    'customer_name': customerName == null ? null : customerName,
+    'access_level': accessLevel == null ? null : accessLevel,
+    'account_type': accountType == null ? null : accountType,
     'date_created': dateCreated,
     'account_balance': accountBalance == null ? null : accountBalance,
-    'nuban': nuban,
+    'available_balance': availableBalance == null ? null : availableBalance,
+    'ledger_balance': ledgerBalance == null ? null : ledgerBalance,
     'created_at': createdAt == null ? null : createdAt.toIso8601String(),
     'updated_at': updatedAt == null ? null : updatedAt.toIso8601String(),
   };
@@ -178,7 +186,7 @@ class User {
   final int branchId;
   final String state;
   final String address;
-  final String dob;
+  final DateTime dob;
   final String gender;
   final String phone;
   final dynamic coreId;
@@ -209,7 +217,7 @@ class User {
     branchId: json['branch_id'] == null ? null : json['branch_id'],
     state: json['state'] == null ? null : json['state'],
     address: json['address'] == null ? null : json['address'],
-    dob: json['dob'] == null ? null : json['dob'],
+    dob: json['dob'] == null ? null : DateTime.parse(json['dob']),
     gender: json['gender'] == null ? null : json['gender'],
     phone: json['phone'] == null ? null : json['phone'],
     coreId: json['core_id'],
@@ -241,7 +249,7 @@ class User {
     'branch_id': branchId == null ? null : branchId,
     'state': state == null ? null : state,
     'address': address == null ? null : address,
-    'dob': dob == null ? null : dob,
+    'dob': dob == null ? null : '${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}',
     'gender': gender == null ? null : gender,
     'phone': phone == null ? null : phone,
     'core_id': coreId,

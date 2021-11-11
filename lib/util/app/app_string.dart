@@ -44,6 +44,7 @@ class AppStrings {
   static const String USERNAME = 'username';
   static const String FIRSTNAME = 'firstname';
   static const String LASTNAME = 'lastname';
+  static const String nairaUnicode = '\u{20A6}';
 
   static const String SecurityQuestionI = "What's the name of your girlfriend?";
   static const String SecurityQuestionII = "What's your mother's maiden name? ";

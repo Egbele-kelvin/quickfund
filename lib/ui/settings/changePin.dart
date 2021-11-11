@@ -30,10 +30,9 @@ class ChangePin extends StatefulWidget {
 class _ChangePinState extends State<ChangePin> {
   String email, _pin, oldPassword, password, confirmPassword, phoneNumber, responseData;
   TextEditingController transactPin;
-  bool _oldPassword, _passwordVisible, _confirPasswordVisible, isLoading = false;
+  bool _oldPassword, _passwordVisible, _confirmPasswordVisible, isLoading = false;
   int currentView = 1, selectedIndex;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   final List<String> errors = [];
 
   void addError({String error}) {
@@ -56,7 +55,7 @@ class _ChangePinState extends State<ChangePin> {
   void initState() {
     _passwordVisible = true;
     _oldPassword = true;
-    _confirPasswordVisible = true;
+    _confirmPasswordVisible = true;
     super.initState();
   }
   void responseMessage(BuildContext context, String message, Color color) {
@@ -266,7 +265,7 @@ class _ChangePinState extends State<ChangePin> {
                         maxLen: 4,
                         hintText: '**********',
                         autoCorrect: true,
-                        passwordvisible: _confirPasswordVisible,
+                        passwordvisible: _confirmPasswordVisible,
                         onSaved: (newValue) => confirmPassword = newValue,
                         onChanged: (value) {
                           if (value.isNotEmpty) {
@@ -292,7 +291,7 @@ class _ChangePinState extends State<ChangePin> {
                         },
                         suffixIcon: InkWell(
                             child: Icon(
-                              _confirPasswordVisible
+                              _confirmPasswordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               color: Colors.grey[500],
@@ -300,8 +299,8 @@ class _ChangePinState extends State<ChangePin> {
                             ),
                             onTap: () {
                               setState(() {
-                                _confirPasswordVisible =
-                                !_confirPasswordVisible;
+                                _confirmPasswordVisible =
+                                !_confirmPasswordVisible;
                               });
                             }),
                       ),

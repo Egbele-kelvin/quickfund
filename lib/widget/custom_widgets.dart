@@ -188,28 +188,31 @@ class CustomItemWidget extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(40)),
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(5),
-            vertical: getProportionateScreenHeight(5)),
-        height: size.height * 0.07,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.grey.withOpacity(0.2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Container(
+          padding:
+              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(40)),
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(5),
+              vertical: getProportionateScreenHeight(5)),
+          height: size.height * 0.07,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.2),
+            ),
           ),
-        ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            descriptionItem,
-            style: GoogleFonts.roboto(
-              color: Colors.black,
-              fontWeight: FontWeight.w300,
-              fontSize: 13.5,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              descriptionItem,
+              style: GoogleFonts.roboto(
+                color: Colors.black,
+                fontWeight: FontWeight.w300,
+                fontSize: 13.5,
+              ),
             ),
           ),
         ),
@@ -268,7 +271,7 @@ class DashBoardHeader extends StatelessWidget {
       title: Text(
         'Hi $userName',
         style: GoogleFonts.poppins(
-            fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
       ),
       trailing: InkWell(
         onTap: notification,
@@ -300,7 +303,7 @@ class RecentTransactionHead extends StatelessWidget {
             'Recent Transactions',
             style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w500,
-                fontSize: 11.8,
+                fontSize: 13,
                 color: Colors.black),
           ),
           InkWell(
@@ -309,7 +312,7 @@ class RecentTransactionHead extends StatelessWidget {
             child: Text(
               'See All',
               style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                   fontSize: 11,
                   color: Colors.black),
             ),
@@ -349,7 +352,7 @@ class CardDetails extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         // width: size.width * 0.9,
         width: double.infinity,
-        height: size.height * 0.18,
+        height: size.height * 0.21,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/f_png/dashboardbg.png'),
@@ -369,7 +372,7 @@ class CardDetails extends StatelessWidget {
                 children: [
                   Text(
                     acctBalanceI,
-                    style: GoogleFonts.roboto(
+                    style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w300,
                         fontSize: 11,
                         color: Colors.white),
@@ -392,7 +395,7 @@ class CardDetails extends StatelessWidget {
                   Text(
                     acctBalanceII,
                     style: GoogleFonts.roboto(
-                        fontSize: 12.5,
+                        fontSize: 35,
                         color: Colors.white,
                         fontWeight: FontWeight.w500),
                   ),
@@ -411,14 +414,14 @@ class CardDetails extends StatelessWidget {
               alignment: Alignment.topLeft,
             ),
             SizedBox(
-              height: size.height * 0.03,
+              height: size.height * 0.01,
             ),
             Align(
               child: Text(
-                savingsAcct,
-                style: GoogleFonts.roboto(
+                'Account Number',
+                style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w300,
-                    fontSize: 11,
+                    fontSize: 9,
                     color: Colors.white),
               ),
               alignment: Alignment.topLeft,
@@ -429,8 +432,8 @@ class CardDetails extends StatelessWidget {
             Align(
               child: Text(
                 accountNum,
-                style: GoogleFonts.roboto(
-                    fontSize: 13,
+                style: GoogleFonts.poppins(
+                    fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.w500),
               ),
@@ -449,27 +452,28 @@ class CustomDashBoardCard extends StatelessWidget {
     @required this.size,
     this.cardTitle,
     this.cardIcon,
-    this.onTap,
+    this.onTap, this.color, this.cardTitleColor, this.imgColor,
   }) : super(key: key);
 
   final Size size;
   final String cardTitle;
   final String cardIcon;
   final Function onTap;
+  final Color color,cardTitleColor,imgColor;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: size.width * 0.435,
+        width: size.width * 0.41,
         height: size.height * 0.14,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey.shade300,
+            color: Colors.grey.shade50,
            // width: size.width *0.1
           ),
-          color: kDashBoardCardColor,
+          color:color==null ? kDashBoardCardColor:color,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -485,7 +489,7 @@ class CustomDashBoardCard extends StatelessWidget {
                     cardIcon,
                     // fit: BoxFit.fill,
                     width: size.width *0.03,
-                    color: kPrimaryColor,
+                    color: imgColor==null ? kPrimaryColor: imgColor,
                   ),
                 )
               ),
@@ -500,9 +504,9 @@ class CustomDashBoardCard extends StatelessWidget {
                 child: Text(
                   cardTitle,
                   style: GoogleFonts.poppins(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.white),
+                      color:cardTitleColor==null ?  Colors.white:cardTitleColor),
                 ),
                 alignment: Alignment.bottomLeft,
               ),
@@ -525,10 +529,11 @@ class TransactionHistorySummary extends StatelessWidget {
     this.amount,
     this.igUrl,
     this.amountColor,
-    this.onTap,
+    this.onTap, this.isPending,
   }) : super(key: key);
 
   final Size size;
+  final bool isPending;
   final String tfDate, transferName, code, amount, igUrl;
   final Color amountColor;
   final Function onTap;
@@ -542,94 +547,90 @@ class TransactionHistorySummary extends StatelessWidget {
         child: Container(
           height: size.height * 0.09,
           width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.withOpacity(0.2))),
+          // decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(8),
+          //     border: Border.all(color: Colors.grey.withOpacity(0.2))),
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
                 child: Container(
-                  child:Icon(Icons.swap_horiz_rounded, color: kPrimaryColor,),
+                  child:Icon(Icons.swap_horiz_rounded,  color: !isPending ? Colors.green : kPrimaryColor,),
                   padding: EdgeInsets.all(5),
                   width: size.width * 0.13,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    border: Border.all(
-                      color: kPrimaryColor
-                    )
-                  ),
+                  // decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //   border: Border.all(
+                  //       color: !isPending ? Colors.green : kPrimaryColor
+                  //   )
+                  // ),
                 ),
               ),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 4.0, vertical: 15),
-                child: Container(
-                  width: size.width * 0.5,
-                  height: size.height * 08,
-                  child: Column(
-                    children: [
-                      Align(
+              Container(
+                width: size.width * 0.5,
+                height: size.height * 08,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex:0,
+                      child: Align(
                         child: Text(
                           transferName,
+                          overflow:  TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
-                              fontSize: 10,
+                              fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: Colors.black),
                         ),
                         alignment: Alignment.topLeft,
                       ),
-                      SizedBox(
-                        height: size.height * 0.00678,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.00678,
+                    ),
+                    Align(
+                      child: Text(
+                        code,
+                        style: GoogleFonts.poppins(
+                            fontSize: 9.1,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black.withOpacity(0.6)),
                       ),
-                      Align(
-                        child: Text(
-                          code,
-                          style: GoogleFonts.poppins(
-                              fontSize: 9.1,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black.withOpacity(0.6)),
-                        ),
-                        alignment: Alignment.bottomLeft,
-                      ),
-                    ],
-                  ),
+                      alignment: Alignment.bottomLeft,
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 4.0, vertical: 15),
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 5 , vertical: 2),
-                  width: size.width * 0.2,
-                  //height: size.height * 0.5,
-                  child: Column(
-                    children: [
-                      Align(
-                        child: Text(
-                          amount,
-                          style: GoogleFonts.roboto(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w400,
-                              color: amountColor),
-                        ),
-                        alignment: Alignment.topRight,
+              Container(
+                // padding: EdgeInsets.symmetric(horizontal: 5 , vertical: 2),
+                width: size.width * 0.2,
+                //height: size.height * 0.5,
+                child: Column(
+                  children: [
+                    Align(
+                      child: Text(
+                        amount,
+                        style: GoogleFonts.roboto(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: !isPending ? Colors.green : kPrimaryColor),
                       ),
-                      SizedBox(
-                        height: size.height * 0.00678,
+                      alignment: Alignment.topRight,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.00678,
+                    ),
+                    Align(
+                      child: Text(
+                        tfDate,
+                        style: GoogleFonts.roboto(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey.withOpacity(1)),
                       ),
-                      Align(
-                        child: Text(
-                          tfDate,
-                          style: GoogleFonts.roboto(
-                              fontSize: 9.5,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.grey.withOpacity(1)),
-                        ),
-                        alignment: Alignment.bottomRight,
-                      ),
-                    ],
-                  ),
+                      alignment: Alignment.bottomRight,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -772,111 +773,114 @@ class BeneficiaryCard extends StatelessWidget {
     this.bankName,
     this.moreTap,
     this.deleteTap,
-    this.imgURL,
+    this.imgURL, this.onTap,
   }) : super(key: key);
 
   final Size size;
   final String imgURL, accountName, accountNum, bankName;
-  final Function moreTap, deleteTap;
+  final Function moreTap,onTap, deleteTap;
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
+      actionExtentRatio: 0.2,
       secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: deleteTap,
+        Container(
+          height: size.height*0.095,
+          child: IconSlideAction(
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: deleteTap,
+          ),
         ),
       ],
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-        child: Container(
-          height: size.height * 0.1,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            border: Border.all(
-              color: Colors.grey.withOpacity(0.03),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: size.height * 0.1,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              border: Border.all(
+                color: Colors.grey.withOpacity(0.03),
+              ),
+              borderRadius: BorderRadius.circular(10),
             ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 6),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade50,
-                  radius: 35,
-                  child: Image.asset(
-                    imgURL,
-                    width: size.width * 0.1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 2.0, vertical: 6),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey.shade50,
+                    radius: 35,
+                    child: Icon(Icons.add_chart, color: Colors.grey.shade300,)
                   ),
                 ),
-              ),
-              SizedBox(
-                width: size.width * 0.02,
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                width: size.width * 0.6,
-                height: size.height * 0.085,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Align(
-                      child: Text(
-                        accountNum,
-                        style: GoogleFonts.lato(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                      ),
-                      alignment: Alignment.topLeft,
-                    ),
-                    Align(
-                      child: Text(
-                        accountName,
-                        style: GoogleFonts.lato(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                      ),
-                      alignment: Alignment.topLeft,
-                    ),
-                    Align(
-                      child: Text(
-                        bankName,
-                        style: GoogleFonts.lato(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(0.9),
-                        ),
-                      ),
-                      alignment: Alignment.topLeft,
-                    ),
-                  ],
+                SizedBox(
+                  width: size.width * 0.02,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    Icons.stacked_bar_chart,
-                    size: 15,
-                    color: Colors.grey,
+                Container(
+                  alignment: Alignment.topLeft,
+                  width: size.width * 0.6,
+                  height: size.height * 0.085,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        child: Text(
+                          accountNum,
+                          style: GoogleFonts.lato(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                          ),
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                      Align(
+                        child: Text(
+                          accountName,
+                          style: GoogleFonts.lato(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                          ),
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                      Align(
+                        child: Text(
+                          bankName,
+                          style: GoogleFonts.lato(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black.withOpacity(0.9),
+                          ),
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                    ],
                   ),
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.stacked_bar_chart,
+                      size: 15,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -898,8 +902,8 @@ class BuyingAirtimeCustomPlaceHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topRight,
-      child: SvgPicture.asset(
-        'assets/f_svg/${airtimeType.toLowerCase()}.svg',
+      child: Image.asset(
+        'assets/f_png/avatar.png',
         width: size.width * 0.1,
         height: size.height *0.05,
       ),
@@ -945,6 +949,52 @@ class SelectAmountWidget extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+      ),
+    );
+  }
+}
+
+
+class CustomProfileChildRowWidget extends StatelessWidget {
+  const CustomProfileChildRowWidget({
+    Key key,
+    @required this.size,
+    this.title,
+    this.svgURL,
+    this.widgetIcon,
+  }) : super(key: key);
+
+  final Size size;
+  final String title, svgURL;
+  final Widget widgetIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  svgURL,
+                  color: kPrimaryColor,
+                ),
+                SizedBox(
+                  width: size.width * 0.05,
+                ),
+                Text(
+                  title,
+                  style: GoogleFonts.nunito(
+                      fontSize: 12, fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+          ),
+          widgetIcon
+        ],
       ),
     );
   }

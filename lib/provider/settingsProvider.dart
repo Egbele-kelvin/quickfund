@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:quickfund/data/model/resetPasswordReq.dart';
 import 'package:quickfund/data/model/resetPinReq.dart';
+import 'package:quickfund/data/model/resetSecurityQuestion.dart';
 import 'package:quickfund/data/network-service/networkServices.dart';
 import 'package:quickfund/data/repository/repository.dart';
 
@@ -18,6 +19,10 @@ class SettingsProvider with ChangeNotifier {
   Map _changeSecurityQuestion;
 
   get changeSecurityQuestion => _changeSecurityQuestion;
+
+  Map _changeSecurityQuest;
+
+  get changeSecurityQuest => _changeSecurityQuest;
 
   Future<void> _resetPassWord(ResetPassword resetPassword) async {
     try {
@@ -39,18 +44,15 @@ class SettingsProvider with ChangeNotifier {
     }
   }
 
-  //
-  //
-  // Future<void> _completeOnBoardOldCustomerReq(CompleteOnBoardOldCustomerReq completeOnBoardOldCustomerReq)async{
-  //   try {
-  //     final otpVerification = await repository.completeOnBoardOldCustomerReq(completeOnBoardOldCustomerReq);
-  //     _completeOnBoardOldC = otpVerification;
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print('Error ${e.toString()}');
-  //   }
-  // }
-
+  Future<void> _resetSecurityQuestion(ResetSecurityQuestionReq resetSecurityQuestionReq) async {
+    try {
+      final otpVerification = await repository.resetSecurityQuestionQuery(resetSecurityQuestionReq);
+      _changeSecurityQuest = otpVerification;
+      notifyListeners();
+    } catch (e) {
+      print('Error ${e.toString()}');
+    }
+  }
   ///
   ///
   //-----public Access------//
@@ -65,7 +67,7 @@ class SettingsProvider with ChangeNotifier {
     return await _resetPin(resetPin);
   }
 
-// Future<void> initiateOnBoardOldCustomer(InitiateOnBoardOldCustomer initiateOnBoardOldCustomer) async {
-//   return await _initiateOnBoardOldCustomer(initiateOnBoardOldCustomer);
-// }
+  Future<void> resetSecurityQuestion(ResetSecurityQuestionReq resetSecurityQuestionReq) async {
+    return await _resetSecurityQuestion(resetSecurityQuestionReq);
+  }
 }

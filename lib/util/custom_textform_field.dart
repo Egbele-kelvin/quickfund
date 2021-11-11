@@ -83,12 +83,12 @@ class RoundedInputField extends StatelessWidget {
           fontSize: 12, color: textColor, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: GoogleFonts.roboto(
+        labelStyle: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w400,
           color: kPrimaryColor,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         hintText: hintText,
         suffixIcon: suffixIcon,
         hintStyle: customTextHintStyle,

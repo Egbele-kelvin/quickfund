@@ -54,7 +54,6 @@ class _ForgotPassIIState extends State<ForgotPassII> {
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
   List<ListedQuestionData> securityQuestionList = [];
-
   Future<dynamic> buildShowModalBottomSheetForQuestion1(BuildContext context) {
     return showModalBottomSheet(
         context: context,
@@ -522,11 +521,8 @@ class _ForgotPassIIState extends State<ForgotPassII> {
                                   password: password,
                                   passwordConfirmation: confirmPassword,
                                   phone: phoneNum,
-                                  otp: _pin,
                                   answer1: answer1,
-                                  answer2: answer2,
-                                  quest1: idQuestion1,
-                                  quest2: idQuestion2);
+                                  answer2: answer2,);
                               forgotPassword(
                                   forgotPassWordParams, authProvider);
                             }

@@ -14,7 +14,7 @@ import 'package:quickfund/data/repository/repository.dart';
 class SetupAccountViaBVNandViaPhoneProvider with ChangeNotifier {
   Repository repository = Repository(networkService: NetworkService());
   bool loading = false;
-  List stateList = [];
+  List<StateData> stateList = [];
   Map _initiateBvnR;
 
   Map get initiateBvnR => _initiateBvnR;
