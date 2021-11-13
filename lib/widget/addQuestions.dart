@@ -244,7 +244,7 @@ class NoActivity extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28.0 , vertical: 20),
             child: Text(tag ==null ? 'OH, You don\'t have any Activity at the \n Moment!': tag, textAlign:TextAlign.center ,style: GoogleFonts.poppins(
-              fontSize: 10,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
             ),),
           ),
@@ -309,38 +309,41 @@ class CustomDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return GestureDetector(
+    return InkWell(
+      radius: 0,
       onTap: onTap,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            height: size.height * 0.06,
-            child: ListTile(
-              title: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0,vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:[
+              Text(
                 title,
                 style: GoogleFonts.nunito(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: Colors.black),
               ),
-              trailing: Text(
-                amountLabel,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.nunito(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
+                Text(
+                  amountLabel,
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.nunito(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-              horizontalTitleGap: 10.0,
+              ]
+             // horizontalTitleGap: 10.0,
             ),
           ),
           SizedBox(
-            height: size.height * 0.05,
+            height: size.height * 0.02,
           ),
           Divider(
-            height: 0.4,
+            height: 0.1,
           )
         ],
       ),

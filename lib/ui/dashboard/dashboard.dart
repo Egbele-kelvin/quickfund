@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -48,62 +50,86 @@ class _DashboardMainState extends State<DashboardMain> {
     }
 
 
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        //  backgroundColor: kPrimaryColor,
-        body: _widgetOptions.elementAt(_selectedIndex),
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15), topLeft: Radius.circular(15)),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black38.withOpacity(0.08),
-                    spreadRadius: 0,
-                    blurRadius: 10),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: BottomNavigationBar(
-
-                type: BottomNavigationBarType.fixed,
-                elevation: 1.0,
-                onTap: onItemTapped,
-                selectedItemColor: kDashBoardCardColor,
-                unselectedItemColor: Colors.grey,
-                currentIndex: _selectedIndex,
-                selectedLabelStyle: GoogleFonts.roboto(
-
-                ),
-                unselectedLabelStyle: GoogleFonts.roboto(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 11
-                ),
-                showUnselectedLabels: true,
-                unselectedFontSize: 11,
-                selectedFontSize: 11,
-
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.home_outlined),
-                      label: 'Home',),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.wysiwyg_rounded),
-                      label: 'Bills'),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.sticky_note_2_outlined),
-                      label: 'Transactions'),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.more_horiz,),
-                      label: 'More',)
+     Future<bool> _onWillPop() {
+       return showDialog(
+         context: context,
+         builder: (context) => AlertDialog(
+           title: Text('Are you sure?'),
+           content: Text('Do you want to exit an App'),
+           actions: <Widget>[
+             FlatButton(
+               onPressed: () => Navigator.of(context).pop(false),
+               child: Text('No'),
+             ),
+             FlatButton(
+               onPressed: () => exit(0),
+               /*Navigator.of(context).pop(true)*/
+               child: Text('Yes'),
+             ),
+           ],
+         ),
+       ) ??
+           false;
+     }
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          //  backgroundColor: kPrimaryColor,
+          body: _widgetOptions.elementAt(_selectedIndex),
+          bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15), topLeft: Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black38.withOpacity(0.08),
+                      spreadRadius: 0,
+                      blurRadius: 10),
                 ],
               ),
-            )));
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+                child: BottomNavigationBar(
+
+                  type: BottomNavigationBarType.fixed,
+                  elevation: 1.0,
+                  onTap: onItemTapped,
+                  selectedItemColor: kDashBoardCardColor,
+                  unselectedItemColor: Colors.grey,
+                  currentIndex: _selectedIndex,
+                  selectedLabelStyle: GoogleFonts.roboto(
+
+                  ),
+                  unselectedLabelStyle: GoogleFonts.roboto(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 11
+                  ),
+                  showUnselectedLabels: true,
+                  unselectedFontSize: 11,
+                  selectedFontSize: 11,
+
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined),
+                        label: 'Home',),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.wysiwyg_rounded),
+                        label: 'Bills'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.sticky_note_2_outlined),
+                        label: 'Transactions'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.more_horiz,),
+                        label: 'More',)
+                  ],
+                ),
+              ))),
+    );
   }
 }
 

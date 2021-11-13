@@ -23,6 +23,7 @@ import 'package:quickfund/widget/custom_gethelp_item_ui.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:quickfund/widget/form_error.dart';
+import 'package:quickfund/widget/responseMessage.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
 
 import 'billWidget.dart';
@@ -158,6 +159,11 @@ class _BillMainUIState extends State<BillMainUI> {
                                 Navigator.of(context).pop();
                                 if (e.value.amount == 0) {
                                   setState(() {
+                                    categoryId = e.value.categoryId;
+                                    bundle = e.value.id;
+                                    billerName = e.value.billerName;
+                                    bundleName = e.value.name;
+                                    categoryName = e.value.categoryName;
                                     isAmountZero = true;
                                     selectBundleController.text =
                                     '${e.value.name}';
@@ -187,6 +193,8 @@ class _BillMainUIState extends State<BillMainUI> {
     print("pret" + currentView.toString());
     if (currentView == 1) {
       isAmountZero=false;
+      invisibleAmount.clear();
+      phoneNumberController.clear();
       selectBundleController.clear();
       Navigator.of(context).pop();
     } else {
@@ -196,6 +204,8 @@ class _BillMainUIState extends State<BillMainUI> {
           showDataplan = false;
         } else if (currentView == 2) {
           isAmountZero=false;
+          phoneNumberController.clear();
+          invisibleAmount.clear();
           selectBundleController.clear();
           currentView = 1;
           headerText = 'Pay Bills';
@@ -203,6 +213,8 @@ class _BillMainUIState extends State<BillMainUI> {
           isEnabled = false;
           isAmountZero=false;
           currentView = 2;
+          phoneNumberController.clear();
+          invisibleAmount.clear();
           selectBundleController.clear();
         } else if (currentView == 4) {
           isEnabled = false;
@@ -215,20 +227,20 @@ class _BillMainUIState extends State<BillMainUI> {
 
 
 
-  responseMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 5),
-      padding: EdgeInsets.symmetric(vertical: 30),
-      content: Text(
-        message,
-        style: GoogleFonts.openSans(
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: color,
-    ));
+  void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+    showDialog(context: context,
+        builder: (_) {
+          return ResponseMessage(size: size,
+            subtitle: subtitle,
+            lotteError: lottleError,
+            textColor: textColor,
+            msgTitle: message.toUpperCase(),
+          );
+        }
+    );
   }
 
   @override
@@ -270,14 +282,23 @@ class _BillMainUIState extends State<BillMainUI> {
             currentView = 2;
           });
         } else {
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       print('Catch this $e');
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
     return null;
   }
@@ -299,14 +320,22 @@ class _BillMainUIState extends State<BillMainUI> {
             currentView = 3;
           });
         } else {
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
-      print('Catch this $e');
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -331,14 +360,20 @@ class _BillMainUIState extends State<BillMainUI> {
           });
           responseData = changePinResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -448,7 +483,7 @@ class _BillMainUIState extends State<BillMainUI> {
                               child: Column(
                                 children: [
                                   Container(
-                                    child: Text(
+                                    child:  categoryById.isEmpty || categoryById==null ? Container():Text(
                                       'Select your service provider',
                                       style: GoogleFonts.poppins(
                                           color: Colors.black,
@@ -462,7 +497,10 @@ class _BillMainUIState extends State<BillMainUI> {
                                   SizedBox(
                                     height: size.height * 0.01,
                                   ),
-                                  Column(
+                                  categoryById.isEmpty || categoryById==null ? NoActivity(
+                                    tag:
+                                    'OH No service provider At The Moment!',
+                                  ): Column(
                                     children: categoryById
                                         .asMap()
                                         .entries
@@ -546,9 +584,6 @@ class _BillMainUIState extends State<BillMainUI> {
                                         if (value.isNotEmpty) {
                                           removeError(
                                               error: kPhoneNumberNullError);
-                                        } else if (value.length >= 11) {
-                                          removeError(
-                                              error: kShortPhoneNumberError);
                                         }
                                         return null;
                                       },
@@ -556,10 +591,6 @@ class _BillMainUIState extends State<BillMainUI> {
                                         if (value.isEmpty) {
                                           addError(
                                               error: kPhoneNumberNullError);
-                                          return "";
-                                        } else if (value.length < 11) {
-                                          addError(
-                                              error: kShortPhoneNumberError);
                                           return "";
                                         }
                                         return null;
@@ -587,11 +618,7 @@ class _BillMainUIState extends State<BillMainUI> {
                                       onTap: () {
                                         if (_formKey.currentState.validate()) {
                                           _formKey.currentState.save();
-                                          // if all are valid then go to success screen
                                           KeyboardUtil.hideKeyboard(context);
-                                          // Navigator.pushReplacementNamed(
-                                          //     context, AppRouteName.DASHBOARD);
-
                                           setState(() {
                                             currentView = 4;
                                           });
@@ -606,9 +633,9 @@ class _BillMainUIState extends State<BillMainUI> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: OTPTransaction(
-                                  selectedBank: 'QuickMFB',
+                                  selectedBank: 'QuickFund MFB',
                                   size: size,
-                                  amount: amount,
+                                  amount:  'NGN ${invisibleAmount.text.isEmpty ? amount :invisibleAmount.text}',
                                   date: tfDate,
                                   userAccount: from,
                                   receipientNumber: phoneNumberController.text,
@@ -652,13 +679,9 @@ class _BillMainUIState extends State<BillMainUI> {
                                           bundle: bundle,
                                           billerName: billerName,
                                           billerId: billerId,
-                                          amount: invisibleAmount.text.isEmpty? amount :invisibleAmount.text,
+                                          amount: invisibleAmount.text.isEmpty ? amount :invisibleAmount.text,
                                           pin: pin);
                                       payBill(payBillParams, provider);
-
-                                      // setState(() {
-                                      //   currentView = 2;
-                                      // });
                                     }
                                   },
                                   cancelOnTap: () {

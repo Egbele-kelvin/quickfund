@@ -270,8 +270,8 @@ class DashBoardHeader extends StatelessWidget {
       ),
       title: Text(
         'Hi $userName',
-        style: GoogleFonts.poppins(
-            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+        style: GoogleFonts.nunito(
+            fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
       ),
       trailing: InkWell(
         onTap: notification,
@@ -301,9 +301,9 @@ class RecentTransactionHead extends StatelessWidget {
         children: [
           Text(
             'Recent Transactions',
-            style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
+            style: GoogleFonts.nunito(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
                 color: Colors.black),
           ),
           InkWell(
@@ -311,7 +311,7 @@ class RecentTransactionHead extends StatelessWidget {
             onTap: onTap,
             child: Text(
               'See All',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.nunito(
                   fontWeight: FontWeight.w400,
                   fontSize: 11,
                   color: Colors.black),
@@ -349,16 +349,16 @@ class CardDetails extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         // width: size.width * 0.9,
         width: double.infinity,
-        height: size.height * 0.21,
+        height: size.height * 0.2,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/f_png/dashboardbg.png'),
             fit: BoxFit.cover
           ),
-            color: dashBoardColor,
+           color: dashBoardColor,
             borderRadius: BorderRadius.circular(6)
           ),
         child: Column(
@@ -372,9 +372,9 @@ class CardDetails extends StatelessWidget {
                 children: [
                   Text(
                     acctBalanceI,
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 11,
+                    style: GoogleFonts.nunito(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
                         color: Colors.white),
                   ),
 
@@ -394,10 +394,10 @@ class CardDetails extends StatelessWidget {
                 children: [
                   Text(
                     acctBalanceII,
-                    style: GoogleFonts.roboto(
-                        fontSize: 35,
+                    style: GoogleFonts.nunito(
+                        fontSize: 40,
                         color: Colors.white,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w700),
                   ),
                   SizedBox(
                     width: size.width * 0.05,
@@ -419,9 +419,9 @@ class CardDetails extends StatelessWidget {
             Align(
               child: Text(
                 'Account Number',
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 9,
+                style: GoogleFonts.nunito(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
                     color: Colors.white),
               ),
               alignment: Alignment.topLeft,
@@ -432,7 +432,7 @@ class CardDetails extends StatelessWidget {
             Align(
               child: Text(
                 accountNum,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.nunito(
                     fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.w500),
@@ -467,7 +467,7 @@ class CustomDashBoardCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: size.width * 0.41,
-        height: size.height * 0.14,
+        height: size.height * 0.135,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.shade50,
@@ -496,14 +496,14 @@ class CustomDashBoardCard extends StatelessWidget {
               alignment: Alignment.topRight,
             ),
             SizedBox(
-              height: size.height * 0.02,
+              height: size.height * 0.015,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Align(
                 child: Text(
                   cardTitle,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.nunito(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color:cardTitleColor==null ?  Colors.white:cardTitleColor),
@@ -543,20 +543,22 @@ class TransactionHistorySummary extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
         child: Container(
-          height: size.height * 0.09,
+          height: size.height * 0.07,
           width: double.infinity,
           // decoration: BoxDecoration(
           //     borderRadius: BorderRadius.circular(8),
           //     border: Border.all(color: Colors.grey.withOpacity(0.2))),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
+                padding:  EdgeInsets.symmetric(horizontal: 5.0),
                 child: Container(
+                  alignment: Alignment.topLeft,
                   child:Icon(Icons.swap_horiz_rounded,  color: !isPending ? Colors.green : kPrimaryColor,),
-                  padding: EdgeInsets.all(5),
+                 // padding: EdgeInsets.all(5),
                   width: size.width * 0.13,
                   // decoration: BoxDecoration(
                   //     shape: BoxShape.circle,
@@ -575,9 +577,9 @@ class TransactionHistorySummary extends StatelessWidget {
                       flex:0,
                       child: Align(
                         child: Text(
-                          transferName,
+                          transferName.toUpperCase(),
                           overflow:  TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.nunito(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: Colors.black),
@@ -591,8 +593,8 @@ class TransactionHistorySummary extends StatelessWidget {
                     Align(
                       child: Text(
                         code,
-                        style: GoogleFonts.poppins(
-                            fontSize: 9.1,
+                        style: GoogleFonts.nunito(
+                            fontSize: 13,
                             fontWeight: FontWeight.w400,
                             color: Colors.black.withOpacity(0.6)),
                       ),
@@ -602,6 +604,7 @@ class TransactionHistorySummary extends StatelessWidget {
                 ),
               ),
               Container(
+                alignment: Alignment.topRight,
                 // padding: EdgeInsets.symmetric(horizontal: 5 , vertical: 2),
                 width: size.width * 0.2,
                 //height: size.height * 0.5,
@@ -610,9 +613,9 @@ class TransactionHistorySummary extends StatelessWidget {
                     Align(
                       child: Text(
                         amount,
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.nunito(
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w400,
                             color: !isPending ? Colors.green : kPrimaryColor),
                       ),
                       alignment: Alignment.topRight,
@@ -623,7 +626,7 @@ class TransactionHistorySummary extends StatelessWidget {
                     Align(
                       child: Text(
                         tfDate,
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.nunito(
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
                             color: Colors.grey.withOpacity(1)),

@@ -236,6 +236,9 @@ class _TransactionUIState extends State<TransactionUI> {
   void initState() {
     final postMdl = Provider.of<TransferProvider>(context, listen: false);
     postMdl.getAllTransactionHistory();
+   setState(() {
+     transactionHistoryData = postMdl.transactionHistoryData;
+   });
     getUserDetails();
     super.initState();
   }
@@ -249,7 +252,7 @@ class _TransactionUIState extends State<TransactionUI> {
     return Consumer<TransferProvider>(
         builder: (context, transferProvider, child) {
           _provider = transferProvider;
-          parseTransactionDataCheck(transferProvider);
+         // parseTransactionDataCheck(transferProvider);
 
           return
             Scaffold(

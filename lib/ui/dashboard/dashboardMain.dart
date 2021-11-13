@@ -6,10 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/accountBalanceRep.dart';
 import 'package:quickfund/data/model/accountDetailsResp.dart';
-import 'package:quickfund/data/model/createAccountBvnResp.dart';
 import 'package:quickfund/data/model/loginResp.dart';
 import 'package:quickfund/data/model/transactionHistory.dart';
-import 'package:quickfund/provider/accountSetupProvider.dart';
 import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/transferProvider.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
@@ -34,7 +32,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
       accountNum = '2993204939',
       accountType,
       closedBal = 'XXXXXXX';
-  bool _passwordVisible;
+  bool _passwordVisible=true;
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   List<Account> accountList;
   List<AccountDatum> accountDetails;
@@ -76,7 +74,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
 
   @override
   void initState() {
-    _passwordVisible = false;
+    _passwordVisible = true;
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       getAcct();
@@ -187,14 +185,13 @@ class _DashBoardMainState extends State<DashBoardMain> {
                           ),
 
                           SizedBox(
-                            height: size.height * 0.02,
+                            height: size.height * 0.01,
                           ),
 
                           CardDetails(
                             dashBoardColor: kPrimaryColor,
                             size: size,
                             gestureTap: () {
-                              print('add fund');
                               Navigator.pushReplacementNamed(
                                   context, AppRouteName.FundAccountUI);
                             },
@@ -206,7 +203,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
                             acctBalanceII: _passwordVisible
                                 ? accountBal == null || accountBal.isEmpty
                                     ? acctBalance
-                                    : '₦ ${accountBal[0].balance ?? acctBalance}'
+                                    : 'NGN ${accountBal[0].balance ?? acctBalance}'
                                 : 'XXXXXXXXXX',
                             // savingsAcct: accountType == null
                             //     ? 'Account Type is not available!'
@@ -282,7 +279,7 @@ class _DashBoardMainState extends State<DashBoardMain> {
                                   context, AppRouteName.LoanMainUI);
                             },
                             cardIcon: 'assets/f_svg/accountBalance.svg',
-                            cardTitle: 'Loan',
+                            cardTitle: 'Loan \nRequest',
                           ),
                           CustomDashBoardCard(
                             size: size,
@@ -352,7 +349,14 @@ class _DashBoardMainState extends State<DashBoardMain> {
                                                                 index]
                                                             .payerAccount ==
                                                        acctN,
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                      context,
+                                                      AppRouteName
+                                                          .TransactionRef,
+                                                      arguments: transactionHistoryData[index]);
+                                                },
                                                 size: size,
                                                 tfDate: transactionHistoryData[
                                                         index]

@@ -1,6 +1,8 @@
 import 'package:fdottedline/fdottedline.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -13,9 +15,17 @@ import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 
 class TransactionRef extends StatelessWidget {
   final TransactionHistoryDatum transactionHistoryDatum;
- const TransactionRef({Key key, this.transactionHistoryDatum}) : super(key: key);
 
+  const TransactionRef({Key key, this.transactionHistoryDatum})
+      : super(key: key);
 
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Example share',
+        text: 'Example share text',
+        linkUrl: 'https://flutter.dev/',
+        chooserTitle: 'Example Chooser Title');
+  }
   @override
   Widget build(BuildContext context) {
     String tf;
@@ -33,7 +43,7 @@ class TransactionRef extends StatelessWidget {
               //color: kPrimaryColor,
               child: CustomAppBar(
                 onTap: () {
-                 // Navigator.pop(context);
+                  // Navigator.pop(context);
                   //onBackPress();
                   Navigator.pushReplacementNamed(
                       context, AppRouteName.DASHBOARD);
@@ -85,8 +95,10 @@ class TransactionRef extends StatelessWidget {
                               RefrenceContent(
                                 size: size,
                                 tag: 'Payer',
-                                labelI: '${transactionHistoryDatum.payerName.toUpperCase()}',
-                                labelII: '${transactionHistoryDatum.payerAccount}',
+                                labelI:
+                                    '${transactionHistoryDatum.payerName.toUpperCase()}',
+                                labelII:
+                                    '${transactionHistoryDatum.payerAccount}',
                                 labelIII: 'QuickFundMB',
                               ),
                               SizedBox(
@@ -95,8 +107,10 @@ class TransactionRef extends StatelessWidget {
                               RefrenceContent(
                                 size: size,
                                 tag: 'Receiver',
-                                labelI: '${transactionHistoryDatum.receiverName}',
-                                labelII: '${transactionHistoryDatum.receiverAccount}',
+                                labelI:
+                                    '${transactionHistoryDatum.receiverName}',
+                                labelII:
+                                    '${transactionHistoryDatum.receiverAccount}',
                                 labelIII: '${transactionHistoryDatum.bank}',
                               ),
                               SizedBox(
@@ -107,7 +121,8 @@ class TransactionRef extends StatelessWidget {
                                 tag: 'Transaction',
                                 labelI: 'NGN ${transactionHistoryDatum.amount}',
                                 labelII: 'Transfer',
-                                labelIII: '${transactionHistoryDatum.date} GMT +1',
+                                labelIII:
+                                    '${transactionHistoryDatum.date} GMT +1',
                               ),
                               SizedBox(
                                 height: size.height * .02,
@@ -117,7 +132,8 @@ class TransactionRef extends StatelessWidget {
                                 tag: 'Narration',
                                 labelI: '',
                                 labelII: '${transactionHistoryDatum.narration}',
-                                labelIII: '${transactionHistoryDatum.payerName} ${transactionHistoryDatum.payerAccount}*****',
+                                labelIII:
+                                    '${transactionHistoryDatum.payerName} ${transactionHistoryDatum.payerAccount}*****',
                               ),
                               SizedBox(
                                 height: size.height * .02,
@@ -129,6 +145,20 @@ class TransactionRef extends StatelessWidget {
                                 labelII: '${transactionHistoryDatum.reference}',
                                 labelIII: '',
                               ),
+                              SizedBox(
+                                height: size.height * 0.05,
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: InkWell(
+                                    onTap: () {
+                                      share();
+                                    },
+                                    child: Icon(
+                                      Icons.share,
+                                      size: 25,
+                                    )),
+                              )
                             ]),
                           ),
                         ],

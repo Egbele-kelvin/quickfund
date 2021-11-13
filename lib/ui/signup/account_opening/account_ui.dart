@@ -25,6 +25,7 @@ import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_button.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/form_error.dart';
+import 'package:quickfund/widget/responseMessage.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class AccountMain extends StatefulWidget {
@@ -82,16 +83,20 @@ class _AccountMainState extends State<AccountMain> {
       });
   }
 
-  responseMessage(String message, Color color) {
-    scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.poppins(
-            color: Colors.white, fontSize: 11, fontWeight: FontWeight.w400),
-      ),
-      backgroundColor: color,
-    ));
+  void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+    showDialog(context: context,
+        builder: (_) {
+          return ResponseMessage(size: size,
+            subtitle: subtitle,
+            lotteError: lottleError,
+            textColor: textColor,
+            msgTitle: message.toUpperCase(),
+          );
+        }
+    );
   }
 
   void initiateBvnReq(
@@ -113,7 +118,10 @@ class _AccountMainState extends State<AccountMain> {
           responseData = initiateBvnResp.message;
 
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.green);
+          responseMessage('Success', '$responseData', 'assets/lf30_editor_23pqj4lo.json', Colors.green);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
           setState(() {
             currentView = 2;
           });
@@ -124,7 +132,10 @@ class _AccountMainState extends State<AccountMain> {
           });
           responseData = initiateBvnResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
@@ -132,14 +143,19 @@ class _AccountMainState extends State<AccountMain> {
         });
         print('LoadingData: $isLoading');
         print('dataResp: ${authProvider.initiateBvnR.toString()}');
-
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('Server Auth Error', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -162,7 +178,10 @@ class _AccountMainState extends State<AccountMain> {
           responseData = initiatePhoneResp.message;
 
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.green);
+          responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
           setState(() {
             currentView = 3;
           });
@@ -172,8 +191,10 @@ class _AccountMainState extends State<AccountMain> {
             isLoading=false;
           });
           responseData = initiatePhoneResp.message;
-          print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
@@ -182,13 +203,19 @@ class _AccountMainState extends State<AccountMain> {
         print('LoadingData: $isLoading');
         print('dataResp: ${authProvider.initiateBvnR.toString()}');
 
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('Server Auth Error', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -209,7 +236,10 @@ class _AccountMainState extends State<AccountMain> {
           });
           responseData = initiateBvnResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.green);
+          responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
           Navigator.pushReplacementNamed(
               context, AppRouteName.ReviewDetails);
         }
@@ -219,7 +249,10 @@ class _AccountMainState extends State<AccountMain> {
           });
           responseData = initiateBvnResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
@@ -227,14 +260,18 @@ class _AccountMainState extends State<AccountMain> {
         });
         print('LoadingData: $isLoading');
         print('dataResp: ${authProvider.initiateBvnR.toString()}');
-
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
+      }); responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.of(context).pop();
       });
-      responseMessage('Server Auth Error', Colors.red);
     }
   }
 
@@ -255,8 +292,11 @@ class _AccountMainState extends State<AccountMain> {
           });
           responseData = initiateBvnResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.green);
-          Navigator.pushReplacementNamed(
+          responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
+        await  Navigator.pushReplacementNamed(
               context, AppRouteName.ReviewDetails);
         }
         else{
@@ -265,7 +305,10 @@ class _AccountMainState extends State<AccountMain> {
           });
           responseData = initiateBvnResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
@@ -274,13 +317,19 @@ class _AccountMainState extends State<AccountMain> {
         print('LoadingData: $isLoading');
         print('dataResp: ${authProvider.initiateBvnR.toString()}');
 
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('Server Auth Error', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 

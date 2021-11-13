@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
@@ -12,9 +13,11 @@ import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/customLoader.dart';
 import 'package:quickfund/util/size_config.dart';
+import 'package:quickfund/widget/addQuestions.dart';
 import 'package:quickfund/widget/custom_search.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
+import 'package:quickfund/widget/responseMessage.dart';
 
 class SaveBeneficiary extends StatefulWidget {
   @override
@@ -105,20 +108,41 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
     );
   }
 
-  responseMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        message,
-        style: GoogleFonts.openSans(
-          fontWeight: FontWeight.w400,
-          fontSize: 11,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: color,
-    ));
+
+  void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+    showDialog(context: context,
+        builder: (_) {
+          return ResponseMessage(size: size,
+            subtitle: subtitle,
+            lotteError: lottleError,
+            textColor: textColor,
+            msgTitle: message.toUpperCase(),
+          );
+        }
+    );
   }
 
+  void filterSearchResults(String query) {
+    final postMdl = Provider.of<TransferProvider>(context, listen: false);
+    setState(() {
+      if (query.isNotEmpty) {
+        saveBeneficiaryData = postMdl.saveBeneficiaryData;
+        print('filteredList: ${saveBeneficiaryData.toList()}');
+        saveBeneficiaryData =
+            postMdl.saveBeneficiaryData
+                .where((i) =>
+                i.name.toLowerCase().contains(query.toLowerCase()))
+                .toList();
+      } else {
+        saveBeneficiaryData =
+            saveBeneficiaryData = postMdl.saveBeneficiaryData;
+      }
+      print('filter ${saveBeneficiaryData.toString()}');
+    });
+  }
   void deleteBeneficiary(DeleteSaveBeneficiary deleteSaveBeneficiary,
       TransferProvider transferProvider) async {
     setState(() {
@@ -135,28 +159,38 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
             responseData = changePinResp.message;
           });
           print('responseMessage : $responseData');
-          responseMessage('${changePinResp.message}', Colors.green);
+          responseMessage('Success', '${changePinResp.message}', 'assets/lf30_editor_23pqj4lo.json', Colors.green);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
           final postMdl = Provider.of<TransferProvider>(context, listen: false);
           postMdl.getAllSavedBeneficiary();
           setState(() {
             saveBeneficiaryData = postMdl.saveBeneficiaryData;
           });
         } else {
-          print('responseData: $responseData');
-          responseMessage('${changePinResp.message}', Colors.red);
+          responseMessage('Error', '${changePinResp.message}', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
           isLoading = false;
         });
-        print('responseMessage : ${changePinResp.message}');
-        responseMessage('${changePinResp.message}', Colors.red);
+        responseMessage('Error', '${changePinResp.message}', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -182,8 +216,7 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                   child: CustomAppBar(
                     onTap: () {
                       //onBackPress();
-                      Navigator.pushReplacementNamed(
-                          context, AppRouteName.DASHBOARD);
+                      Navigator.pop(context);
                     },
                     pageTitle: 'Saved Beneficiary',
                   ),
@@ -212,7 +245,7 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                         SizedBox(
                           height: size.height * 0.03,
                         ),
-                        Expanded(
+                        saveBeneficiaryData.isEmpty ? Container() : Expanded(
                           flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -220,7 +253,9 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                               searchController: searchController,
                               onSubmitted: (val) {},
                               onEditingComplete: () {},
-                              onChanged: (val) {},
+                              onChanged: (val) {
+                                filterSearchResults(val);
+                              },
                               onEditing: (val) {},
                             ),
                           ),
@@ -233,7 +268,20 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                                 hasScrollBody: false,
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 18.0),
-                                  child: Column(
+                                  child:saveBeneficiaryData == null
+                                      ? Center(
+                                      child: SpinKitFadingCircle(
+                                          size: 20,
+                                          itemBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                              ),
+                                            );
+                                          }))
+                                      : saveBeneficiaryData.isNotEmpty ? Column(
                                       children: saveBeneficiaryData
                                           .asMap()
                                           .entries
@@ -259,7 +307,10 @@ class _SaveBeneficiaryState extends State<SaveBeneficiary> {
                                                   title: '???');
                                             },
                                           ))
-                                          .toList()),
+                                          .toList()) : NoActivity(
+                                    tag:
+                                    'OH No Saved Beneficiary...',
+                                  ),
                                 ),
                               ),
                             ],

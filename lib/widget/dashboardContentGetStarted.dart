@@ -14,8 +14,8 @@ class DashBoardGetStartedComponent extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Text(
           'Get Started',
-          style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w500,
+          style: GoogleFonts.nunito(
+              fontWeight: FontWeight.w600,
               fontSize: 13,
               color: Colors.black),
         ),

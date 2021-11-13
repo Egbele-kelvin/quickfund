@@ -21,6 +21,7 @@ import 'package:quickfund/widget/custom_gethelp_item_ui.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:quickfund/widget/form_error.dart';
+import 'package:quickfund/widget/responseMessage.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
 
 class AirtimeUI extends StatefulWidget {
@@ -70,20 +71,21 @@ class _AirtimeUIState extends State<AirtimeUI> {
     super.initState();
   }
 
-  responseMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 5),
-      padding: EdgeInsets.symmetric(vertical: 30),
-      content: Text(
-        message,
-        style: GoogleFonts.openSans(
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: color,
-    ));
+
+  void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+    showDialog(context: context,
+        builder: (_) {
+          return ResponseMessage(size: size,
+            subtitle: subtitle,
+            lotteError: lottleError,
+            textColor: textColor,
+            msgTitle: message.toUpperCase(),
+          );
+        }
+    );
   }
 
   parseBillerData(BillsProvider billsProvider) {
@@ -112,14 +114,23 @@ class _AirtimeUIState extends State<AirtimeUI> {
             currentView = 1;
           });
         } else {
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
-        responseMessage('$responseData', Colors.red);
+        responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       print('Catch this $e');
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
     return null;
   }
@@ -151,14 +162,20 @@ class _AirtimeUIState extends State<AirtimeUI> {
           });
           responseData = changePinResp.message;
           print('responseMessage : $responseData');
-          responseMessage('$responseData', Colors.red);
+          responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '$responseData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 

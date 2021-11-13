@@ -199,7 +199,7 @@ class _MoreState extends State<More> {
                         size: size,
                         onTap: () {
                           print('click');
-                          Navigator.popAndPushNamed(
+                          Navigator.pushNamed(
                               context, AppRouteName.SaveBeneficiary);
                         },
                         iconData: Icons.swap_horiz_rounded,

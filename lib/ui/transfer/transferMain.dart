@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/NameEnquiry.dart';
@@ -27,6 +28,7 @@ import 'package:quickfund/widget/custom_search.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
 import 'package:quickfund/widget/form_error.dart';
+import 'package:quickfund/widget/responseMessage.dart';
 import 'package:quickfund/widget/save_beneficiary_widget.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
 
@@ -71,18 +73,20 @@ class _TransferComponentState extends State<TransferComponent> {
   String initialAmount, pin;
   int currentView = 0;
 
-  responseMessage(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        message,
-        style: GoogleFonts.openSans(
-          fontWeight: FontWeight.w400,
-          fontSize: 11,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: color,
-    ));
+  void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+    showDialog(context: context,
+        builder: (_) {
+        return ResponseMessage(size: size,
+          subtitle: subtitle,
+          lotteError: lottleError,
+          textColor: textColor,
+          msgTitle: message.toUpperCase(),
+        );
+        }
+    );
   }
 
   parseTransactionDataCheck(TransferProvider transferProvider) {
@@ -93,7 +97,9 @@ class _TransferComponentState extends State<TransferComponent> {
     } catch (e) {
       print('e: $e');
     }
-  }  parseBankCheck(TransferProvider transferProvider) {
+  }
+
+  parseBankCheck(TransferProvider transferProvider) {
     try {
       if (transferProvider.bankData != null) {
         bankData = transferProvider.bankData;
@@ -147,13 +153,19 @@ class _TransferComponentState extends State<TransferComponent> {
           nameEnquiryLoading = false;
         });
         print('responseMessage : $userResultData');
-        responseMessage('$userResultData', Colors.red);
+        responseMessage('Error', '$userResultData', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         nameEnquiryLoading = false;
       });
-      responseMessage('Server Auth Error', Colors.red);
+      responseMessage('Error', '$userResultData', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -195,20 +207,29 @@ class _TransferComponentState extends State<TransferComponent> {
         } else {
           isLoading = false;
           print('responseData: $responseData');
-          responseMessage('${changePinResp.message}', Colors.red);
+          responseMessage('Error', '${changePinResp.message}', 'assets/76705-error-animation.json', Colors.red);
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
         }
       } else {
         setState(() {
           isLoading = false;
         });
         print('responseMessage : ${changePinResp.message}');
-        responseMessage('${changePinResp.message}', Colors.red);
+        responseMessage('Error', '${changePinResp.message}', 'assets/76705-error-animation.json', Colors.red);
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      responseMessage('$responseData', Colors.red);
+      responseMessage('Error', '${ConnectionState.none}', 'assets/76705-error-animation.json', Colors.red);
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -271,9 +292,6 @@ class _TransferComponentState extends State<TransferComponent> {
               children: [
                 CustomDetails(
                   heading: 'List of Bank',
-                  // onTap: () {
-                  //   Navigator.of(context).pop();
-                  // },
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -282,6 +300,7 @@ class _TransferComponentState extends State<TransferComponent> {
                     ? Container(): Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
                   child: SearchBoxWidget(
+                    searchController: searchController,
                     onChanged:(val)=>filterSearchResults(val),
                   ),
                 ),
@@ -332,6 +351,9 @@ class _TransferComponentState extends State<TransferComponent> {
     postMdl.getListOfBanks();
     postMdl.getAllSavedBeneficiary();
     getUserDetails();
+    setState(() {
+      bankData=postMdl.bankData;
+    });
     amountController = TextEditingController();
     amountController.addListener(() {
       final text = amountController.text.toLowerCase();
@@ -357,7 +379,7 @@ class _TransferComponentState extends State<TransferComponent> {
     SizeConfig().init(context);
     return Consumer<TransferProvider>(builder: (context, transferProv, child) {
       parseTransactionDataCheck(transferProv);
-      parseBankCheck(transferProv);
+      // parseBankCheck(transferProv);
       return LoadingOverlay(
         isLoading: isLoading,
         child: Scaffold(
@@ -695,7 +717,7 @@ class _TransferComponentState extends State<TransferComponent> {
                                           fromName: fromName ?? '',
                                           toKyc: toKyc ?? '--------',
                                           toName: userResultData,
-                                          narration: note ?? '-------',
+                                          narration: note.isEmpty ? '-------': note ,
                                           saveBeneficiary: isSaveToBeneficiary??false,
                                           sessionId: isSessionId);
                                       transferFunds(
