@@ -4,11 +4,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/accountDetailsResp.dart';
 import 'package:quickfund/data/model/transactionHistory.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/transferProvider.dart';
 import 'package:quickfund/ui/quickHelp/ui_design/contact_info.dart';
+import 'package:quickfund/ui/signup/account_opening/accountWidget.dart';
+import 'package:quickfund/ui/transfer/transferAccountWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
+import 'package:quickfund/util/custom_textform_field.dart';
 import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/util/size_config.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
@@ -22,14 +27,16 @@ class TransactionUI extends StatefulWidget {
 
 class _TransactionUIState extends State<TransactionUI> {
   TransferProvider _provider;
-
+  AuthProvider _authProvider;
+  List<AccountDatum> accountDetails=[];
+  TextEditingController selectedAccountController = TextEditingController();
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
 
   List<TransactionHistoryDatum> transactionHistoryData = [];
   String userName = 'Bose',
       acctBalance = '239,600',
       toDate = '',
-      from,
+      from,fromName,
       fromDate = '';
   DateTime selectedDate,
       fromDateCal,
@@ -165,10 +172,64 @@ class _TransactionUIState extends State<TransactionUI> {
         });
   }
 
+
+  Future<dynamic> buildShowModalBottomSheetForUserAccountSelect(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          return AccountWidget(
+            widgetIcon: Expanded(
+              flex: 0,
+              child:  Column(
+                  children: accountDetails.asMap().entries.map((e) =>  AccountContainerwIDGET(
+                    onTap:(){
+
+                      selectedAccountController.text='${e.value.customerName.toUpperCase() } \nNGN ${e.value.accountBalance}';
+                      setState(() {
+                        from=e.value.accountNumber;
+                        fromName=e.value.customerName;
+                      });
+                      Navigator.pop(context);
+                    },
+                    accountName: e.value.accountNumber.toUpperCase(),
+                    accountNum: 'NGN ${e.value.accountBalance}',
+                  )).toList()
+
+
+              ),
+            ),
+          );
+        });
+  }
+
   parseTransactionDataCheck(TransferProvider transferProvider) {
     try {
       if (transferProvider.transactionHistoryData != null) {
         transactionHistoryData = transferProvider.transactionHistoryData;
+      }
+    } catch (e) {
+      print('e: $e');
+    }
+  }
+
+  getAccountDetails(AuthProvider authProvider) {
+    try {
+      if (authProvider.accountDetails != null) {
+        accountDetails = authProvider.accountDetails;
+        print('accountDetails: $accountDetails');
+        selectedAccountController.text='${accountDetails[0].accountNumber}  \nNGN ${accountDetails[0].accountBalance}';
       }
     } catch (e) {
       print('e: $e');
@@ -236,6 +297,7 @@ class _TransactionUIState extends State<TransactionUI> {
   void initState() {
     final postMdl = Provider.of<TransferProvider>(context, listen: false);
     postMdl.getAllTransactionHistory();
+    getAccountDetails(_authProvider);
    setState(() {
      transactionHistoryData = postMdl.transactionHistoryData;
    });
@@ -249,9 +311,11 @@ class _TransactionUIState extends State<TransactionUI> {
         .of(context)
         .size;
     SizeConfig().init(context);
-    return Consumer<TransferProvider>(
-        builder: (context, transferProvider, child) {
+    return Consumer2<TransferProvider , AuthProvider>(
+        builder: (context, transferProvider,authProvider, child) {
           _provider = transferProvider;
+          _authProvider=authProvider;
+          getAccountDetails(authProvider);
          // parseTransactionDataCheck(transferProvider);
 
           return
@@ -275,7 +339,7 @@ class _TransactionUIState extends State<TransactionUI> {
                     ),
                   ),
                   Expanded(
-                    flex: 9,
+                    flex: 10,
                     child: Container(
                       //color: Colors.black,
                       decoration: BoxDecoration(
@@ -298,15 +362,30 @@ class _TransactionUIState extends State<TransactionUI> {
                               height: size.height * 0.03,
                             ),
                             Expanded(
-                              flex: 1,
-                              child:transactionHistoryData==null || transactionHistoryData.isEmpty ?Container(): TransactionHistoryDateCalender(
-                                onChange: (val) => filterSearchResults(val),
-                                size: size,
-                                searchController: searchController,
-                                onTap: () {
-                                  searchController.clear();
-                                  showMessage('');
-                                },
+                              flex: 4,
+                              child:Column(
+                                children: [ Padding(
+                                  padding: const EdgeInsets.only(bottom: 15.0, right: 10,left: 10),
+                                  child: RoundedInputField(
+                                    readOnly: true,
+                                    suffixIcon: Icon(Icons.keyboard_arrow_down, color: kPrimaryColor,),
+                                    onTap: ()=>buildShowModalBottomSheetForUserAccountSelect(context, size),
+                                    controller: selectedAccountController,
+                                    inputType: TextInputType.number,
+                                    labelText: 'User Account',
+                                    autoCorrect: true,
+                                  ),
+                                ),
+                                  transactionHistoryData==null || transactionHistoryData.isEmpty ?Container(): TransactionHistoryDateCalender(
+                                    onChange: (val) => filterSearchResults(val),
+                                    size: size,
+                                    searchController: searchController,
+                                    onTap: () {
+                                      searchController.clear();
+                                      showMessage('');
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                             Expanded(
