@@ -8,7 +8,7 @@ import 'package:quickfund/data/repository/repository.dart';
 
 class AuthProvider with ChangeNotifier{
   Repository repository = Repository(networkService: NetworkService());
-  List<AccountDatum> accountDetails;
+  List<AccountDatum> accountDetails=[];
   bool loading = false;
   Map _login;
   Map get login => _login;

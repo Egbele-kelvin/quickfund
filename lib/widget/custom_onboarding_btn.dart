@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickfund/util/constants.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -32,6 +33,32 @@ class CustomButton extends StatelessWidget {
               fontSize: 16,
             ),),
         ),
+      ),
+    );
+  }
+}
+
+
+class DotIndicator extends StatefulWidget {
+  final bool isActive;
+
+  DotIndicator(this.isActive);
+
+  @override
+  _DotIndicatorState createState() => _DotIndicatorState();
+}
+
+class _DotIndicatorState extends State<DotIndicator> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Container(
+        height: 8.0,
+        width: 30.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: widget.isActive ? kPrimaryColor : Colors.grey),
       ),
     );
   }

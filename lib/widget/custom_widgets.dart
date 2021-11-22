@@ -160,15 +160,15 @@ class CustomDetails extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.1),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 22),
         child: Text(
           heading,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.nunito(
               fontSize: 12.2, color: Colors.black, fontWeight: FontWeight.w400),
         ),
       ),
@@ -395,7 +395,7 @@ class CardDetails extends StatelessWidget {
                   Text(
                     acctBalanceII,
                     style: GoogleFonts.nunito(
-                        fontSize: 40,
+                        fontSize: 24,
                         color: Colors.white,
                         fontWeight: FontWeight.w700),
                   ),
@@ -489,6 +489,7 @@ class CustomDashBoardCard extends StatelessWidget {
                     cardIcon,
                     // fit: BoxFit.fill,
                     width: size.width *0.03,
+                   // cacheColorFilter: true,
                     color: imgColor==null ? kPrimaryColor: imgColor,
                   ),
                 )
@@ -926,7 +927,7 @@ class CancelTranasactionProcess extends StatelessWidget {
       onTap: onTap,
       child: Text(
         'Cancel',
-        style: GoogleFonts.roboto(
+        style: GoogleFonts.nunito(
             fontWeight: FontWeight.w400, color: Colors.black, fontSize: 12),
       ),
     );
@@ -946,7 +947,7 @@ class SelectAmountWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Text(
           'Or Select amount',
-          style: GoogleFonts.robotoMono(
+          style: GoogleFonts.nunito(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: Colors.black,

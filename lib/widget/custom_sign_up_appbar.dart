@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             pageTitle,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.nunito(
                 fontWeight: FontWeight.w400, fontSize: 13.0, color: Colors.white),
           ),
         ),

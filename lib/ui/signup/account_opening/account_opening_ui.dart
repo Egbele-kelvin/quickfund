@@ -86,9 +86,10 @@ class _AccountOpeningUIState extends State<AccountOpeningUI> {
           responseMessage('Success', '$responseData', 'assets/lf30_editor_23pqj4lo.json', Colors.green);
           Future.delayed(Duration(seconds: 5), () {
             Navigator.of(context).pop();
+            Navigator.pushReplacementNamed(
+                context, AppRouteName.SecurityQuestionUI);
           });
-          await Navigator.pushReplacementNamed(
-              context, AppRouteName.SecurityQuestionUI);
+
         } else{
           setState(() {
             isLoading=false;

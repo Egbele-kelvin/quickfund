@@ -79,12 +79,12 @@ class RoundedInputField extends StatelessWidget {
       onChanged: onChanged,
       enabled: isEnabled,
       keyboardType: inputType,
-      style: GoogleFonts.roboto(
-          fontSize: 12, color: textColor, fontWeight: FontWeight.w400),
+      style: GoogleFonts.nunito(
+          fontSize: 11, color: textColor, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: GoogleFonts.poppins(
-          fontSize: 12,
+        labelStyle: GoogleFonts.nunito(
+          fontSize: 11,
           fontWeight: FontWeight.w400,
           color: kPrimaryColor,
         ),

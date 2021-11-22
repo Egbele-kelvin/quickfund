@@ -121,10 +121,11 @@ class _AccountMainState extends State<AccountMain> {
           responseMessage('Success', '$responseData', 'assets/lf30_editor_23pqj4lo.json', Colors.green);
           Future.delayed(Duration(seconds: 5), () {
             Navigator.of(context).pop();
+            setState(() {
+              currentView = 2;
+            });
           });
-          setState(() {
-            currentView = 2;
-          });
+
         }
         else{
           setState(() {
@@ -180,11 +181,13 @@ class _AccountMainState extends State<AccountMain> {
           print('responseMessage : $responseData');
           responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
           Future.delayed(Duration(seconds: 5), () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            setState(() {
+              currentView = 3;
+            });
           });
-          setState(() {
-            currentView = 3;
-          });
+
+
         }
         else{
           setState(() {
@@ -238,10 +241,10 @@ class _AccountMainState extends State<AccountMain> {
           print('responseMessage : $responseData');
           responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
           Future.delayed(Duration(seconds: 5), () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(
+                context, AppRouteName.ReviewDetails);
           });
-          Navigator.pushReplacementNamed(
-              context, AppRouteName.ReviewDetails);
         }
         else{
           setState(() {
@@ -294,10 +297,11 @@ class _AccountMainState extends State<AccountMain> {
           print('responseMessage : $responseData');
           responseMessage('Success', '$responseData','assets/lf30_editor_23pqj4lo.json', Colors.green);
           Future.delayed(Duration(seconds: 5), () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(
+                context, AppRouteName.ReviewDetails);
           });
-        await  Navigator.pushReplacementNamed(
-              context, AppRouteName.ReviewDetails);
+
         }
         else{
           setState(() {

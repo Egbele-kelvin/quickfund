@@ -73,3 +73,35 @@ class ProfilePicAndSignature extends StatelessWidget {
     );
   }
 }
+
+
+class AccountContainerwIDGET extends StatelessWidget {
+  const AccountContainerwIDGET({
+    Key key, this.accountName, this.accountNum, this.onTap,
+  }) : super(key: key);
+  final String accountName, accountNum;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20),
+          onTap:onTap,
+          title: Text(accountName, style: GoogleFonts.nunito(
+              fontWeight: FontWeight.w300,
+              fontSize: 12,
+              color: Colors.grey
+          ),),
+          subtitle: Text(accountNum, style: GoogleFonts.nunito(
+              fontSize: 18,
+              color: Colors.black,
+              fontWeight: FontWeight.w600
+          ),),
+        ),
+        Divider(thickness: 0.5,)
+      ],
+    );
+  }
+}

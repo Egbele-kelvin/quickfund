@@ -4,12 +4,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/accountDetailsResp.dart';
 import 'package:quickfund/data/model/billerByIdResp.dart';
 import 'package:quickfund/data/model/billerDataBundle.dart';
 import 'package:quickfund/data/model/listOfCategories.dart';
 import 'package:quickfund/data/model/payBillResp.dart';
 import 'package:quickfund/data/model/payBillsReq.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/billsProvider.dart';
+import 'package:quickfund/ui/signup/account_opening/accountWidget.dart';
+import 'package:quickfund/ui/transfer/transferAccountWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/customLoader.dart';
@@ -36,11 +40,13 @@ class BillMainUI extends StatefulWidget {
 class _BillMainUIState extends State<BillMainUI> {
   List<CategoryData> billerCategory = [];
   List<CategoryByIdData> categoryById = [];
+  String fieldName;
   List<BillerDataBundleDatum> billerDataBundleDatum = [];
   BillsProvider _billsProvider;
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   TextEditingController transactPin;
   TextEditingController otpCode;
+  TextEditingController selectedAccountController = TextEditingController();
   TextEditingController selectBundleController = TextEditingController();
   TextEditingController invisibleAmount = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
@@ -77,9 +83,21 @@ class _BillMainUIState extends State<BillMainUI> {
   int currentView = 1;
   bool isEnabled = false, isAmountZero = false;
   bool showDataplan = false, showPhoneEdit = false;
+  List<AccountDatum> accountDetails=[];
 
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
+
+  getAccountDetails(AuthProvider authProvider) {
+    try {
+      if (authProvider.accountDetails != null) {
+        accountDetails = authProvider.accountDetails;
+        print('accountDetails: $accountDetails');
+      }
+    } catch (e) {
+      print('e: $e');
+    }
+  }
 
   Future<String> openContactBook() async {
     Contact contact = await ContactPicker().selectContact();
@@ -225,6 +243,46 @@ class _BillMainUIState extends State<BillMainUI> {
     }
   }
 
+  Future<dynamic> buildShowModalBottomSheetForUserAccountSelect(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          return AccountWidget(
+            widgetIcon: Expanded(
+              flex: 0,
+              child:  Column(
+                  children: accountDetails.asMap().entries.map((e) =>  AccountContainerwIDGET(
+                    onTap:(){
+
+                      selectedAccountController.text='${e.value.customerName.toUpperCase() } \nNGN ${e.value.accountBalance}';
+                      setState(() {
+                        from=e.value.accountNumber;
+                        fromName=e.value.customerName;
+                      });
+                      Navigator.pop(context);
+                    },
+                    accountName: e.value.accountNumber.toUpperCase(),
+                    accountNum: 'NGN ${e.value.accountBalance}',
+                  )).toList()
+
+
+              ),
+            ),
+          );
+        });
+  }
 
 
   void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
@@ -391,9 +449,10 @@ class _BillMainUIState extends State<BillMainUI> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     var size = MediaQuery.of(context).size;
-    return Consumer<BillsProvider>(builder: (context, provider, child) {
+    return Consumer2<BillsProvider, AuthProvider>(builder: (context, provider,authProvider, child) {
       _billsProvider = provider;
       parseBillerData(provider);
+      getAccountDetails(authProvider);
 
       return LoadingOverlay(
         isLoading: isLoading,
@@ -515,6 +574,7 @@ class _BillMainUIState extends State<BillMainUI> {
                                               print(e.value);
                                               setState(() {
                                                 billerDataPlanID = e.value.id;
+                                                fieldName=e.value.customerField1;
                                                 getDataBundlePlanByID(
                                                     billerDataPlanID);
                                                 // currentView = 3;
@@ -538,10 +598,31 @@ class _BillMainUIState extends State<BillMainUI> {
                                       height: size.height * .03,
                                     ),
                                     RoundedInputField(
+                                      readOnly: true,
+                                      suffixIcon: Icon(Icons.keyboard_arrow_down, color: kPrimaryColor,),
+                                      onTap: ()=>buildShowModalBottomSheetForUserAccountSelect(context, size),
+                                      controller: selectedAccountController,
+                                      inputType: TextInputType.number,
+                                      labelText: 'User Account',
+                                      autoCorrect: true,
+                                      validateForm: (value) {
+                                        if (value.isEmpty) {
+                                          addError(
+                                              error:
+                                              'User Account is required');
+                                          return "";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: size.height * .03,
+                                    ),
+                                    RoundedInputField(
                                       controller: phoneNumberController,
                                       inputType: TextInputType.number,
                                       maxLen: 11,
-                                      labelText: 'Subscriber Number',
+                                      labelText: fieldName,
                                       autoCorrect: true,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
@@ -671,6 +752,8 @@ class _BillMainUIState extends State<BillMainUI> {
                                       _formKey.currentState.save();
                                       KeyboardUtil.hideKeyboard(context);
                                       var payBillParams = PayBillsReq(
+                                          accountName: fromName,
+                                          accountNumber: from,
                                           customerId:
                                               phoneNumberController.text,
                                           bundleName: bundleName,

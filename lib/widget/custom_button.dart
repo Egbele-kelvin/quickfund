@@ -33,7 +33,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             btnTitle,
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.nunito(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: Colors.white,
@@ -70,7 +70,7 @@ class CustomSignInButton extends StatelessWidget {
         child: Center(
           child: Text(
             btnTitle,
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.nunito(
               fontSize: 16,
               fontWeight: FontWeight.w400,
               color: Colors.white,
@@ -110,7 +110,7 @@ class CalenderPickWidget extends StatelessWidget {
           children: [
             Text(
               titleMessage,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.nunito(
                 color: Colors.black,
                 fontWeight: FontWeight.w400,
                 fontSize: 11,

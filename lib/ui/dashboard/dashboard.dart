@@ -1,10 +1,9 @@
 import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:quickfund/util/constants.dart';
-
 import 'bill/bill_main.dart';
 import 'dashboardMain.dart';
 import 'more/more.dart';
@@ -21,6 +20,19 @@ class _DashboardMainState extends State<DashboardMain> {
   String userName = 'Bose', acctBalance = '239,600';
 
   String tfDate = DateFormat.yMMMd().format(DateTime.now());
+  List<Widget> _widgetOptions = <Widget>[
+    DashBoardMain(),
+    BillMainUI(),
+    TransactionUI(),
+    More()
+    // FundAccountUI()
+  ];
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -29,58 +41,76 @@ class _DashboardMainState extends State<DashboardMain> {
     super.initState();
   }
   int _selectedIndex = 0;
+
+  showAlertDialog({
+    @required BuildContext context,
+    @required String title,
+    @required String content,
+    String cancelActionText,
+    @required String defaultActionText,
+  }) async {
+    if (!Platform.isIOS) {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            if (cancelActionText != null)
+              FlatButton(
+                child: Text(cancelActionText),
+                textColor: Colors.blue,
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            FlatButton(
+                child: Text(defaultActionText),
+                textColor: Colors.red,
+                onPressed:  () => exit(0)),
+          ],
+        ),
+      );
+    }
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          if (cancelActionText != null)
+            CupertinoDialogAction(
+              child: Text(cancelActionText),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+          CupertinoDialogAction(
+            textStyle: TextStyle(color: Colors.red),
+            child: Text(defaultActionText),
+            onPressed: () => exit(0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _onBackPress(BuildContext context){
+    showAlertDialog(
+        content: 'Do you want to exit an App',
+        context: context,
+        defaultActionText: 'Yes',
+        cancelActionText: 'No',
+        title: 'Are you sure?');
+  }
   @override
   Widget build(BuildContext context) {
-
-     List<Widget> _widgetOptions = <Widget>[
-
-       DashBoardMain(),
-       BillMainUI(),
-       TransactionUI(),
-       More()
-      // FundAccountUI()
-
-
-    ];
-
-    void onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-
-
-     Future<bool> _onWillPop() {
-       return showDialog(
-         context: context,
-         builder: (context) => AlertDialog(
-           title: Text('Are you sure?'),
-           content: Text('Do you want to exit an App'),
-           actions: <Widget>[
-             FlatButton(
-               onPressed: () => Navigator.of(context).pop(false),
-               child: Text('No'),
-             ),
-             FlatButton(
-               onPressed: () => exit(0),
-               /*Navigator.of(context).pop(true)*/
-               child: Text('Yes'),
-             ),
-           ],
-         ),
-       ) ??
-           false;
-     }
     return WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop:()=> _onBackPress(context),
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          //  backgroundColor: kPrimaryColor,
           body: _widgetOptions.elementAt(_selectedIndex),
           bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15), topLeft: Radius.circular(15)),
+                    topRight: Radius.circular(15),
+                    topLeft: Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
                       color: Colors.black38.withOpacity(0.08),

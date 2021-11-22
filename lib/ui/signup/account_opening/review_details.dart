@@ -40,6 +40,10 @@ class ReviewDetails extends StatefulWidget {
 class _ReviewDetailsState extends State<ReviewDetails> {
   int currentView = 0;
   TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController middleController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   final List<String> errors = [];
   final ImagePicker picker = ImagePicker();
@@ -49,6 +53,17 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   final _formKey = GlobalKey<FormState>();
   bool _passwordVisible, _confirPasswordVisible, readOnly = true;
 
+  @override
+  void dispose() {
+    dateOfBirth.clear();
+    firstNameController.clear();
+    middleController.clear();
+    lastNameController.clear();
+    phoneNumberController.clear();
+
+    super.dispose();
+  }
+
   void addError({String error}) {
     if (!errors.contains(error))
       setState(() {
@@ -57,11 +72,16 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   }
 
   void checkIfFLMDNareAllNull() {
-    if (firstName == null &&
-        lastName == null &&
-        otherNames == null) {
+    if (firstNameController.text.isEmpty &&
+        lastNameController.text.isEmpty &&
+        middleController.text.isEmpty &&
+        phoneNumberController.text.isEmpty) {
       setState(() {
         readOnly = false;
+        firstNameController.clear();
+        lastNameController.clear();
+        middleController.clear();
+        phoneNumberController.clear();
       });
     }
   }
@@ -72,6 +92,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
         errors.remove(error);
       });
   }
+
   _selectDateOfBirth(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
     assert(theme.platform != null);
@@ -86,6 +107,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
         return buildCupertinoDatePickerForDateOfBirth(context);
     }
   }
+
   buildCupertinoDatePickerForDateOfBirth(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -104,6 +126,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
           );
         });
   }
+
   buildMaterialDatePickerForDateOfBirth(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       cancelText: 'Cancel',
@@ -124,7 +147,6 @@ class _ReviewDetailsState extends State<ReviewDetails> {
         print('issueDate : ${dateOfBirth.text}');
       });
   }
-
 
   List<String> genderData = ['Male', 'Female', 'Neuter'];
   String title = 'Title',
@@ -157,9 +179,9 @@ class _ReviewDetailsState extends State<ReviewDetails> {
 
   void getImei() async {
     final deviceInfo = DeviceInfoPlugin();
-    phoneNumber =
+    phoneNumberController.text =
         await _sharedPreferenceQS.getSharedPrefs(String, 'customPhoneNumber');
-    print('username: $phoneNumber');
+    print('username: ${phoneNumberController.text}');
     if (UniversalPlatform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
       deviceID = androidInfo.androidId;
@@ -179,10 +201,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
 
   @override
   void initState() {
-    final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context, listen: false);
+    final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context,
+        listen: false);
     postMdl.getListOfState();
     setState(() {
-
       stateList = postMdl.stateList;
       print('stateListData: ${postMdl.stateList}');
       print('stateListData: $stateList');
@@ -249,34 +271,32 @@ class _ReviewDetailsState extends State<ReviewDetails> {
     }
   }
 
-
   void filterSearchResults(String query) {
-    final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context, listen: false);
+    final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context,
+        listen: false);
     //setState(() {
-      if (query.isNotEmpty) {
-        stateList =  postMdl.stateList;
-        print('filteredList: ${stateList.toList()}');
-        stateList= postMdl.stateList
-            .where((i) => i.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      } else {
-        stateList =
-            stateList = postMdl.stateList;
-      }
-      print('filter ${stateList.toString()}');
+    if (query.isNotEmpty) {
+      stateList = postMdl.stateList;
+      print('filteredList: ${stateList.toList()}');
+      stateList = postMdl.stateList
+          .where((i) => i.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else {
+      stateList = stateList = postMdl.stateList;
+    }
+    print('filter ${stateList.toString()}');
     //});
   }
-
 
   parseAuthData(authProvider) {
     try {
       if (authProvider.verifyBvnOtp != null) {
         final userData = VerifyBvnResp.fromJson(authProvider.verifyBvnOtp);
-        firstName = userData.data.firstName.toLowerCase();
-        lastName = userData.data.lastName.toLowerCase();
-        phoneNumber = userData.data.phoneNumber.toLowerCase();
-        otherNames = userData.data.otherNames.toLowerCase();
-        dateOfBirth.text  = userData.data.dob.toLowerCase();
+        firstNameController.text = userData.data.firstName.toLowerCase();
+        lastNameController.text = userData.data.lastName.toLowerCase();
+        phoneNumberController.text = userData.data.phoneNumber.toLowerCase();
+        middleController.text = userData.data.otherNames.toLowerCase();
+        dateOfBirth.text = userData.data.dob.toLowerCase();
         bvn = userData.data.bvn.toLowerCase();
       }
     } catch (e) {
@@ -285,10 +305,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   }
 
   _imgFromCamera() async {
-    PickedFile image = await picker.getImage(
-        source: ImageSource.camera, imageQuality: 50);
+    PickedFile image =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
-      _image =   File(image.path);
+      _image = File(image.path);
       print(_image);
       var bytes = File(image.path).readAsBytesSync();
       profilePic = base64.encode(bytes);
@@ -297,24 +317,23 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   }
 
   _imageFromGallery() async {
-    PickedFile image = await picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50);
+    PickedFile image =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
-
-      _image =   File(image.path);
+      _image = File(image.path);
       print('_image; $_image');
 
-     var imageBytes = File(image.path).readAsBytesSync();
+      var imageBytes = File(image.path).readAsBytesSync();
       profilePic = base64.encode(imageBytes);
       print('profile pic ------ $profilePic \n\n');
     });
   }
 
   _imgFromCameraForSignature() async {
-    PickedFile image = await picker.getImage(
-        source: ImageSource.camera, imageQuality: 50);
+    PickedFile image =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
-      _signImage =   File(image.path);
+      _signImage = File(image.path);
       print(_signImage);
       var bytes = File(image.path).readAsBytesSync();
       signature = base64.encode(bytes);
@@ -323,10 +342,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   }
 
   _imageFromGalleryForSignature() async {
-    PickedFile image = await picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50);
+    PickedFile image =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
-      _signImage =   File(image.path);
+      _signImage = File(image.path);
       print(_signImage);
       var bytes = File(image.path).readAsBytesSync();
       signature = base64.encode(bytes);
@@ -553,52 +572,55 @@ class _ReviewDetailsState extends State<ReviewDetails> {
           ),
         ),
         enableDrag: true,
-
         builder: (context) {
-          final postMdl = Provider.of<SetupAccountViaBVNandViaPhoneProvider>(context, listen: false);
-          postMdl.getListOfState();
           return Container(
-            height: size.height *0.8,
+            height: size.height * 0.8,
             child: Column(
               children: [
-                postMdl.stateList.isEmpty
-                    ?Container():    CustomDetails(
-                  heading: 'List Of State',
-                ),
+                stateList.isEmpty
+                    ? Container()
+                    : CustomDetails(
+                        heading: 'List Of State',
+                      ),
                 stateList == null
-                    ? Container(): Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
-                  child: SearchBoxWidget(
-                    searchController: searchController,
-                    onChanged:(val)=>filterSearchResults(val),
-                  ),
-                ),
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18.0, vertical: 10),
+                        child: SearchBoxWidget(
+                          searchController: searchController,
+                          onChanged: (val) => filterSearchResults(val),
+                        ),
+                      ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 Expanded(
-                    child:  postMdl.stateList.isEmpty
+                    child: stateList.isEmpty
                         ? Center(
-                      child: Text('List of State is not Available at the moment!' , textAlign: TextAlign.center, style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 21,
-                          color: Colors.black
-                      ),),
-                    )
+                            child: Text(
+                              'List of State is not Available at the moment!',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 21,
+                                  color: Colors.black),
+                            ),
+                          )
                         : ListView(
-                        shrinkWrap: true,
-                        children:  postMdl.stateList
-                            .asMap()
-                            .entries
-                            .map((e) => CustomItemWidget(
-                            onTap: () {
-                              setState(() {
-                                state = e.value.name;
-                              });
-                              Navigator.of(context).pop();
-                            },
-                            descriptionItem: e.value.name))
-                            .toList()))
+                            shrinkWrap: true,
+                            children: stateList
+                                .asMap()
+                                .entries
+                                .map((e) => CustomItemWidget(
+                                    onTap: () {
+                                      setState(() {
+                                        state = e.value.name;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    descriptionItem: e.value.name))
+                                .toList()))
               ],
             ),
           );
@@ -623,8 +645,6 @@ class _ReviewDetailsState extends State<ReviewDetails> {
 
   @override
   Widget build(BuildContext context) {
-    //print('stateListData: $stateList');
-    checkIfFLMDNareAllNull();
     var size = MediaQuery.of(context).size;
     SizeConfig().init(context);
     return Consumer<SetupAccountViaBVNandViaPhoneProvider>(
@@ -696,47 +716,23 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                       height: size.height * 0.02,
                                     ),
                                     RoundedInputField(
-                                      readOnly: readOnly,
-                                      onSaved: (newValue) =>
-                                          firstName = newValue,
-                                      customTextHintStyle: GoogleFonts.lato(
-                                          fontSize: 12,
-                                          color: firstName == null
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.w400),
+                                      readOnly: firstNameController.text.isEmpty
+                                          ? false
+                                          : readOnly,
+                                      controller: firstNameController,
                                       inputType: TextInputType.text,
                                       labelText: 'First Name',
-                                      hintText:
-                                          firstName == null ? '' : '$firstName',
                                       autoCorrect: true,
-                                      //  hasFocus:firstName == null ? NotAlwaysDisabledFocusNode() :  AlwaysDisabledFocusNode(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          firstName = val;
-                                        });
-                                      },
                                     ),
                                     SizedBox(
                                       height: size.height * 0.02,
                                     ),
                                     RoundedInputField(
                                       readOnly: readOnly,
-                                      customTextHintStyle: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          color: otherNames == null
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                      onSaved: (newValue) =>
-                                          otherNames = newValue,
+                                      controller: middleController,
                                       inputType: TextInputType.text,
                                       labelText: 'Middle Name',
-                                      hintText: otherNames == null
-                                          ? ''
-                                          : '$otherNames',
                                       autoCorrect: true,
-                                      //hasFocus:otherNames==null ? NotAlwaysDisabledFocusNode() :  AlwaysDisabledFocusNode(),
                                       onChanged: (val) {
                                         setState(() {
                                           otherNames = val;
@@ -748,18 +744,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     ),
                                     RoundedInputField(
                                       readOnly: readOnly,
-                                      customTextHintStyle: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                      onSaved: (newValue) =>
-                                          lastName = newValue,
+                                      controller: lastNameController,
                                       inputType: TextInputType.text,
                                       labelText: 'Last Name',
-                                      hintText:
-                                          lastName == null ? '' : '$lastName',
                                       autoCorrect: true,
-                                      //hasFocus:lastName==null ?  NotAlwaysDisabledFocusNode() : AlwaysDisabledFocusNode(),
                                       onChanged: (val) {
                                         setState(() {
                                           lastName = val;
@@ -789,12 +777,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                       //hasFocus: AlwaysDisabledFocusNode(),
                                       suffixIcon: Icon(
                                         Icons.calendar_today_outlined,
-                                        color: Colors.grey.withOpacity(
-                                            0.5),
+                                        color: Colors.grey.withOpacity(0.5),
                                         size: 20,
                                       ),
-                                      inputType:
-                                      TextInputType.datetime,
+                                      inputType: TextInputType.datetime,
                                       labelText: 'Birth Date',
                                       hintText: dob == null
                                           ? 'e.g 11-june-1997'
@@ -855,26 +841,12 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                       height: size.height * 0.02,
                                     ),
                                     RoundedInputField(
+                                      controller: phoneNumberController,
                                       readOnly: true,
-                                      customTextHintStyle: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                      onSaved: (newValue) =>
-                                          phoneNumber = newValue,
                                       inputType: TextInputType.number,
                                       labelText: 'Phone Number',
                                       maxLen: 11,
-                                      hintText: phoneNumber == null
-                                          ? ''
-                                          : '$phoneNumber',
                                       autoCorrect: true,
-                                      onChanged: (val) {
-                                        setState(() {
-                                          phoneNumber = val;
-                                        });
-                                      },
-                                      // hasFocus: phoneNumber==null ?  NotAlwaysDisabledFocusNode() : AlwaysDisabledFocusNode(),
                                     ),
                                     SizedBox(
                                       height: size.height * 0.02,
@@ -1098,14 +1070,18 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                           KeyboardUtil.hideKeyboard(context);
                                           var accountCreation =
                                               CreateAccountBvn(
-                                                  phone: phoneNumber,
+                                                  phone: phoneNumberController
+                                                      .text,
                                                   email: email,
                                                   bvn: bvn == null ? '' : bvn,
                                                   password: password,
                                                   state: state,
-                                                  middleName: otherNames,
-                                                  lastName: lastName,
-                                                  firstName: firstName,
+                                                  middleName:
+                                                      middleController.text,
+                                                  lastName:
+                                                      lastNameController.text,
+                                                  firstName:
+                                                      firstNameController.text,
                                                   dob: dateOfBirth.text,
                                                   gender: gender,
                                                   title: title,

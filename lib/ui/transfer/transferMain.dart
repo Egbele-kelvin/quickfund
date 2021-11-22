@@ -8,13 +8,16 @@ import 'package:lottie/lottie.dart';
 import 'package:money2/money2.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/NameEnquiry.dart';
+import 'package:quickfund/data/model/accountDetailsResp.dart';
 import 'package:quickfund/data/model/listOfBanks.dart';
 import 'package:quickfund/data/model/nameEnquiryResp.dart';
 import 'package:quickfund/data/model/saveBeneficiaryResp.dart';
 import 'package:quickfund/data/model/transferFundsReq.dart';
 import 'package:quickfund/data/model/transfersResp.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/transferProvider.dart';
 import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
+import 'package:quickfund/ui/signup/account_opening/accountWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/customLoader.dart';
@@ -32,6 +35,8 @@ import 'package:quickfund/widget/responseMessage.dart';
 import 'package:quickfund/widget/save_beneficiary_widget.dart';
 import 'package:quickfund/widget/transactionPinUI.dart';
 
+import 'transferAccountWidget.dart';
+
 class TransferComponent extends StatefulWidget {
   const TransferComponent({Key key}) : super(key: key);
 
@@ -42,6 +47,7 @@ class TransferComponent extends StatefulWidget {
 class _TransferComponentState extends State<TransferComponent> {
   bool _isExpanded = false;
   TextEditingController accountNameData = TextEditingController();
+  TextEditingController selectedAccountController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   TextEditingController accountNumData = TextEditingController();
   TextEditingController amountController = TextEditingController();
@@ -72,6 +78,19 @@ class _TransferComponentState extends State<TransferComponent> {
       responseData = '';
   String initialAmount, pin;
   int currentView = 0;
+  List<AccountDatum> accountDetails=[];
+  String  accountNumber, balance;
+
+  getAccountDetails(AuthProvider authProvider) {
+    try {
+      if (authProvider.accountDetails != null) {
+        accountDetails = authProvider.accountDetails;
+        print('accountDetails: $accountDetails');
+      }
+    } catch (e) {
+      print('e: $e');
+    }
+  }
 
   void responseMessage(String message ,subtitle,lottleError , Color textColor ) {
     var size = MediaQuery
@@ -103,18 +122,11 @@ class _TransferComponentState extends State<TransferComponent> {
     try {
       if (transferProvider.bankData != null) {
         bankData = transferProvider.bankData;
+        print('parseBankCheck: $bankData');
       }
     } catch (e) {
       print('e: $e');
     }
-  }
-
-  getUserDetails() async {
-    fromName =
-        await _sharedPreferenceQS.getSharedPrefs(String, 'customerName') ?? '';
-    print('fromName: $fromName');
-    from = await _sharedPreferenceQS.getSharedPrefs(String, 'accountNum') ?? '';
-    print('from: $from');
   }
 
   void nameEnquiry(
@@ -139,14 +151,6 @@ class _TransferComponentState extends State<TransferComponent> {
           toKyc = changePinResp.data.kyc;
 
           print('responseMessage : $userResultData');
-          fromName = await _sharedPreferenceQS.getSharedPrefs(
-                  String, 'customerName') ??
-              '';
-          print('fromName: $fromName');
-          from =
-              await _sharedPreferenceQS.getSharedPrefs(String, 'accountNum') ??
-                  '';
-          print('from: $from');
         }
       } else {
         setState(() {
@@ -290,13 +294,14 @@ class _TransferComponentState extends State<TransferComponent> {
             height: size.height*0.8,
             child: Column(
               children: [
-                CustomDetails(
+                bankData == null || bankData.isEmpty
+                    ? Container():  CustomDetails(
                   heading: 'List of Bank',
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
-                bankData == null
+                bankData == null || bankData.isEmpty
                     ? Container(): Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
                   child: SearchBoxWidget(
@@ -334,15 +339,57 @@ class _TransferComponentState extends State<TransferComponent> {
                                       ))
                                   .toList(),
                             )
-                          : NoActivity(),
+                          : NoActivity(
+                    tag: 'No Bank Provided yet!',
+                  ),
                 ),
               ],
             ),
           );
         });
   }
+  Future<dynamic> buildShowModalBottomSheetForUserAccountSelect(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          return AccountWidget(
+            widgetIcon: Expanded(
+              flex: 0,
+              child:  Column(
+                children: accountDetails.asMap().entries.map((e) =>  AccountContainerwIDGET(
+                  onTap:(){
 
-  List<BankData> bankData = [];
+                    selectedAccountController.text='${e.value.customerName.toUpperCase() } \nNGN ${e.value.accountBalance}';
+                    setState(() {
+                      from=e.value.accountNumber;
+                      fromName=e.value.customerName;
+                    });
+                    Navigator.pop(context);
+                  },
+                  accountName: e.value.accountNumber.toUpperCase(),
+                  accountNum: 'NGN ${e.value.accountBalance}',
+                )).toList()
+
+
+              ),
+            ),
+          );
+        });
+  }
+
+  List<BankData> bankData;
   List<SaveBeneficiaryData> saveBeneficiaryData = [];
 
   @override
@@ -350,9 +397,11 @@ class _TransferComponentState extends State<TransferComponent> {
     final postMdl = Provider.of<TransferProvider>(context, listen: false);
     postMdl.getListOfBanks();
     postMdl.getAllSavedBeneficiary();
-    getUserDetails();
+    final bankAccountData = Provider.of<AuthProvider>(context, listen: false);
+    bankAccountData.getAccount();
     setState(() {
       bankData=postMdl.bankData;
+      print ('bankData: $bankData');
     });
     amountController = TextEditingController();
     amountController.addListener(() {
@@ -377,9 +426,10 @@ class _TransferComponentState extends State<TransferComponent> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     SizeConfig().init(context);
-    return Consumer<TransferProvider>(builder: (context, transferProv, child) {
+    return Consumer2<TransferProvider , AuthProvider>(builder: (context ,transferProv, authProvider, child) {
       parseTransactionDataCheck(transferProv);
-      // parseBankCheck(transferProv);
+      getAccountDetails(authProvider);
+      parseBankCheck(transferProv);
       return LoadingOverlay(
         isLoading: isLoading,
         child: Scaffold(
@@ -443,7 +493,7 @@ class _TransferComponentState extends State<TransferComponent> {
                                                 .entries
                                                 .map((e) => Padding(
                                                       padding:
-                                                          const EdgeInsets
+                                                           EdgeInsets
                                                               .all(8.0),
                                                       child: InkResponse(
                                                         onTap: () {
@@ -517,6 +567,27 @@ class _TransferComponentState extends State<TransferComponent> {
                                       children: [
                                         Column(children: [
                                           RoundedInputField(
+                                            readOnly: true,
+                                            suffixIcon: Icon(Icons.keyboard_arrow_down, color: kPrimaryColor,),
+                                            onTap: ()=>buildShowModalBottomSheetForUserAccountSelect(context, size),
+                                            controller: selectedAccountController,
+                                            inputType: TextInputType.number,
+                                            labelText: 'User Account',
+                                            autoCorrect: true,
+                                            validateForm: (value) {
+                                              if (value.isEmpty) {
+                                                addError(
+                                                    error:
+                                                        'User Account is required');
+                                                return "";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                          RoundedInputField(
                                             //maxLen: 7,
                                            // controller: amountController,
                                             // onSaved: (newValue) => bvn = newValue,
@@ -533,7 +604,6 @@ class _TransferComponentState extends State<TransferComponent> {
                                               }
                                               return null;
                                             },
-
                                             validateForm: (value) {
                                               if (value.isEmpty) {
                                                 addError(

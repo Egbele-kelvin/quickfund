@@ -299,7 +299,7 @@ class _TransactionUIState extends State<TransactionUI> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: TransactionHistoryDateCalender(
+                              child:transactionHistoryData==null || transactionHistoryData.isEmpty ?Container(): TransactionHistoryDateCalender(
                                 onChange: (val) => filterSearchResults(val),
                                 size: size,
                                 searchController: searchController,

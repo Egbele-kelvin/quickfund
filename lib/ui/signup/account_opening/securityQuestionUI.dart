@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/createAccountBvnResp.dart';
+import 'package:quickfund/data/model/listOfSecurityQuestionResp.dart';
 import 'package:quickfund/data/model/otpReq.dart';
 import 'package:quickfund/data/model/otpResp.dart';
 import 'package:quickfund/data/model/securityQuestionReq.dart';
@@ -38,18 +39,11 @@ class _SecurityQuestionUIState extends State<SecurityQuestionUI> {
   bool _passwordVisible, _confirPasswordVisible;
   bool showDataplan = false, showPhoneEdit = false;
   TextEditingController transactPin=TextEditingController();
-  final question1Controller=TextEditingController();
-  final question2Controller=TextEditingController();
+  TextEditingController question1Controller=TextEditingController();
+  TextEditingController question2Controller=TextEditingController();
 bool question1=true , question2=true;
   String _pin,userID, answerToSecurityQuestion , answerToSecurityQuestion1,answerToSecurityQuestion2;
-  List<String> securityQuestion = [
-    AppStrings.SecurityQuestionI,
-    AppStrings.SecurityQuestionII,
-    AppStrings.SecurityQuestionIII,
-    AppStrings.SecurityQuestionIV,
-    AppStrings.SecurityQuestionV,
-    AppStrings.SecurityQuestionVI
-  ];
+  List<ListedQuestionData> securityQuestion = [];
   String gender, maritalStatus, stateOO;
   final _formKey = GlobalKey<FormState>();
   String email;
@@ -221,8 +215,8 @@ bool question1=true , question2=true;
                       SecurityQuestionWidgetQuest(
                         onTap: (){
                          setState(() {
-                           print('qst1 : $qst1');
-                           qst1=answerToSecurityQuestion;
+                           question1Controller.text=answerToSecurityQuestion;
+                           print('question1Controller : ${question1Controller.text}');
                          });
                           Navigator.pop(context);},
                         onChanged: (val){
@@ -246,10 +240,10 @@ bool question1=true , question2=true;
                             padding: const EdgeInsets.symmetric(horizontal: 18.0 , vertical: 10),
                             child:
                             CustomListTile(
-                              title: e.value,
+                              title: e.value.question,
                               onTap: (){
                                 setState(() {
-                                  qst1 = e.value;
+                                  question1Controller.text = e.value.question;
                                 });
                                 Navigator.pop(context);
                               },
@@ -300,8 +294,9 @@ bool question1=true , question2=true;
                       SecurityQuestionWidgetQuest(
                         onTap: (){
                          setState(() {
-                           print('qst2 : $qst2');
-                           qst2=answerToSecurityQuestion;
+
+                           question2Controller.text=answerToSecurityQuestion;
+                           print('question2Controller : ${question2Controller.text}');
                          });
                           Navigator.pop(context);},
                         onChanged: (val){
@@ -317,7 +312,9 @@ bool question1=true , question2=true;
                       Expanded(flex:2, child:   Container(
 
                         height:size.height *0.5,
-                        child: ListView(
+                        child: securityQuestion.isEmpty ||securityQuestion==null ? NoActivity(
+                          tag: 'OH No Security Question yet!',
+                        ): ListView(
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -327,10 +324,10 @@ bool question1=true , question2=true;
                             Column(
                               children: [
                                 CustomListTile(
-                                  title: e.value,
+                                  title: e.value.question,
                                   onTap: (){
                                     setState(() {
-                                      qst2 = e.value;
+                                      question2Controller.text = e.value.question;
                                     });
                                     Navigator.pop(context);
                                   },
@@ -369,6 +366,12 @@ bool question1=true , question2=true;
 
   @override
   void initState() {
+    final postMdl =
+    Provider.of<SecurityQuestionProvider>(context, listen: false);
+    postMdl.getListOfSecurityQuestion();
+    setState(() {
+      securityQuestion = postMdl.data;
+    });
   _passwordVisible = true;
   _confirPasswordVisible = true;
     super.initState();
@@ -436,11 +439,6 @@ bool question1=true , question2=true;
                             readOnly: question1,
                             inputType: TextInputType.text,
                             labelText: 'Question One',
-                            hintText: qst1,
-                            customTextHintStyle: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400),
                             autoCorrect: true,
                           ),
                           SizedBox(
@@ -482,7 +480,7 @@ bool question1=true , question2=true;
                           RoundedInputField(
                             controller: question2Controller,
                             onTap: (){buildShowModalBottomSheetForUserT(context, size);},
-                            readOnly: question1,
+                            readOnly: question2,
                             inputType: TextInputType.text,
                             labelText: 'Question Two',
                             hintText: qst2,

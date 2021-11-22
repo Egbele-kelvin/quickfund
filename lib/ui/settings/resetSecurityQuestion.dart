@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quickfund/data/model/listOfSecurityQuestionResp.dart';
 import 'package:quickfund/data/model/loginResp.dart';
-import 'package:quickfund/data/model/resetPinReq.dart';
 import 'package:quickfund/data/model/resetSecurityQuestion.dart';
 import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/securityQuestionProvider.dart';
@@ -323,7 +322,6 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
               }
               return null;
             },
-
             validateForm: (value) {
               if (value.isEmpty) {
                 addError(error: kSecurityNullError);
@@ -347,11 +345,11 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
                 color: Colors.black,
                 fontWeight: FontWeight.w400),
             autoCorrect: true,
-          ), SizedBox(
+          ),
+          SizedBox(
             height: size.height * 0.02,
           ),
           RoundedInputField(
-            // onSaved: (newValue) => bvn = newValue,
             onSaved: (newValue) =>
             answer2 = newValue,
             inputType: TextInputType.text,
@@ -367,7 +365,6 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
               }
               return null;
             },
-
             validateForm: (value) {
               if (value.isEmpty) {
                 addError(error: kSecurityNullError);
@@ -396,11 +393,7 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
             onTap: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                // if all are valid then go to success screen
                 KeyboardUtil.hideKeyboard(context);
-                // Navigator.pushReplacementNamed(
-                //     context, AppRouteName.DASHBOARD);
-
                 var resetQuestParam= ResetSecurityQuestionReq(
                   phone: phone,
                   quest1: quest1,
@@ -408,9 +401,7 @@ class _ResetSecurityQuestionState extends State<ResetSecurityQuestion> {
                   answer2: answer2,
                   answer1: answer1,
                   userId: userId
-
                 );
-
                 resetSecurityQuestion(resetQuestParam, settingProvider);
 
               }

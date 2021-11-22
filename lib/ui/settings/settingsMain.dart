@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:quickfund/data/network-service/networkServices.dart';
 import 'package:quickfund/data/repository/repository.dart';
 import 'package:quickfund/ui/settings/resetSecurityQuestion.dart';
-import 'package:quickfund/ui/signup/account_opening/accountOpeningWidget.dart';
-import 'package:quickfund/util/app/app_string.dart';
 import 'package:quickfund/util/constants.dart';
-import 'package:quickfund/util/custom_textform_field.dart';
-import 'package:quickfund/util/keyboard.dart';
 import 'package:quickfund/util/sharedPreference.dart';
 import 'package:quickfund/util/size_config.dart';
-import 'package:quickfund/widget/addQuestions.dart';
 import 'package:quickfund/widget/custom_button.dart';
 import 'package:quickfund/widget/custom_gethelp_item_ui.dart';
-import 'package:quickfund/widget/custom_resend_otp.dart';
 import 'package:quickfund/widget/custom_sign_up_appbar.dart';
 import 'package:quickfund/widget/custom_widgets.dart';
-import 'package:quickfund/widget/form_error.dart';
-
 import 'changePassWord.dart';
 import 'changePin.dart';
 

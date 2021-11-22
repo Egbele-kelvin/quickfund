@@ -1,5 +1,7 @@
 class PayBillsReq {
   PayBillsReq({
+    this.accountNumber,
+    this.accountName,
     this.customerId,
     this.amount,
     this.billerName,
@@ -11,6 +13,8 @@ class PayBillsReq {
     this.pin,
   });
 
+  final String accountNumber;
+  final String accountName;
   final String customerId;
   final String amount;
   final String billerName;
@@ -22,6 +26,8 @@ class PayBillsReq {
   final String pin;
 
   factory PayBillsReq.fromJson(Map<String, dynamic> json) => PayBillsReq(
+    accountNumber: json['account_number'] == null ? null : json['account_number'],
+    accountName: json['account_name'] == null ? null : json['account_name'],
     customerId: json['customer_id'] == null ? null : json['customer_id'],
     amount: json['amount'] == null ? null : json['amount'],
     billerName: json['biller_name'] == null ? null : json['biller_name'],
@@ -34,6 +40,8 @@ class PayBillsReq {
   );
 
   Map<String, dynamic> toJson() => {
+    'account_number': accountNumber == null ? null : accountNumber,
+    'account_name': accountName == null ? null : accountName,
     'customer_id': customerId == null ? null : customerId,
     'amount': amount == null ? null : amount,
     'biller_name': billerName == null ? null : billerName,

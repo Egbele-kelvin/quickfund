@@ -174,7 +174,7 @@ class CustomAirtimeWidget extends StatelessWidget {
         ),
         title: Text(
         title,
-          style: GoogleFonts.lato(
+          style: GoogleFonts.nunito(
             color: Colors.black,
             fontWeight: FontWeight.w400,
             fontSize: 12,

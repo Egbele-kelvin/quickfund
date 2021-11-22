@@ -3,11 +3,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quickfund/data/model/accountDetailsResp.dart';
 import 'package:quickfund/data/model/billerDataBundle.dart';
 import 'package:quickfund/data/model/listOfAirtimeResp.dart';
 import 'package:quickfund/data/model/payBillResp.dart';
 import 'package:quickfund/data/model/payBillsReq.dart';
+import 'package:quickfund/provider/authProvider.dart';
 import 'package:quickfund/provider/billsProvider.dart';
+import 'package:quickfund/ui/signup/account_opening/accountWidget.dart';
+import 'package:quickfund/ui/transfer/transferAccountWidget.dart';
 import 'package:quickfund/util/app/app_route_name.dart';
 import 'package:quickfund/util/constants.dart';
 import 'package:quickfund/util/customLoader.dart';
@@ -36,8 +40,10 @@ class _AirtimeUIState extends State<AirtimeUI> {
   SharedPreferenceQS _sharedPreferenceQS = SharedPreferenceQS();
   BillsProvider _billsProvider;
   TextEditingController _amountController = TextEditingController();
+  TextEditingController selectedAccountController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController transactPin;
+  List<AccountDatum> accountDetails=[];
   bool showDataplan = false,
       showPhoneEdit = false,
       _btnEnabled = false,
@@ -66,6 +72,8 @@ class _AirtimeUIState extends State<AirtimeUI> {
   void initState() {
     final postMdl = Provider.of<BillsProvider>(context, listen: false);
     postMdl.getAirtime();
+    final bankAccountData = Provider.of<AuthProvider>(context, listen: false);
+    bankAccountData.getAccount();
     print(tfDate);
     getUserDetails();
     super.initState();
@@ -87,6 +95,16 @@ class _AirtimeUIState extends State<AirtimeUI> {
         }
     );
   }
+  getAccountDetails(AuthProvider authProvider) {
+    try {
+      if (authProvider.accountDetails != null) {
+        accountDetails = authProvider.accountDetails;
+        print('accountDetails: $accountDetails');
+      }
+    } catch (e) {
+      print('e: $e');
+    }
+  }
 
   parseBillerData(BillsProvider billsProvider) {
     try {
@@ -96,6 +114,47 @@ class _AirtimeUIState extends State<AirtimeUI> {
     } catch (e) {
       print('e: $e');
     }
+  }
+
+  Future<dynamic> buildShowModalBottomSheetForUserAccountSelect(
+      BuildContext context, Size size) {
+    return showModalBottomSheet(
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          return AccountWidget(
+            widgetIcon: Expanded(
+              flex: 0,
+              child:  Column(
+                  children: accountDetails.asMap().entries.map((e) =>  AccountContainerwIDGET(
+                    onTap:(){
+
+                      selectedAccountController.text='${e.value.customerName.toUpperCase() } \nNGN ${e.value.accountBalance}';
+                      setState(() {
+                        from=e.value.accountNumber;
+                        fromName=e.value.customerName;
+                      });
+                      Navigator.pop(context);
+                    },
+                    accountName: e.value.accountNumber.toUpperCase(),
+                    accountNum: 'NGN ${e.value.accountBalance}',
+                  )).toList()
+
+
+              ),
+            ),
+          );
+        });
   }
 
   Future<void> getDataBundlePlanByID(dataBundlePlanID) async {
@@ -218,9 +277,10 @@ class _AirtimeUIState extends State<AirtimeUI> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     var size = MediaQuery.of(context).size;
-    return Consumer<BillsProvider>(builder: (context, provider, child) {
+    return Consumer2<BillsProvider , AuthProvider>(builder: (context, provider, authProvider, child) {
       _billsProvider = provider;
       parseBillerData(provider);
+      getAccountDetails(authProvider);
 
       return LoadingOverlay(
         isLoading: isLoading,
@@ -280,7 +340,7 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                         : Container(
                                             child: Text(
                                               'Select your service provider',
-                                              style: GoogleFonts.poppins(
+                                              style: GoogleFonts.nunito(
                                                   color: Colors.black,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400),
@@ -349,17 +409,33 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                       height: size.height * .03,
                                     ),
                                     RoundedInputField(
+                                      readOnly: true,
+                                      suffixIcon: Icon(Icons.keyboard_arrow_down, color: kPrimaryColor,),
+                                      onTap: ()=>buildShowModalBottomSheetForUserAccountSelect(context, size),
+                                      controller: selectedAccountController,
+                                      inputType: TextInputType.number,
+                                      labelText: 'User Account',
+                                      autoCorrect: true,
+                                      validateForm: (value) {
+                                        if (value.isEmpty) {
+                                          addError(
+                                              error:
+                                              'User Account is required');
+                                          return "";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: size.height * .03,
+                                    ),
+                                    RoundedInputField(
                                       controller: phoneNumberController,
                                       // onSaved: (newValue) => bvn = newValue,
                                       onSaved: (newValue) => phoneNum = newValue,
                                       inputType: TextInputType.number,
                                       maxLen: 11,
                                       labelText: 'Phone Number',
-                                      customTextHintStyle: GoogleFonts.lato(
-                                          fontSize: 12,
-                                          color: Colors.black54.withOpacity(0.3),
-                                          fontWeight: FontWeight.w600),
-                                      hintText: 'Phone Number',
                                       autoCorrect: true,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
@@ -422,7 +498,7 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                             .map(
                                               (e) => Padding(
                                                 padding: const EdgeInsets.only(
-                                                    left: 7.0, bottom: 8),
+                                                    left: 5.0, bottom: 8),
                                                 child:e.value.amount==0 ?Container(): GestureDetector(
                                                   onTap: () {
                                                     setState(() {
@@ -436,13 +512,14 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                                       bundle = e.value.id;
                                                       billerName =
                                                           e.value.billerName;
+                                                      print('billerName: $billerName');
                                                       bundleName = e.value.name;
                                                       categoryName =
                                                           e.value.categoryName;
                                                     });
                                                   },
                                                   child: Container(
-                                                    width: size.width * 0.143,
+                                                    width: size.width * 0.16,
                                                     height: size.height * 0.04,
                                                     decoration: selectedIndex ==
                                                             e.key
@@ -463,10 +540,10 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                                     child: e.value.amount ==0 ?Container(): Center(
                                                       child: Text(
                                                         'NGN ${e.value.amount.toString()}',
-                                                        style: GoogleFonts.robotoMono(
+                                                        style: GoogleFonts.nunito(
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontSize: 12,
+                                                            fontSize: 11,
                                                             color:
                                                                 selectedIndex ==
                                                                         e.key
@@ -550,12 +627,10 @@ class _AirtimeUIState extends State<AirtimeUI> {
                                     onTap: () {
                                       if (_formKey.currentState.validate()) {
                                         _formKey.currentState.save();
-                                        // if all are valid then go to success screen
                                         KeyboardUtil.hideKeyboard(context);
-                                        // Navigator.of(context)
-                                        //     .pushReplacementNamed(
-                                        //     AppRouteName.SuccessPage);
                                         var payBillParams = PayBillsReq(
+                                          accountName: fromName,
+                                            accountNumber: from,
                                             customerId:
                                                 phoneNumberController.text,
                                             bundleName: bundleName,
